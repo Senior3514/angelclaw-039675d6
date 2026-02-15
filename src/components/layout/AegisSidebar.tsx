@@ -12,7 +12,6 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
-  Search,
   Bell,
   Zap,
 } from "lucide-react";
