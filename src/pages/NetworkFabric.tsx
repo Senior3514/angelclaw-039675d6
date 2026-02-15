@@ -1,6 +1,6 @@
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
-import { Network, Link2, ShieldCheck, Layers, Server, Monitor, Cloud, Cpu, Wifi } from "lucide-react";
+import { Network, Link2, ShieldCheck, Layers, Server, Monitor, Cloud, Cpu, Wifi, Bot, Brain, Radio, AlertTriangle, CheckCircle2, ArrowRight, Globe } from "lucide-react";
 
 const stats = [
   { label: "Monitored Nodes", value: "1,284", icon: Network, glow: "cyan" as const },
@@ -18,10 +18,12 @@ const nodes = [
   { id: 6, label: "WS-Pool", type: "endpoint", x: 300, y: 300, trust: "high" },
   { id: 7, label: "Cloud-LB", type: "cloud", x: 600, y: 260, trust: "high" },
   { id: 8, label: "DMZ-Proxy", type: "server", x: 100, y: 150, trust: "medium" },
+  { id: 9, label: "GPT-4o API", type: "ai", x: 650, y: 100, trust: "high" },
+  { id: 10, label: "AI-Agent-Pool", type: "ai", x: 500, y: 340, trust: "medium" },
 ];
 
 const edges = [
-  [1,2],[1,3],[1,4],[1,6],[2,3],[3,7],[4,8],[5,6],[6,7],[4,6],
+  [1,2],[1,3],[1,4],[1,6],[2,3],[3,7],[4,8],[5,6],[6,7],[4,6],[3,9],[7,9],[6,10],[10,9],
 ];
 
 const connections = [
@@ -47,15 +49,37 @@ const traffic = [
   { from: "Guest", to: "DMZ", encrypted: 78, total: 340 },
 ];
 
+const aiTraffic = [
+  { src: "GPT-4o Production", dst: "App-Cluster", type: "LLM Inference", trust: 96, requests: "14.2K/hr", encrypted: true },
+  { src: "Support Bot v3", dst: "Customer DB", type: "Data Query", trust: 89, requests: "3.8K/hr", encrypted: true },
+  { src: "RPA Agent", dst: "Financial API", type: "Transaction", trust: 71, requests: "890/hr", encrypted: true },
+  { src: "AI-Agent-Pool", dst: "Model Registry", type: "Model Sync", trust: 94, requests: "120/hr", encrypted: true },
+  { src: "External LLM", dst: "Edge-FW-01", type: "API Call", trust: 38, requests: "2.4K/hr", encrypted: false },
+];
+
+const containmentFlow = [
+  { step: "Anomaly Detected", detail: "ANGELNODE sensor triggers on node IoT-Gateway", color: "var(--aegis-amber)" },
+  { step: "Risk Assessment", detail: "ANGELGRID AI scores threat at 87/100 in 0.3s", color: "var(--aegis-red)" },
+  { step: "Auto-Isolation", detail: "Micro-segment quarantine applied — 0 lateral paths", color: "var(--aegis-cyan)" },
+  { step: "Forensic Capture", detail: "Memory dump + network logs preserved autonomously", color: "var(--aegis-green)" },
+];
+
+const meshStats = [
+  { label: "ANGELNODE Heartbeats", value: "1,284/1,284", status: "All responsive" },
+  { label: "Mesh Latency", value: "2.4ms", status: "Optimal" },
+  { label: "Cross-Region Sync", value: "< 100ms", status: "Real-time" },
+  { label: "Policy Propagation", value: "4.2s", status: "All nodes synced" },
+];
+
 const trustColor = (t: string) => t === "high" ? "hsl(var(--aegis-green))" : t === "medium" ? "hsl(var(--aegis-amber))" : "hsl(var(--aegis-red))";
-const nodeIcon = (t: string) => t === "cloud" ? "☁" : t === "iot" ? "◈" : t === "endpoint" ? "◻" : "▣";
+const nodeIcon = (t: string) => t === "cloud" ? "☁" : t === "iot" ? "◈" : t === "ai" ? "◉" : t === "endpoint" ? "◻" : "▣";
 
 export default function NetworkFabric() {
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">ANGELGRID Network Fabric</h1>
-        <p className="text-sm text-muted-foreground mt-1">ANGELNODE mesh topology, real-time trust visualization, and autonomous micro-segmentation</p>
+        <p className="text-sm text-muted-foreground mt-1">ANGELNODE mesh topology with AI-to-AI traffic monitoring, autonomous threat containment, and real-time micro-segmentation</p>
       </div>
 
       <div className="grid grid-cols-4 gap-4">
@@ -95,6 +119,36 @@ export default function NetworkFabric() {
             ))}
           </svg>
         </div>
+      </GlassCard>
+
+      {/* AI Traffic Inspection */}
+      <GlassCard aurora>
+        <div className="flex items-center gap-2 mb-4">
+          <Bot className="h-4 w-4 text-primary" />
+          <h3 className="text-sm font-semibold text-muted-foreground">AI Traffic Inspection — AI-to-AI Communication Monitor</h3>
+        </div>
+        <table className="w-full text-sm">
+          <thead><tr className="border-b border-border/50 text-muted-foreground text-xs">
+            <th className="text-left py-2 px-2 font-medium">Source</th>
+            <th className="text-left py-2 px-2 font-medium">Destination</th>
+            <th className="text-left py-2 px-2 font-medium">Traffic Type</th>
+            <th className="text-left py-2 px-2 font-medium">Trust</th>
+            <th className="text-left py-2 px-2 font-medium">Rate</th>
+            <th className="text-left py-2 px-2 font-medium">Encrypted</th>
+          </tr></thead>
+          <tbody>
+            {aiTraffic.map((t, i) => (
+              <tr key={i} className="border-b border-border/20 hover:bg-muted/20">
+                <td className="py-2 px-2 font-medium">{t.src}</td>
+                <td className="py-2 px-2 text-muted-foreground">{t.dst}</td>
+                <td className="py-2 px-2"><Badge variant="outline" className="text-[10px]">{t.type}</Badge></td>
+                <td className={`py-2 px-2 text-xs font-semibold ${t.trust > 80 ? "text-[hsl(var(--aegis-green))]" : t.trust > 50 ? "text-[hsl(var(--aegis-amber))]" : "text-[hsl(var(--aegis-red))]"}`}>{t.trust}%</td>
+                <td className="py-2 px-2 text-xs text-muted-foreground">{t.requests}</td>
+                <td className="py-2 px-2">{t.encrypted ? <span className="text-[hsl(var(--aegis-green))] text-xs">● Secured</span> : <span className="text-[hsl(var(--aegis-red))] text-xs">● Unencrypted</span>}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </GlassCard>
 
       <div className="grid grid-cols-12 gap-5">
@@ -144,6 +198,37 @@ export default function NetworkFabric() {
             </div>
           </GlassCard>
         </div>
+      </div>
+
+      {/* Autonomous Threat Containment */}
+      <GlassCard aurora>
+        <div className="flex items-center gap-2 mb-4">
+          <ShieldCheck className="h-4 w-4 text-primary" />
+          <h3 className="text-sm font-semibold text-muted-foreground">Autonomous Threat Containment Flow</h3>
+        </div>
+        <div className="flex items-center gap-2">
+          {containmentFlow.map((c, i) => (
+            <div key={c.step} className="flex items-center gap-2 flex-1">
+              <div className="p-3 rounded-lg bg-muted/40 border border-border/40 flex-1">
+                <p className="text-xs font-semibold text-primary mb-1">{c.step}</p>
+                <p className="text-[10px] text-muted-foreground leading-relaxed">{c.detail}</p>
+              </div>
+              {i < containmentFlow.length - 1 && <ArrowRight className="h-4 w-4 text-primary shrink-0" />}
+            </div>
+          ))}
+        </div>
+      </GlassCard>
+
+      {/* Global Mesh Stats */}
+      <div className="grid grid-cols-4 gap-4">
+        {meshStats.map(m => (
+          <GlassCard key={m.label} glow="cyan" className="text-center">
+            <Radio className="h-5 w-5 text-primary mx-auto mb-2" />
+            <p className="text-lg font-bold">{m.value}</p>
+            <p className="text-xs text-muted-foreground">{m.label}</p>
+            <p className="text-[10px] text-[hsl(var(--aegis-green))] mt-1">● {m.status}</p>
+          </GlassCard>
+        ))}
       </div>
 
       {/* Traffic Flow */}

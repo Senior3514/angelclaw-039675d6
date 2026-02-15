@@ -1,6 +1,6 @@
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
-import { Bot, Play, CheckCircle2, Timer, Zap, Brain, Target, Cog, FileText, ArrowDown, Link2, Mail, Cloud, Shield, MonitorSmartphone } from "lucide-react";
+import { Bot, Play, CheckCircle2, Timer, Zap, Brain, Target, Cog, FileText, ArrowDown, Link2, Mail, Cloud, Shield, MonitorSmartphone, Wrench, Server, Globe, Activity } from "lucide-react";
 
 const stats = [
   { label: "Active Playbooks", value: "34", icon: Bot, glow: "cyan" as const },
@@ -16,6 +16,9 @@ const playbooks = [
   { name: "Cloud Drift Remediation", desc: "ANGELGRID Cloud auto-correct IaC drift across multi-cloud", trigger: "Scheduled", runs: 567, lastRun: "1h ago", status: "Active" },
   { name: "Endpoint Compliance Check", desc: "ANGELNODE patch level, agent version, config validation", trigger: "Continuous", runs: 4892, lastRun: "1m ago", status: "Active" },
   { name: "Threat Intel Enrichment", desc: "ANGELGRID AI IOC correlation with global threat feeds", trigger: "New Alert", runs: 2103, lastRun: "3m ago", status: "Active" },
+  { name: "AI Prompt Injection Defense", desc: "Real-time LLM input sanitization and adversarial pattern blocking", trigger: "AI Detection", runs: 1847, lastRun: "30s ago", status: "Active" },
+  { name: "Agent Behavioral Baseline", desc: "Continuous AI agent behavior monitoring with drift detection", trigger: "Continuous", runs: 3421, lastRun: "1m ago", status: "Active" },
+  { name: "Model Exfiltration Guard", desc: "Prevent unauthorized model weight extraction and API abuse", trigger: "AI Detection", runs: 234, lastRun: "5m ago", status: "Active" },
 ];
 
 const workflowSteps = [
@@ -48,7 +51,26 @@ const recentRuns = [
   { id: "EXE-4820", playbook: "Phishing Response", trigger: "Email Gateway", duration: "4.8s", status: "Success", time: "8m ago" },
   { id: "EXE-4819", playbook: "Privilege Escalation Block", trigger: "Behavior Anomaly", duration: "1.2s", status: "Success", time: "15m ago" },
   { id: "EXE-4818", playbook: "Endpoint Compliance Check", trigger: "Continuous", duration: "6.4s", status: "Success", time: "18m ago" },
-  { id: "EXE-4817", playbook: "Threat Intel Enrichment", trigger: "New Alert", duration: "3.1s", status: "Warning", time: "22m ago" },
+  { id: "EXE-4817", playbook: "AI Prompt Injection Defense", trigger: "AI Detection", duration: "0.8s", status: "Success", time: "22m ago" },
+];
+
+const playbookSuggestions = [
+  { name: "LLM Output Watermarking", reason: "ANGELGRID AI detected 23 unauthorized model outputs in external channels", confidence: 94, impact: "6 AI agents" },
+  { name: "Cross-Cloud Session Binding", reason: "Session hijacking patterns emerging across hybrid environments", confidence: 88, impact: "All cloud endpoints" },
+  { name: "Autonomous Agent Sandboxing", reason: "New autonomous agents deployed without behavioral baseline", confidence: 91, impact: "3 new AI agents" },
+];
+
+const crossEnvOrchestration = [
+  { env: "SaaS", icon: Cloud, activeRemediations: 12, status: "Synced", latency: "1.2s" },
+  { env: "On-Premises", icon: Server, activeRemediations: 8, status: "Synced", latency: "0.8s" },
+  { env: "Hybrid", icon: Globe, activeRemediations: 5, status: "Synced", latency: "2.1s" },
+];
+
+const selfHealingMetrics = [
+  { label: "Patches Applied", value: "1,842", desc: "Zero-downtime autonomous patching", icon: Wrench },
+  { label: "Configs Corrected", value: "456", desc: "Drift detection and auto-correction", icon: Cog },
+  { label: "Threats Neutralized", value: "12,491", desc: "Without human intervention", icon: Shield },
+  { label: "Mean Time to Heal", value: "2.8s", desc: "From detection to resolution", icon: Activity },
 ];
 
 const methodColor = (m: string) => m === "GET" ? "bg-[hsl(var(--aegis-green))]/20 text-[hsl(var(--aegis-green))]" : m === "POST" ? "bg-primary/20 text-primary" : m === "PUT" ? "bg-[hsl(var(--aegis-amber))]/20 text-[hsl(var(--aegis-amber))]" : "bg-destructive/20 text-destructive";
@@ -58,7 +80,7 @@ export default function Automation() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Automation & Orchestration</h1>
-        <p className="text-sm text-muted-foreground mt-1">ANGELGRID autonomous playbooks, ANGELNODE workflow engine, and API-driven defense orchestration</p>
+        <p className="text-sm text-muted-foreground mt-1">ANGELGRID autonomous playbooks with AI-agent-specific defense, self-healing metrics, and cross-environment orchestration</p>
       </div>
 
       <div className="grid grid-cols-4 gap-4">
@@ -66,6 +88,22 @@ export default function Automation() {
           <GlassCard key={s.label} glow={s.glow} className="flex items-center gap-4">
             <div className="p-2.5 rounded-lg bg-primary/10"><s.icon className="h-5 w-5 text-primary" /></div>
             <div><p className="text-2xl font-bold">{s.value}</p><p className="text-xs text-muted-foreground">{s.label}</p></div>
+          </GlassCard>
+        ))}
+      </div>
+
+      {/* Self-Healing Metrics */}
+      <div className="grid grid-cols-4 gap-4">
+        {selfHealingMetrics.map(m => (
+          <GlassCard key={m.label} glow="cyan">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-primary/10"><m.icon className="h-5 w-5 text-primary" /></div>
+              <div>
+                <p className="text-xl font-bold">{m.value}</p>
+                <p className="text-xs font-medium">{m.label}</p>
+                <p className="text-[10px] text-muted-foreground">{m.desc}</p>
+              </div>
+            </div>
           </GlassCard>
         ))}
       </div>
@@ -85,6 +123,53 @@ export default function Automation() {
                 <span>⚡ {p.trigger}</span>
                 <span>{p.runs.toLocaleString()} runs</span>
                 <span>{p.lastRun}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </GlassCard>
+
+      {/* AI-Powered Playbook Suggestions */}
+      <GlassCard aurora>
+        <div className="flex items-center gap-2 mb-4">
+          <Brain className="h-4 w-4 text-primary" />
+          <h3 className="text-sm font-semibold text-muted-foreground">AI-Powered Playbook Suggestions</h3>
+        </div>
+        <div className="space-y-3">
+          {playbookSuggestions.map(s => (
+            <div key={s.name} className="flex items-center justify-between p-3 rounded-lg bg-muted/20 border border-border/20">
+              <div className="flex items-center gap-3">
+                <Zap className="h-4 w-4 text-primary shrink-0" />
+                <div>
+                  <p className="text-sm font-medium">{s.name}</p>
+                  <p className="text-[10px] text-muted-foreground">{s.reason}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <Badge variant="outline" className="text-[10px]">{s.impact}</Badge>
+                <span className="text-xs text-primary font-semibold">{s.confidence}%</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </GlassCard>
+
+      {/* Cross-Environment Orchestration */}
+      <GlassCard>
+        <div className="flex items-center gap-2 mb-4">
+          <Globe className="h-4 w-4 text-primary" />
+          <h3 className="text-sm font-semibold text-muted-foreground">Cross-Environment Orchestration — Simultaneous Remediation</h3>
+        </div>
+        <div className="grid grid-cols-3 gap-4">
+          {crossEnvOrchestration.map(e => (
+            <div key={e.env} className="p-4 rounded-lg bg-muted/30 border border-border/30 text-center">
+              <e.icon className="h-6 w-6 mx-auto mb-2 text-primary" />
+              <p className="text-sm font-semibold">{e.env}</p>
+              <p className="text-2xl font-bold mt-1">{e.activeRemediations}</p>
+              <p className="text-[10px] text-muted-foreground">active remediations</p>
+              <div className="mt-2 pt-2 border-t border-border/30 flex justify-center gap-3 text-[10px]">
+                <span className="text-[hsl(var(--aegis-green))]">● {e.status}</span>
+                <span className="text-muted-foreground">{e.latency} latency</span>
               </div>
             </div>
           ))}

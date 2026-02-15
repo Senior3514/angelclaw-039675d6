@@ -1,7 +1,7 @@
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { Shield, Brain, BookOpen, Zap, ChevronRight } from "lucide-react";
+import { Shield, Brain, BookOpen, Zap, ChevronRight, AlertTriangle, Monitor, Apple, Terminal, Cloud, Eye, Target } from "lucide-react";
 
 const stats = [
   { label: "Threats Blocked (30d)", value: "14,892", icon: Shield, glow: "cyan" as const },
@@ -41,12 +41,35 @@ const trendData = [
 
 const filters = ["Critical", "High", "Medium", "Malware", "Phishing", "Last 7 Days"];
 
+const aiThreatMatrix = [
+  { threat: "Prompt Injection", severity: "Critical", targets: "LLMs, Chatbots", incidents: 142, blocked: 142, trend: "↑ 23%" },
+  { threat: "Model Poisoning", severity: "High", targets: "Training Pipelines", incidents: 8, blocked: 8, trend: "→ Stable" },
+  { threat: "Data Exfiltration via LLM", severity: "Critical", targets: "GPT-4o, Copilot", incidents: 34, blocked: 34, trend: "↑ 12%" },
+  { threat: "Adversarial Inputs", severity: "High", targets: "Vision Models, NLP", incidents: 67, blocked: 65, trend: "↓ 8%" },
+  { threat: "Agent Hijacking", severity: "Critical", targets: "RPA, Autonomous Agents", incidents: 12, blocked: 12, trend: "↑ 45%" },
+  { threat: "Model Theft", severity: "Medium", targets: "Model Registry", incidents: 3, blocked: 3, trend: "→ Stable" },
+];
+
+const predictiveTimeline = [
+  { time: "Next 2h", prediction: "Elevated phishing risk — campaign detected in adjacent sector", confidence: 94, severity: "high" },
+  { time: "Next 6h", prediction: "Potential brute-force wave targeting VPN endpoints", confidence: 87, severity: "medium" },
+  { time: "Next 12h", prediction: "AI model probing expected — adversarial input patterns emerging", confidence: 78, severity: "high" },
+  { time: "Next 24h", prediction: "Credential stuffing spike predicted based on dark web chatter", confidence: 72, severity: "medium" },
+];
+
+const crossPlatform = [
+  { platform: "Windows", icon: Monitor, events: 4821, correlated: 342, autoFixed: 338 },
+  { platform: "macOS", icon: Apple, events: 2104, correlated: 156, autoFixed: 155 },
+  { platform: "Linux", icon: Terminal, events: 1847, correlated: 98, autoFixed: 97 },
+  { platform: "Cloud", icon: Cloud, events: 6120, correlated: 451, autoFixed: 449 },
+];
+
 export default function Analytics() {
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Analytics & Threat Intelligence</h1>
-        <p className="text-sm text-muted-foreground mt-1">ANGELGRID AI-driven attack narratives, deep data visualization, and predictive defense</p>
+        <p className="text-sm text-muted-foreground mt-1">ANGELGRID AI-driven attack narratives, AI model threat matrix, and predictive defense across every platform</p>
       </div>
 
       <div className="grid grid-cols-4 gap-4">
@@ -57,6 +80,36 @@ export default function Analytics() {
           </GlassCard>
         ))}
       </div>
+
+      {/* AI Model Threat Matrix */}
+      <GlassCard aurora>
+        <div className="flex items-center gap-2 mb-4">
+          <Target className="h-4 w-4 text-primary" />
+          <h3 className="text-sm font-semibold text-muted-foreground">AI Model Threat Matrix — Threats Targeting AI Systems</h3>
+        </div>
+        <table className="w-full text-sm">
+          <thead><tr className="border-b border-border/50 text-muted-foreground text-xs">
+            <th className="text-left py-2 px-2 font-medium">Threat Vector</th>
+            <th className="text-left py-2 px-2 font-medium">Severity</th>
+            <th className="text-left py-2 px-2 font-medium">Targets</th>
+            <th className="text-left py-2 px-2 font-medium">Incidents</th>
+            <th className="text-left py-2 px-2 font-medium">Blocked</th>
+            <th className="text-left py-2 px-2 font-medium">Trend</th>
+          </tr></thead>
+          <tbody>
+            {aiThreatMatrix.map(t => (
+              <tr key={t.threat} className="border-b border-border/20 hover:bg-muted/20">
+                <td className="py-2 px-2 font-medium">{t.threat}</td>
+                <td className="py-2 px-2"><Badge variant={t.severity === "Critical" ? "destructive" : t.severity === "High" ? "secondary" : "outline"} className="text-[10px]">{t.severity}</Badge></td>
+                <td className="py-2 px-2 text-xs text-muted-foreground">{t.targets}</td>
+                <td className="py-2 px-2 text-xs font-semibold">{t.incidents}</td>
+                <td className="py-2 px-2 text-xs text-[hsl(var(--aegis-green))] font-semibold">{t.blocked}</td>
+                <td className={`py-2 px-2 text-xs ${t.trend.includes("↑") ? "text-[hsl(var(--aegis-red))]" : t.trend.includes("↓") ? "text-[hsl(var(--aegis-green))]" : "text-muted-foreground"}`}>{t.trend}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </GlassCard>
 
       {/* Threat Heatmap */}
       <GlassCard>
@@ -116,7 +169,7 @@ export default function Analytics() {
             <div className="space-y-3 text-xs text-muted-foreground leading-relaxed">
               <p>ANGELGRID AI reconstructed a coordinated attack attempt originating from Eastern European infrastructure. The adversary employed a <span className="text-primary font-medium">polymorphic dropper</span> delivered via spear-phishing targeting engineering staff.</p>
               <p>The attack was <span className="text-[hsl(var(--aegis-green))] font-medium">neutralized autonomously</span> at the delivery phase — zero human intervention required. ANGELGRID AI predicted the lateral movement intent 3 steps ahead and pre-emptively hardened adjacent segments.</p>
-              <p>All threat signatures were propagated to <span className="text-primary font-medium">1,284 ANGELNODEs across 3 OS platforms</span> within 4.2 seconds.</p>
+              <p>Simultaneously, <span className="text-primary font-medium">prompt injection attempts</span> targeting GPT-4o were intercepted by AI Agent Protection — input sanitization applied across all LLM endpoints within 0.8 seconds.</p>
             </div>
             <div className="mt-4 pt-3 border-t border-border/30 flex justify-between items-center">
               <Badge variant="default" className="text-[10px]">Confidence: 98.7%</Badge>
@@ -125,6 +178,47 @@ export default function Analytics() {
           </GlassCard>
         </div>
       </div>
+
+      {/* Predictive Timeline */}
+      <GlassCard glow="cyan">
+        <div className="flex items-center gap-2 mb-4">
+          <Eye className="h-4 w-4 text-primary" />
+          <h3 className="text-sm font-semibold text-muted-foreground">Predictive Timeline — Next 24h Forecast by ANGELGRID AI</h3>
+        </div>
+        <div className="grid grid-cols-4 gap-3">
+          {predictiveTimeline.map(p => (
+            <div key={p.time} className="p-3 rounded-lg bg-muted/30 border border-border/30">
+              <div className="flex items-center justify-between mb-2">
+                <Badge variant={p.severity === "high" ? "destructive" : "secondary"} className="text-[10px]">{p.time}</Badge>
+                <span className="text-[10px] text-primary font-semibold">{p.confidence}%</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">{p.prediction}</p>
+            </div>
+          ))}
+        </div>
+      </GlassCard>
+
+      {/* Cross-Platform Correlation */}
+      <GlassCard>
+        <div className="flex items-center gap-2 mb-4">
+          <Brain className="h-4 w-4 text-primary" />
+          <h3 className="text-sm font-semibold text-muted-foreground">Cross-Platform Correlation — Simultaneous Event Analysis</h3>
+        </div>
+        <div className="grid grid-cols-4 gap-3">
+          {crossPlatform.map(c => (
+            <div key={c.platform} className="p-4 rounded-lg bg-muted/30 border border-border/30 text-center">
+              <c.icon className="h-6 w-6 mx-auto mb-2 text-primary" />
+              <p className="text-sm font-semibold">{c.platform}</p>
+              <p className="text-xl font-bold mt-1">{c.events.toLocaleString()}</p>
+              <p className="text-[10px] text-muted-foreground">events analyzed</p>
+              <div className="mt-2 pt-2 border-t border-border/30 grid grid-cols-2 gap-1 text-[10px]">
+                <div><p className="font-semibold text-primary">{c.correlated}</p><p className="text-muted-foreground">Correlated</p></div>
+                <div><p className="font-semibold text-[hsl(var(--aegis-green))]">{c.autoFixed}</p><p className="text-muted-foreground">Auto-Fixed</p></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </GlassCard>
 
       {/* Charts */}
       <div className="grid grid-cols-12 gap-5">
