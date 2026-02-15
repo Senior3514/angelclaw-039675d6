@@ -22,11 +22,11 @@ const heatmapData: number[][] = [
 ];
 
 const attackStages = [
-  { stage: "Reconnaissance", time: "14:22", detail: "Port scanning from 194.x.x.x detected by AEGIS perimeter agent", severity: "info" },
+  { stage: "Reconnaissance", time: "14:22", detail: "Port scanning from 194.x.x.x detected by ANGELNODE perimeter agent", severity: "info" },
   { stage: "Weaponization", time: "14:28", detail: "Payload signature matched — polymorphic dropper variant", severity: "warning" },
-  { stage: "Delivery", time: "14:31", detail: "Spear-phishing email intercepted — attachment quarantined autonomously", severity: "error" },
-  { stage: "Exploitation", time: "14:31", detail: "Blocked — AEGIS zero-trust prevented execution on endpoint", severity: "error" },
-  { stage: "Remediation", time: "14:32", detail: "Auto-isolation triggered, threat signatures pushed to all agents", severity: "info" },
+  { stage: "Delivery", time: "14:31", detail: "Spear-phishing email intercepted — attachment quarantined autonomously by ANGELGRID AI", severity: "error" },
+  { stage: "Exploitation", time: "14:31", detail: "Blocked — ANGELGRID zero-trust prevented execution on endpoint", severity: "error" },
+  { stage: "Remediation", time: "14:32", detail: "Auto-isolation triggered, threat signatures pushed to all ANGELNODEs", severity: "info" },
 ];
 
 const barData = [
@@ -46,7 +46,7 @@ export default function Analytics() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Analytics & Threat Intelligence</h1>
-        <p className="text-sm text-muted-foreground mt-1">AI-driven attack narratives, deep data visualization, and predictive defense</p>
+        <p className="text-sm text-muted-foreground mt-1">ANGELGRID AI-driven attack narratives, deep data visualization, and predictive defense</p>
       </div>
 
       <div className="grid grid-cols-4 gap-4">
@@ -114,9 +114,9 @@ export default function Analytics() {
               <h3 className="text-sm font-semibold text-muted-foreground">AI Attack Narrative</h3>
             </div>
             <div className="space-y-3 text-xs text-muted-foreground leading-relaxed">
-              <p>AEGIS AI reconstructed a coordinated attack attempt originating from Eastern European infrastructure. The adversary employed a <span className="text-primary font-medium">polymorphic dropper</span> delivered via spear-phishing targeting engineering staff.</p>
-              <p>The attack was <span className="text-[hsl(var(--aegis-green))] font-medium">neutralized autonomously</span> at the delivery phase — zero human intervention required. AEGIS predicted the lateral movement intent 3 steps ahead and pre-emptively hardened adjacent segments.</p>
-              <p>All threat signatures were propagated to <span className="text-primary font-medium">1,284 endpoints across 3 OS platforms</span> within 4.2 seconds.</p>
+              <p>ANGELGRID AI reconstructed a coordinated attack attempt originating from Eastern European infrastructure. The adversary employed a <span className="text-primary font-medium">polymorphic dropper</span> delivered via spear-phishing targeting engineering staff.</p>
+              <p>The attack was <span className="text-[hsl(var(--aegis-green))] font-medium">neutralized autonomously</span> at the delivery phase — zero human intervention required. ANGELGRID AI predicted the lateral movement intent 3 steps ahead and pre-emptively hardened adjacent segments.</p>
+              <p>All threat signatures were propagated to <span className="text-primary font-medium">1,284 ANGELNODEs across 3 OS platforms</span> within 4.2 seconds.</p>
             </div>
             <div className="mt-4 pt-3 border-t border-border/30 flex justify-between items-center">
               <Badge variant="default" className="text-[10px]">Confidence: 98.7%</Badge>

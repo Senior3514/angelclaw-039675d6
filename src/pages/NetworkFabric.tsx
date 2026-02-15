@@ -54,8 +54,8 @@ export default function NetworkFabric() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Network Security Fabric</h1>
-        <p className="text-sm text-muted-foreground mt-1">Real-time topology, trust visualization, and autonomous micro-segmentation</p>
+        <h1 className="text-2xl font-bold tracking-tight">ANGELGRID Network Fabric</h1>
+        <p className="text-sm text-muted-foreground mt-1">ANGELNODE mesh topology, real-time trust visualization, and autonomous micro-segmentation</p>
       </div>
 
       <div className="grid grid-cols-4 gap-4">

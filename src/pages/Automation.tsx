@@ -10,12 +10,12 @@ const stats = [
 ];
 
 const playbooks = [
-  { name: "Ransomware Kill Chain", desc: "Autonomous detection, isolation, and rollback", trigger: "AI Detection", runs: 342, lastRun: "2m ago", status: "Active" },
-  { name: "Phishing Response", desc: "Email quarantine, user notification, IOC extraction", trigger: "Email Gateway", runs: 1204, lastRun: "8m ago", status: "Active" },
-  { name: "Privilege Escalation Block", desc: "Zero-trust verification and session termination", trigger: "Behavior Anomaly", runs: 89, lastRun: "15m ago", status: "Active" },
-  { name: "Cloud Drift Remediation", desc: "Auto-correct IaC drift across multi-cloud", trigger: "Scheduled", runs: 567, lastRun: "1h ago", status: "Active" },
-  { name: "Endpoint Compliance Check", desc: "OS patch level, agent version, config validation", trigger: "Continuous", runs: 4892, lastRun: "1m ago", status: "Active" },
-  { name: "Threat Intel Enrichment", desc: "IOC correlation with global threat feeds", trigger: "New Alert", runs: 2103, lastRun: "3m ago", status: "Active" },
+  { name: "Ransomware Kill Chain", desc: "ANGELGRID AI autonomous detection, isolation, and rollback", trigger: "AI Detection", runs: 342, lastRun: "2m ago", status: "Active" },
+  { name: "Phishing Response", desc: "Email quarantine, ANGELNODE notification, IOC extraction", trigger: "Email Gateway", runs: 1204, lastRun: "8m ago", status: "Active" },
+  { name: "Privilege Escalation Block", desc: "ANGELGRID zero-trust verification and session termination", trigger: "Behavior Anomaly", runs: 89, lastRun: "15m ago", status: "Active" },
+  { name: "Cloud Drift Remediation", desc: "ANGELGRID Cloud auto-correct IaC drift across multi-cloud", trigger: "Scheduled", runs: 567, lastRun: "1h ago", status: "Active" },
+  { name: "Endpoint Compliance Check", desc: "ANGELNODE patch level, agent version, config validation", trigger: "Continuous", runs: 4892, lastRun: "1m ago", status: "Active" },
+  { name: "Threat Intel Enrichment", desc: "ANGELGRID AI IOC correlation with global threat feeds", trigger: "New Alert", runs: 2103, lastRun: "3m ago", status: "Active" },
 ];
 
 const workflowSteps = [
@@ -58,7 +58,7 @@ export default function Automation() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Automation & Orchestration</h1>
-        <p className="text-sm text-muted-foreground mt-1">Autonomous playbooks, workflow engine, and API-driven defense orchestration</p>
+        <p className="text-sm text-muted-foreground mt-1">ANGELGRID autonomous playbooks, ANGELNODE workflow engine, and API-driven defense orchestration</p>
       </div>
 
       <div className="grid grid-cols-4 gap-4">

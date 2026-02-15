@@ -19,7 +19,7 @@ import {
 const navItems = [
   { title: "Dashboard", path: "/", icon: LayoutDashboard },
   { title: "Identity & Access", path: "/identity", icon: Shield },
-  { title: "Network Fabric", path: "/network", icon: Network },
+  { title: "ANGELGRID Fabric", path: "/network", icon: Network },
   { title: "Zero-Trust Policy", path: "/policy", icon: Lock },
   { title: "Analytics & Intel", path: "/analytics", icon: BarChart3 },
   { title: "Automation", path: "/automation", icon: Workflow },
@@ -45,7 +45,7 @@ export function AegisSidebar() {
         </div>
         {!collapsed && (
           <span className="text-lg font-bold tracking-wider text-gradient-cyan select-none">
-            AEGIS
+            ANGELGRID
           </span>
         )}
       </div>

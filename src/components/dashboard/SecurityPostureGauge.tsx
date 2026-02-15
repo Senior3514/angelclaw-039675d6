@@ -9,7 +9,7 @@ export function SecurityPostureGauge({ score }: Props) {
 
   return (
     <div className="flex flex-col items-center gap-2">
-      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">AI Security Posture</p>
+      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">ANGELGRID AI Posture</p>
       <div className="relative w-36 h-36">
         <svg className="w-full h-full -rotate-90" viewBox="0 0 128 128">
           <circle cx="64" cy="64" r="58" fill="none" stroke="hsl(var(--border))" strokeWidth="6" />
