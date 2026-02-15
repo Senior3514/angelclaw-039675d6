@@ -6,7 +6,7 @@ const alerts = [
   { id: 3, severity: "info", message: "MFA enrollment completed for 12 users in Engineering", time: "15m ago", icon: Info },
   { id: 4, severity: "warning", message: "SSL certificate expiring in 7 days for api.internal", time: "22m ago", icon: AlertTriangle },
   { id: 5, severity: "critical", message: "Anomalous lateral movement detected in DMZ segment", time: "31m ago", icon: ShieldAlert },
-  { id: 6, severity: "info", message: "Zero-trust policy ZTP-042 auto-deployed successfully", time: "45m ago", icon: Info },
+  { id: 6, severity: "info", message: "ANGELGRID zero-trust policy ZTP-042 auto-deployed to all ANGELNODEs", time: "45m ago", icon: Info },
 ];
 
 const severityStyles = {

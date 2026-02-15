@@ -61,8 +61,8 @@ export default function SettingsPage() {
           <div className="flex items-center gap-4">
             <div className="p-3 rounded-lg bg-primary/10"><Building2 className="h-6 w-6 text-primary" /></div>
             <div>
-              <h3 className="text-lg font-bold">AEGIS Enterprise</h3>
-              <p className="text-xs text-muted-foreground">Organization ID: AEG-2847-ENT</p>
+              <h3 className="text-lg font-bold">ANGELGRID Enterprise</h3>
+              <p className="text-xs text-muted-foreground">Organization ID: ANG-2847-ENT</p>
             </div>
           </div>
           <div className="flex items-center gap-6 text-sm">

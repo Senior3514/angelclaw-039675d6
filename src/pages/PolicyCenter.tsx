@@ -22,7 +22,7 @@ const policies = [
 
 const ruleSteps = [
   { label: "Source", detail: "Any endpoint with risk > 40", color: "var(--aegis-cyan)" },
-  { label: "Condition", detail: "Anomalous network behavior detected by AEGIS AI", color: "var(--aegis-amber)" },
+  { label: "Condition", detail: "Anomalous network behavior detected by ANGELGRID AI", color: "var(--aegis-amber)" },
   { label: "Action", detail: "Auto-isolate, notify SOC, initiate forensic capture", color: "var(--aegis-green)" },
 ];
 
@@ -44,7 +44,7 @@ export default function PolicyCenter() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Zero-Trust Policy Center</h1>
-        <p className="text-sm text-muted-foreground mt-1">Visual rules engine with autonomous enforcement across all environments</p>
+        <p className="text-sm text-muted-foreground mt-1">ANGELGRID Cloud autonomous policy enforcement — visual rules engine for SaaS, Hybrid, and On-Prem</p>
       </div>
 
       <div className="grid grid-cols-4 gap-4">

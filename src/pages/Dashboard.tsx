@@ -10,8 +10,8 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Command Overview</h1>
-        <p className="text-sm text-muted-foreground mt-1">Real-time security posture and threat landscape</p>
+        <h1 className="text-2xl font-bold tracking-tight">ANGELGRID Command Overview</h1>
+        <p className="text-sm text-muted-foreground mt-1">Autonomous AI Defense Fabric — real-time posture, threat landscape, and ANGELNODE mesh status</p>
       </div>
 
       {/* Top row */}

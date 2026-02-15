@@ -32,7 +32,7 @@ const encryption = [
 ];
 
 const dlpAlerts = [
-  { time: "3m ago", event: "Data exfiltration attempt blocked", detail: "USB copy of classified file — endpoint auto-locked by AEGIS", severity: "critical" },
+  { time: "3m ago", event: "Data exfiltration attempt blocked", detail: "USB copy of classified file — endpoint auto-locked by ANGELNODE", severity: "critical" },
   { time: "18m ago", event: "Classification change detected", detail: "Document downgraded from Confidential to Internal — requires approval", severity: "warning" },
   { time: "45m ago", event: "Unencrypted file detected", detail: "Customer-DB-Export.csv on local drive — auto-encryption initiated", severity: "warning" },
   { time: "1h ago", event: "Policy violation — external share", detail: "Internal document shared to external email — share revoked autonomously", severity: "critical" },
@@ -46,7 +46,7 @@ export default function DataProtection() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Data Protection & DLP</h1>
-        <p className="text-sm text-muted-foreground mt-1">Autonomous content classification, encryption enforcement, and document tracing</p>
+        <p className="text-sm text-muted-foreground mt-1">ANGELGRID autonomous content classification, ANGELNODE encryption enforcement, and document tracing</p>
       </div>
 
       <div className="grid grid-cols-4 gap-4">

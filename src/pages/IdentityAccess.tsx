@@ -29,10 +29,10 @@ const groups = [
 
 const timeline = [
   { time: "2m ago", event: "Privileged session started", user: "Daniel Kessler", status: "verified", detail: "Zero-trust verified, endpoint compliant" },
-  { time: "8m ago", event: "MFA challenge passed", user: "Rachel Miriam", status: "verified", detail: "Biometric authentication via AEGIS Agent" },
-  { time: "15m ago", event: "Access denied — anomalous IP", user: "Anton Volkov", status: "blocked", detail: "Auto-remediation: session terminated, account locked" },
-  { time: "22m ago", event: "Role escalation request", user: "James Torres", status: "pending", detail: "Awaiting AEGIS AI risk assessment" },
-  { time: "1h ago", event: "New device enrolled", user: "Nadia Kuznetsova", status: "verified", detail: "Linux endpoint — AEGIS Agent v4.2 deployed" },
+  { time: "8m ago", event: "MFA challenge passed", user: "Rachel Miriam", status: "verified", detail: "Biometric authentication via ANGELNODE Agent" },
+  { time: "15m ago", event: "Access denied — anomalous IP", user: "Anton Volkov", status: "blocked", detail: "Auto-remediation: session terminated, account locked by ANGELGRID AI" },
+  { time: "22m ago", event: "Role escalation request", user: "James Torres", status: "pending", detail: "Awaiting ANGELGRID AI risk assessment" },
+  { time: "1h ago", event: "New device enrolled", user: "Nadia Kuznetsova", status: "verified", detail: "Linux endpoint — ANGELNODE Agent v4.2 deployed" },
 ];
 
 const mfaMethods = [
@@ -55,7 +55,7 @@ export default function IdentityAccess() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Identity & Access Management</h1>
-        <p className="text-sm text-muted-foreground mt-1">Autonomous identity governance across all endpoints and OS environments</p>
+        <p className="text-sm text-muted-foreground mt-1">ANGELNODE-powered identity governance — deployed on every endpoint and OS, enforced by ANGELGRID AI</p>
       </div>
 
       {/* Stats */}
