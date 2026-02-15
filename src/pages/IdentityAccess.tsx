@@ -2,7 +2,7 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Switch } from "@/components/ui/switch";
-import { Users, UserCheck, ShieldCheck, KeyRound, Monitor, Apple, Terminal, Fingerprint, Key, Smartphone, MessageSquare, CheckCircle2, AlertTriangle, XCircle } from "lucide-react";
+import { Users, UserCheck, ShieldCheck, KeyRound, Monitor, Apple, Terminal, Fingerprint, Key, Smartphone, MessageSquare, CheckCircle2, AlertTriangle, XCircle, Bot, Brain, Eye, Activity, Cpu } from "lucide-react";
 
 const stats = [
   { label: "Total Users", value: "2,847", icon: Users, glow: "cyan" as const },
@@ -42,6 +42,27 @@ const mfaMethods = [
   { name: "SMS (Fallback)", icon: MessageSquare, coverage: 100, enabled: false },
 ];
 
+const aiAgentRegistry = [
+  { name: "GPT-4o Production", type: "LLM", trust: 94, permissions: "Read-only data access", baseline: "Stable", lastAudit: "2m ago", status: "Verified" },
+  { name: "Support Chatbot v3", type: "Chatbot", trust: 91, permissions: "Customer data (masked)", baseline: "Stable", lastAudit: "5m ago", status: "Verified" },
+  { name: "RPA Invoice Agent", type: "RPA Bot", trust: 72, permissions: "Financial systems", baseline: "Drift detected", lastAudit: "12m ago", status: "Review" },
+  { name: "Code Copilot", type: "AI Agent", trust: 88, permissions: "Source repos (read)", baseline: "Stable", lastAudit: "8m ago", status: "Verified" },
+  { name: "Data Pipeline Orchestrator", type: "Autonomous", trust: 65, permissions: "Full DB access", baseline: "Anomalous", lastAudit: "1m ago", status: "Restricted" },
+];
+
+const biometrics = [
+  { metric: "Keystroke Dynamics", score: 97, status: "Normal", detail: "Typing cadence matches baseline across 342 active sessions" },
+  { metric: "Mouse Behavior", score: 94, status: "Normal", detail: "Movement patterns consistent — no bot-like trajectories detected" },
+  { metric: "Session Patterns", score: 88, status: "Alert", detail: "3 users show unusual after-hours access from new geolocations" },
+  { metric: "Device Fingerprint", score: 99, status: "Normal", detail: "All registered devices match hardware signatures" },
+];
+
+const sessionInspector = [
+  { user: "Daniel Kessler", device: "WIN-SOC-01", location: "Tel Aviv, IL", verified: true, continuous: true, lastCheck: "12s ago", trustScore: 98 },
+  { user: "Rachel Miriam", device: "MAC-ENG-14", location: "Tel Aviv, IL", verified: true, continuous: true, lastCheck: "8s ago", trustScore: 96 },
+  { user: "Anton Volkov", device: "LNX-EXT-07", location: "Kyiv, UA", verified: false, continuous: false, lastCheck: "—", trustScore: 22 },
+];
+
 const OsIcon = ({ os }: { os: string }) => {
   if (os === "Windows") return <Monitor className="h-3.5 w-3.5 text-[hsl(var(--aegis-cyan))]" />;
   if (os === "macOS") return <Apple className="h-3.5 w-3.5 text-muted-foreground" />;
@@ -55,7 +76,7 @@ export default function IdentityAccess() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Identity & Access Management</h1>
-        <p className="text-sm text-muted-foreground mt-1">ANGELNODE-powered identity governance — deployed on every endpoint and OS, enforced by ANGELGRID AI</p>
+        <p className="text-sm text-muted-foreground mt-1">ANGELNODE-powered identity governance for humans and AI agents — deployed on every endpoint and OS, enforced by ANGELGRID AI</p>
       </div>
 
       {/* Stats */}
@@ -111,6 +132,39 @@ export default function IdentityAccess() {
         </div>
       </GlassCard>
 
+      {/* AI Agent Identity Registry */}
+      <GlassCard aurora>
+        <div className="flex items-center gap-2 mb-4">
+          <Bot className="h-4 w-4 text-primary" />
+          <h3 className="text-sm font-semibold text-muted-foreground">AI Agent Identity Registry</h3>
+          <Badge variant="default" className="text-[10px] ml-auto">{aiAgentRegistry.length} Managed AI Agents</Badge>
+        </div>
+        <div className="overflow-auto">
+          <table className="w-full text-sm">
+            <thead><tr className="border-b border-border/50 text-muted-foreground text-xs">
+              <th className="text-left py-2 px-2 font-medium">Agent Name</th>
+              <th className="text-left py-2 px-2 font-medium">Type</th>
+              <th className="text-left py-2 px-2 font-medium">Trust Level</th>
+              <th className="text-left py-2 px-2 font-medium">Permissions</th>
+              <th className="text-left py-2 px-2 font-medium">Behavioral Baseline</th>
+              <th className="text-left py-2 px-2 font-medium">Status</th>
+            </tr></thead>
+            <tbody>
+              {aiAgentRegistry.map(a => (
+                <tr key={a.name} className="border-b border-border/30 hover:bg-muted/30 transition-colors">
+                  <td className="py-2.5 px-2"><div className="flex items-center gap-2"><Cpu className="h-3.5 w-3.5 text-primary" /><span className="font-medium">{a.name}</span></div></td>
+                  <td className="py-2.5 px-2"><Badge variant="outline" className="text-[10px]">{a.type}</Badge></td>
+                  <td className={`py-2.5 px-2 text-xs font-semibold ${a.trust > 85 ? "text-[hsl(var(--aegis-green))]" : a.trust > 70 ? "text-[hsl(var(--aegis-amber))]" : "text-[hsl(var(--aegis-red))]"}`}>{a.trust}%</td>
+                  <td className="py-2.5 px-2 text-xs text-muted-foreground">{a.permissions}</td>
+                  <td className="py-2.5 px-2"><Badge variant={a.baseline === "Stable" ? "default" : a.baseline === "Drift detected" ? "secondary" : "destructive"} className="text-[10px]">{a.baseline}</Badge></td>
+                  <td className="py-2.5 px-2"><Badge variant={a.status === "Verified" ? "default" : a.status === "Review" ? "secondary" : "destructive"} className="text-[10px]">{a.status}</Badge></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </GlassCard>
+
       <div className="grid grid-cols-12 gap-5">
         {/* Groups & Policies */}
         <div className="col-span-5">
@@ -155,6 +209,60 @@ export default function IdentityAccess() {
           </GlassCard>
         </div>
       </div>
+
+      {/* Behavioral Biometrics Panel */}
+      <GlassCard>
+        <div className="flex items-center gap-2 mb-4">
+          <Brain className="h-4 w-4 text-primary" />
+          <h3 className="text-sm font-semibold text-muted-foreground">Behavioral Biometrics — ANGELGRID AI Analysis</h3>
+        </div>
+        <div className="grid grid-cols-4 gap-3">
+          {biometrics.map(b => (
+            <div key={b.metric} className="p-4 rounded-lg bg-muted/30 border border-border/30">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium">{b.metric}</span>
+                <Badge variant={b.status === "Normal" ? "default" : "secondary"} className="text-[10px]">{b.status}</Badge>
+              </div>
+              <p className="text-2xl font-bold mb-1">{b.score}%</p>
+              <div className="h-1.5 rounded-full bg-muted mb-2">
+                <div className={`h-full rounded-full ${b.score > 95 ? "bg-[hsl(var(--aegis-green))]" : b.score > 90 ? "bg-primary" : "bg-[hsl(var(--aegis-amber))]"}`} style={{ width: `${b.score}%` }} />
+              </div>
+              <p className="text-[10px] text-muted-foreground">{b.detail}</p>
+            </div>
+          ))}
+        </div>
+      </GlassCard>
+
+      {/* Zero-Trust Session Inspector */}
+      <GlassCard glow="cyan">
+        <div className="flex items-center gap-2 mb-4">
+          <Eye className="h-4 w-4 text-primary" />
+          <h3 className="text-sm font-semibold text-muted-foreground">Zero-Trust Session Inspector — Continuous Verification</h3>
+        </div>
+        <div className="space-y-3">
+          {sessionInspector.map(s => (
+            <div key={s.user} className="flex items-center justify-between p-3 rounded-lg bg-muted/20 border border-border/20">
+              <div className="flex items-center gap-3">
+                {s.verified ? <CheckCircle2 className="h-4 w-4 text-[hsl(var(--aegis-green))]" /> : <XCircle className="h-4 w-4 text-[hsl(var(--aegis-red))]" />}
+                <div>
+                  <p className="text-sm font-medium">{s.user}</p>
+                  <p className="text-[10px] text-muted-foreground">{s.device} · {s.location}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4 text-xs">
+                <div className="text-center">
+                  <p className={`font-bold ${s.trustScore > 80 ? "text-[hsl(var(--aegis-green))]" : "text-[hsl(var(--aegis-red))]"}`}>{s.trustScore}</p>
+                  <p className="text-[10px] text-muted-foreground">Trust</p>
+                </div>
+                <div className="text-center">
+                  <Badge variant={s.continuous ? "default" : "destructive"} className="text-[10px]">{s.continuous ? "Continuous" : "Suspended"}</Badge>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">Last: {s.lastCheck}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </GlassCard>
 
       {/* MFA Configuration */}
       <GlassCard>

@@ -1,6 +1,6 @@
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
-import { FileCheck, ScrollText, Lock, AlertTriangle, ShieldAlert, TrendingUp, TrendingDown, ArrowRight, FileText, Eye, MapPin } from "lucide-react";
+import { FileCheck, ScrollText, Lock, AlertTriangle, ShieldAlert, TrendingUp, TrendingDown, ArrowRight, FileText, Eye, MapPin, Bot, Brain, Shield, Cloud, Server, Globe } from "lucide-react";
 
 const stats = [
   { label: "Protected Files", value: "2.4M", icon: FileCheck, glow: "cyan" as const },
@@ -36,17 +36,37 @@ const dlpAlerts = [
   { time: "18m ago", event: "Classification change detected", detail: "Document downgraded from Confidential to Internal — requires approval", severity: "warning" },
   { time: "45m ago", event: "Unencrypted file detected", detail: "Customer-DB-Export.csv on local drive — auto-encryption initiated", severity: "warning" },
   { time: "1h ago", event: "Policy violation — external share", detail: "Internal document shared to external email — share revoked autonomously", severity: "critical" },
-  { time: "2h ago", event: "New classification rule triggered", detail: "PII pattern detected in 23 new documents — auto-classified as Confidential", severity: "info" },
+  { time: "2h ago", event: "LLM data boundary violation", detail: "GPT-4o attempted to access Confidential data scope — request blocked by ANGELGRID AI", severity: "critical" },
+];
+
+const aiBoundaryEnforcement = [
+  { agent: "GPT-4o Production", prompts: "14.2K", piiDetected: 342, piiBlocked: 342, leakAttempts: 8, status: "Enforced" },
+  { agent: "Support Chatbot v3", prompts: "3.8K", piiDetected: 89, piiBlocked: 89, leakAttempts: 2, status: "Enforced" },
+  { agent: "Code Copilot", prompts: "2.1K", piiDetected: 12, piiBlocked: 12, leakAttempts: 0, status: "Enforced" },
+  { agent: "Data Pipeline Agent", prompts: "5.4K", piiDetected: 567, piiBlocked: 564, leakAttempts: 3, status: "Review" },
+];
+
+const privacyScore = 92;
+
+const dataFlowMap = [
+  { from: "On-Premises", to: "Cloud (Azure)", encryption: "AES-256 + TLS 1.3", status: "Encrypted", volume: "2.4 TB/day" },
+  { from: "Cloud (AWS)", to: "SaaS Apps", encryption: "TLS 1.3", status: "Encrypted", volume: "890 GB/day" },
+  { from: "SaaS Apps", to: "On-Premises", encryption: "IPSec + AES-256", status: "Encrypted", volume: "340 GB/day" },
+  { from: "AI Models", to: "Cloud (Azure)", encryption: "E2E Encrypted", status: "Encrypted", volume: "1.2 TB/day" },
 ];
 
 const classColor = (c: string) => c === "Confidential" ? "destructive" as const : c === "Internal" ? "secondary" as const : "outline" as const;
 
 export default function DataProtection() {
+  const privacyColor = privacyScore >= 80 ? "var(--aegis-green)" : privacyScore >= 50 ? "var(--aegis-amber)" : "var(--aegis-red)";
+  const circumference = 2 * Math.PI * 44;
+  const offset = circumference - (privacyScore / 100) * circumference;
+
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Data Protection & DLP</h1>
-        <p className="text-sm text-muted-foreground mt-1">ANGELGRID autonomous content classification, ANGELNODE encryption enforcement, and document tracing</p>
+        <p className="text-sm text-muted-foreground mt-1">ANGELGRID autonomous content classification, AI data boundary enforcement, and Privacy-by-Design across every environment</p>
       </div>
 
       <div className="grid grid-cols-4 gap-4">
@@ -58,22 +78,73 @@ export default function DataProtection() {
         ))}
       </div>
 
-      {/* Classification Dashboard */}
-      <div className="grid grid-cols-3 gap-4">
-        {categories.map(c => (
-          <GlassCard key={c.name}>
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-semibold">{c.name}</span>
-              <div className={`flex items-center gap-1 text-xs ${c.trend === "up" ? "text-[hsl(var(--aegis-amber))]" : "text-[hsl(var(--aegis-green))]"}`}>
-                {c.trend === "up" ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-                {c.delta}
+      {/* Classification Dashboard + Privacy Score */}
+      <div className="grid grid-cols-12 gap-5">
+        <div className="col-span-9">
+          <div className="grid grid-cols-3 gap-4">
+            {categories.map(c => (
+              <GlassCard key={c.name}>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-semibold">{c.name}</span>
+                  <div className={`flex items-center gap-1 text-xs ${c.trend === "up" ? "text-[hsl(var(--aegis-amber))]" : "text-[hsl(var(--aegis-green))]"}`}>
+                    {c.trend === "up" ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+                    {c.delta}
+                  </div>
+                </div>
+                <p className="text-2xl font-bold">{c.count}</p>
+                <p className="text-xs text-muted-foreground mt-1">documents classified</p>
+              </GlassCard>
+            ))}
+          </div>
+        </div>
+        <div className="col-span-3">
+          <GlassCard aurora className="h-full flex flex-col items-center justify-center">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2">Privacy-by-Design</p>
+            <div className="relative w-24 h-24">
+              <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="44" fill="none" stroke="hsl(var(--border))" strokeWidth="5" />
+                <circle cx="50" cy="50" r="44" fill="none" stroke={`hsl(${privacyColor})`} strokeWidth="5" strokeLinecap="round"
+                  strokeDasharray={circumference} strokeDashoffset={offset}
+                  className="transition-all duration-1000 ease-out" />
+              </svg>
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-2xl font-bold">{privacyScore}</span>
+                <span className="text-[10px] text-muted-foreground">/ 100</span>
               </div>
             </div>
-            <p className="text-2xl font-bold">{c.count}</p>
-            <p className="text-xs text-muted-foreground mt-1">documents classified</p>
           </GlassCard>
-        ))}
+        </div>
       </div>
+
+      {/* AI Data Boundary Enforcement */}
+      <GlassCard aurora>
+        <div className="flex items-center gap-2 mb-4">
+          <Bot className="h-4 w-4 text-primary" />
+          <h3 className="text-sm font-semibold text-muted-foreground">AI Data Boundary Enforcement — LLM Data Leak Prevention</h3>
+        </div>
+        <table className="w-full text-sm">
+          <thead><tr className="border-b border-border/50 text-muted-foreground text-xs">
+            <th className="text-left py-2 px-2 font-medium">AI Agent</th>
+            <th className="text-left py-2 px-2 font-medium">Prompts/hr</th>
+            <th className="text-left py-2 px-2 font-medium">PII Detected</th>
+            <th className="text-left py-2 px-2 font-medium">PII Blocked</th>
+            <th className="text-left py-2 px-2 font-medium">Leak Attempts</th>
+            <th className="text-left py-2 px-2 font-medium">Status</th>
+          </tr></thead>
+          <tbody>
+            {aiBoundaryEnforcement.map(a => (
+              <tr key={a.agent} className="border-b border-border/20 hover:bg-muted/20">
+                <td className="py-2 px-2 font-medium">{a.agent}</td>
+                <td className="py-2 px-2 text-xs text-muted-foreground">{a.prompts}</td>
+                <td className="py-2 px-2 text-xs font-semibold">{a.piiDetected}</td>
+                <td className="py-2 px-2 text-xs text-[hsl(var(--aegis-green))] font-semibold">{a.piiBlocked}</td>
+                <td className={`py-2 px-2 text-xs font-semibold ${a.leakAttempts > 0 ? "text-[hsl(var(--aegis-amber))]" : "text-[hsl(var(--aegis-green))]"}`}>{a.leakAttempts}</td>
+                <td className="py-2 px-2"><Badge variant={a.status === "Enforced" ? "default" : "secondary"} className="text-[10px]">{a.status}</Badge></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </GlassCard>
 
       {/* Document Trace */}
       <GlassCard>
@@ -100,6 +171,34 @@ export default function DataProtection() {
             ))}
           </tbody>
         </table>
+      </GlassCard>
+
+      {/* Cross-Environment Data Flow Map */}
+      <GlassCard>
+        <div className="flex items-center gap-2 mb-4">
+          <Globe className="h-4 w-4 text-primary" />
+          <h3 className="text-sm font-semibold text-muted-foreground">Cross-Environment Data Flow Map</h3>
+        </div>
+        <div className="space-y-3">
+          {dataFlowMap.map((f, i) => (
+            <div key={i} className="flex items-center gap-3 p-3 rounded-lg bg-muted/20 border border-border/20">
+              <div className="flex items-center gap-2 min-w-[140px]">
+                <Server className="h-4 w-4 text-primary" />
+                <span className="text-sm font-medium">{f.from}</span>
+              </div>
+              <ArrowRight className="h-4 w-4 text-primary shrink-0" />
+              <div className="flex items-center gap-2 min-w-[140px]">
+                <Cloud className="h-4 w-4 text-primary" />
+                <span className="text-sm font-medium">{f.to}</span>
+              </div>
+              <div className="flex-1 flex items-center justify-end gap-4 text-xs">
+                <Badge variant="outline" className="text-[10px]">{f.encryption}</Badge>
+                <span className="text-[hsl(var(--aegis-green))]">● {f.status}</span>
+                <span className="text-muted-foreground">{f.volume}</span>
+              </div>
+            </div>
+          ))}
+        </div>
       </GlassCard>
 
       <div className="grid grid-cols-12 gap-5">
