@@ -1,72 +1,58 @@
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
-import { FileCheck, ScrollText, Lock, AlertTriangle, ShieldAlert, TrendingUp, TrendingDown, ArrowRight, FileText, Eye, MapPin, Bot, Brain, Shield, Cloud, Server, Globe } from "lucide-react";
+import { BellRing, ShieldAlert, CheckCircle2, XCircle, AlertTriangle, Eye, Cpu, Zap, Activity, Brain, Clock, Filter } from "lucide-react";
 
 const stats = [
-  { label: "Protected Files", value: "2.4M", icon: FileCheck, glow: "cyan" as const },
-  { label: "Classification Rules", value: "89", icon: ScrollText, glow: "cyan" as const },
-  { label: "Encryption Coverage", value: "97.8%", icon: Lock, glow: "cyan" as const },
-  { label: "DLP Violations (Week)", value: "12", icon: AlertTriangle, glow: "amber" as const },
+  { label: "Active Alerts", value: "12", icon: BellRing, glow: "amber" as const },
+  { label: "Auto-Resolved", value: "4,218", icon: CheckCircle2, glow: "cyan" as const },
+  { label: "Critical Events", value: "3", icon: ShieldAlert, glow: "red" as const },
+  { label: "Avg Resolution", value: "2.8s", icon: Clock, glow: "cyan" as const },
 ];
 
-const categories = [
-  { name: "Confidential", count: "482,391", trend: "up", delta: "+2.1%", color: "var(--aegis-red)" },
-  { name: "Internal", count: "1,247,820", trend: "up", delta: "+0.8%", color: "var(--aegis-amber)" },
-  { name: "Public", count: "689,412", trend: "down", delta: "-1.2%", color: "var(--aegis-green)" },
+const alerts = [
+  { id: "ALT-8821", time: "2m ago", event: "Prompt injection attempt blocked", agent: "GPT-4o Production", tenant: "acme-corp", severity: "critical", warden: "Vault Keeper", resolved: true, detail: "Adversarial prompt detected — Vault Keeper blocked before LLM ingestion" },
+  { id: "ALT-8820", time: "8m ago", event: "Binary checksum mismatch on ANGEL-004", agent: "ANGEL-004", tenant: "dev-team", severity: "critical", warden: "Iron Wing", resolved: true, detail: "Anti-tamper ENFORCE · Iron Wing restored from golden image in 1.2s" },
+  { id: "ALT-8819", time: "15m ago", event: "Anomalous API call sequence detected", agent: "RPA Invoice Agent", tenant: "startup-xyz", severity: "high", warden: "Gate Keeper", resolved: true, detail: "Gate Keeper flagged 847 API calls/min — rate limiter applied" },
+  { id: "ALT-8818", time: "22m ago", event: "Credential stuffing attempt", agent: "Edge-FW-01", tenant: "acme-corp", severity: "high", warden: "Vigil", resolved: true, detail: "Vigil detected pattern — 3,421 failed logins from 14 IPs. Auto-blocked." },
+  { id: "ALT-8817", time: "35m ago", event: "Loose allowlist detected — startup-xyz", agent: "ANGELNODE Cloud", tenant: "startup-xyz", severity: "warning", warden: "Scroll Keeper", resolved: false, detail: "Self-Hardening Engine flagged 3 overly permissive rules — awaiting operator review" },
+  { id: "ALT-8816", time: "1h ago", event: "Data exfiltration attempt via LLM output", agent: "Data Pipeline Agent", tenant: "dev-team", severity: "critical", warden: "Vault Keeper", resolved: true, detail: "PII detected in LLM response — redacted before delivery · Deep Quill collected evidence" },
+  { id: "ALT-8815", time: "2h ago", event: "Agent behavioral drift — baseline deviation", agent: "Autonomous Orchestrator", tenant: "acme-corp", severity: "high", warden: "Drift Watcher", resolved: true, detail: "Drift Watcher detected 34% deviation from peer baseline — session quarantined" },
+  { id: "ALT-8814", time: "3h ago", event: "DNS tunneling detected on IoT-Gateway", agent: "IoT-Gateway", tenant: "startup-xyz", severity: "warning", warden: "Net Warden", resolved: true, detail: "Net Warden blocked C2 beacon attempt — node isolated, Paladin notified GDPR team" },
+  { id: "ALT-8813", time: "4h ago", event: "Suspicious browser extension threat", agent: "WS-Pool endpoint", tenant: "dev-team", severity: "warning", warden: "Glass Eye", resolved: true, detail: "Glass Eye detected page injection attempt · extension quarantined" },
+  { id: "ALT-8812", time: "6h ago", event: "Supply chain tool abuse detected", agent: "Build Pipeline", tenant: "acme-corp", severity: "high", warden: "Tool Smith", resolved: true, detail: "Tool Smith detected unsigned dependency injection · build stopped, reverted" },
+  { id: "ALT-8811", time: "8h ago", event: "Kill chain sequence — lateral movement", agent: "Internal Segment", tenant: "acme-corp", severity: "critical", warden: "Chronicle", resolved: true, detail: "Chronicle correlated 5-step kill chain · Iron Wing isolated 3 nodes in 0.9s" },
+  { id: "ALT-8810", time: "12h ago", event: "HIPAA compliance drift detected", agent: "Patient Data API", tenant: "startup-xyz", severity: "warning", warden: "Paladin", resolved: false, detail: "Paladin: 2 HIPAA controls out of compliance — manual review requested" },
 ];
 
-const documents = [
-  { name: "Q4-Financial-Report.xlsx", classification: "Confidential", accesses: 34, lastBy: "Sara Levi", location: "Cloud Storage", encrypted: true },
-  { name: "Architecture-Diagram.pdf", classification: "Internal", accesses: 128, lastBy: "Daniel Kessler", location: "SharePoint", encrypted: true },
-  { name: "Customer-DB-Export.csv", classification: "Confidential", accesses: 3, lastBy: "Anton Volkov", location: "Local Drive", encrypted: false },
-  { name: "Marketing-Deck.pptx", classification: "Public", accesses: 892, lastBy: "Rachel Miriam", location: "Cloud Storage", encrypted: true },
-  { name: "SSH-Keys-Backup.tar", classification: "Confidential", accesses: 2, lastBy: "James Torres", location: "NAS", encrypted: true },
-  { name: "Employee-Directory.xlsx", classification: "Internal", accesses: 56, lastBy: "Nadia Kuznetsova", location: "SharePoint", encrypted: true },
+const wardenAlertBreakdown = [
+  { warden: "Vigil", alerts: 1847, critical: 342 },
+  { warden: "Gate Keeper", alerts: 2847, critical: 156 },
+  { warden: "Vault Keeper", alerts: 891, critical: 89 },
+  { warden: "Iron Wing", alerts: 1247, critical: 47 },
+  { warden: "Net Warden", alerts: 634, critical: 34 },
+  { warden: "Drift Watcher", alerts: 421, critical: 12 },
+  { warden: "Chronicle", alerts: 208, critical: 23 },
+  { warden: "Paladin", alerts: 67, critical: 8 },
 ];
 
-const encryption = [
-  { algo: "AES-256-GCM", scope: "Files at Rest", enforced: true, coverage: 97 },
-  { algo: "RSA-4096", scope: "Key Exchange", enforced: true, coverage: 100 },
-  { algo: "ChaCha20-Poly1305", scope: "Stream Data", enforced: true, coverage: 94 },
-  { algo: "TLS 1.3", scope: "Data in Transit", enforced: true, coverage: 99 },
+const realtimeFeed = [
+  { time: "00:04", event: "Vault Keeper: secret scan clean — acme-corp ANGEL-001" },
+  { time: "00:03", event: "Drift Watcher: baseline match — startup-xyz user session" },
+  { time: "00:02", event: "Gate Keeper: API rate limit applied — startup-xyz RPA agent" },
+  { time: "00:01", event: "Scroll Keeper: audit log entry created — dev-team admin action" },
+  { time: "00:00", event: "Vigil: threat scan complete — 0 new threats in acme-corp" },
 ];
-
-const dlpAlerts = [
-  { time: "3m ago", event: "Data exfiltration attempt blocked", detail: "USB copy of classified file — endpoint auto-locked by ANGELNODE", severity: "critical" },
-  { time: "18m ago", event: "Classification change detected", detail: "Document downgraded from Confidential to Internal — requires approval", severity: "warning" },
-  { time: "45m ago", event: "Unencrypted file detected", detail: "Customer-DB-Export.csv on local drive — auto-encryption initiated", severity: "warning" },
-  { time: "1h ago", event: "Policy violation — external share", detail: "Internal document shared to external email — share revoked autonomously", severity: "critical" },
-  { time: "2h ago", event: "LLM data boundary violation", detail: "GPT-4o attempted to access Confidential data scope — request blocked by ANGELGRID AI", severity: "critical" },
-];
-
-const aiBoundaryEnforcement = [
-  { agent: "GPT-4o Production", prompts: "14.2K", piiDetected: 342, piiBlocked: 342, leakAttempts: 8, status: "Enforced" },
-  { agent: "Support Chatbot v3", prompts: "3.8K", piiDetected: 89, piiBlocked: 89, leakAttempts: 2, status: "Enforced" },
-  { agent: "Code Copilot", prompts: "2.1K", piiDetected: 12, piiBlocked: 12, leakAttempts: 0, status: "Enforced" },
-  { agent: "Data Pipeline Agent", prompts: "5.4K", piiDetected: 567, piiBlocked: 564, leakAttempts: 3, status: "Review" },
-];
-
-const privacyScore = 92;
-
-const dataFlowMap = [
-  { from: "On-Premises", to: "Cloud (Azure)", encryption: "AES-256 + TLS 1.3", status: "Encrypted", volume: "2.4 TB/day" },
-  { from: "Cloud (AWS)", to: "SaaS Apps", encryption: "TLS 1.3", status: "Encrypted", volume: "890 GB/day" },
-  { from: "SaaS Apps", to: "On-Premises", encryption: "IPSec + AES-256", status: "Encrypted", volume: "340 GB/day" },
-  { from: "AI Models", to: "Cloud (Azure)", encryption: "E2E Encrypted", status: "Encrypted", volume: "1.2 TB/day" },
-];
-
-const classColor = (c: string) => c === "Confidential" ? "destructive" as const : c === "Internal" ? "secondary" as const : "outline" as const;
 
 export default function DataProtection() {
-  const privacyColor = privacyScore >= 80 ? "var(--aegis-green)" : privacyScore >= 50 ? "var(--aegis-amber)" : "var(--aegis-red)";
-  const circumference = 2 * Math.PI * 44;
-  const offset = circumference - (privacyScore / 100) * circumference;
-
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Data Protection & DLP</h1>
-        <p className="text-sm text-muted-foreground mt-1">ANGELGRID autonomous content classification, AI data boundary enforcement, and Privacy-by-Design across every environment</p>
+        <div className="flex items-center gap-2 mb-1">
+          <BellRing className="h-5 w-5 text-primary" />
+          <h1 className="text-2xl font-bold tracking-tight">Alerts & Events</h1>
+          <Badge variant="destructive" className="text-[10px]">3 Critical</Badge>
+        </div>
+        <p className="text-sm text-muted-foreground">Real-time alert feed from all 12 Angel Legion wardens · WebSocket live feed · every event revertible · Seraph Brain auto-resolves with 99.2% success rate</p>
       </div>
 
       <div className="grid grid-cols-4 gap-4">
@@ -78,176 +64,84 @@ export default function DataProtection() {
         ))}
       </div>
 
-      {/* Classification Dashboard + Privacy Score */}
+      {/* Warden Breakdown */}
       <div className="grid grid-cols-12 gap-5">
-        <div className="col-span-9">
-          <div className="grid grid-cols-3 gap-4">
-            {categories.map(c => (
-              <GlassCard key={c.name}>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-semibold">{c.name}</span>
-                  <div className={`flex items-center gap-1 text-xs ${c.trend === "up" ? "text-[hsl(var(--aegis-amber))]" : "text-[hsl(var(--aegis-green))]"}`}>
-                    {c.trend === "up" ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-                    {c.delta}
+        <div className="col-span-8">
+          <GlassCard className="h-full">
+            <div className="flex items-center gap-2 mb-4">
+              <Activity className="h-4 w-4 text-primary" />
+              <h3 className="text-sm font-semibold text-muted-foreground">Alert Breakdown by Warden</h3>
+            </div>
+            <div className="space-y-2">
+              {wardenAlertBreakdown.map(w => (
+                <div key={w.warden} className="flex items-center gap-3">
+                  <span className="text-sm font-medium w-28 shrink-0">{w.warden}</span>
+                  <div className="flex-1 h-5 rounded-full bg-muted overflow-hidden relative">
+                    <div className="h-full bg-primary/40 rounded-full absolute" style={{ width: `${Math.min((w.alerts / 3000) * 100, 100)}%` }} />
+                    <div className="h-full bg-destructive/70 rounded-full absolute" style={{ width: `${Math.min((w.critical / 3000) * 100, 100)}%` }} />
                   </div>
+                  <span className="text-xs text-muted-foreground w-16 text-right">{w.alerts.toLocaleString()} total</span>
+                  <span className="text-xs text-[hsl(var(--aegis-red))] w-16 text-right">{w.critical} crit</span>
                 </div>
-                <p className="text-2xl font-bold">{c.count}</p>
-                <p className="text-xs text-muted-foreground mt-1">documents classified</p>
-              </GlassCard>
-            ))}
-          </div>
+              ))}
+            </div>
+          </GlassCard>
         </div>
-        <div className="col-span-3">
-          <GlassCard aurora className="h-full flex flex-col items-center justify-center">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2">Privacy-by-Design</p>
-            <div className="relative w-24 h-24">
-              <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="44" fill="none" stroke="hsl(var(--border))" strokeWidth="5" />
-                <circle cx="50" cy="50" r="44" fill="none" stroke={`hsl(${privacyColor})`} strokeWidth="5" strokeLinecap="round"
-                  strokeDasharray={circumference} strokeDashoffset={offset}
-                  className="transition-all duration-1000 ease-out" />
-              </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-2xl font-bold">{privacyScore}</span>
-                <span className="text-[10px] text-muted-foreground">/ 100</span>
-              </div>
+        <div className="col-span-4">
+          <GlassCard aurora className="h-full">
+            <div className="flex items-center gap-2 mb-3">
+              <Zap className="h-4 w-4 text-primary" />
+              <h3 className="text-sm font-semibold text-muted-foreground">Live WebSocket Feed</h3>
+              <span className="ml-auto w-2 h-2 rounded-full bg-[hsl(var(--aegis-green))] animate-pulse" />
+            </div>
+            <div className="space-y-2">
+              {realtimeFeed.map((f, i) => (
+                <div key={i} className="p-2 rounded bg-muted/30 border border-border/20">
+                  <span className="text-[10px] text-primary font-mono">T-{f.time}</span>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">{f.event}</p>
+                </div>
+              ))}
             </div>
           </GlassCard>
         </div>
       </div>
 
-      {/* AI Data Boundary Enforcement */}
-      <GlassCard aurora>
-        <div className="flex items-center gap-2 mb-4">
-          <Bot className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-muted-foreground">AI Data Boundary Enforcement — LLM Data Leak Prevention</h3>
-        </div>
-        <table className="w-full text-sm">
-          <thead><tr className="border-b border-border/50 text-muted-foreground text-xs">
-            <th className="text-left py-2 px-2 font-medium">AI Agent</th>
-            <th className="text-left py-2 px-2 font-medium">Prompts/hr</th>
-            <th className="text-left py-2 px-2 font-medium">PII Detected</th>
-            <th className="text-left py-2 px-2 font-medium">PII Blocked</th>
-            <th className="text-left py-2 px-2 font-medium">Leak Attempts</th>
-            <th className="text-left py-2 px-2 font-medium">Status</th>
-          </tr></thead>
-          <tbody>
-            {aiBoundaryEnforcement.map(a => (
-              <tr key={a.agent} className="border-b border-border/20 hover:bg-muted/20">
-                <td className="py-2 px-2 font-medium">{a.agent}</td>
-                <td className="py-2 px-2 text-xs text-muted-foreground">{a.prompts}</td>
-                <td className="py-2 px-2 text-xs font-semibold">{a.piiDetected}</td>
-                <td className="py-2 px-2 text-xs text-[hsl(var(--aegis-green))] font-semibold">{a.piiBlocked}</td>
-                <td className={`py-2 px-2 text-xs font-semibold ${a.leakAttempts > 0 ? "text-[hsl(var(--aegis-amber))]" : "text-[hsl(var(--aegis-green))]"}`}>{a.leakAttempts}</td>
-                <td className="py-2 px-2"><Badge variant={a.status === "Enforced" ? "default" : "secondary"} className="text-[10px]">{a.status}</Badge></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </GlassCard>
-
-      {/* Document Trace */}
-      <GlassCard>
-        <h3 className="text-sm font-semibold text-muted-foreground mb-3">Document Trace View</h3>
-        <table className="w-full text-sm">
-          <thead><tr className="border-b border-border/50 text-xs text-muted-foreground">
-            <th className="text-left py-2 px-2 font-medium">Document</th>
-            <th className="text-left py-2 px-2 font-medium">Classification</th>
-            <th className="text-left py-2 px-2 font-medium">Accesses</th>
-            <th className="text-left py-2 px-2 font-medium">Last Accessed By</th>
-            <th className="text-left py-2 px-2 font-medium">Location</th>
-            <th className="text-left py-2 px-2 font-medium">Encrypted</th>
-          </tr></thead>
-          <tbody>
-            {documents.map(d => (
-              <tr key={d.name} className="border-b border-border/20 hover:bg-muted/20">
-                <td className="py-2 px-2"><div className="flex items-center gap-2"><FileText className="h-3.5 w-3.5 text-primary" /><span className="font-medium">{d.name}</span></div></td>
-                <td className="py-2 px-2"><Badge variant={classColor(d.classification)} className="text-[10px]">{d.classification}</Badge></td>
-                <td className="py-2 px-2 text-xs"><div className="flex items-center gap-1"><Eye className="h-3 w-3 text-muted-foreground" />{d.accesses}</div></td>
-                <td className="py-2 px-2 text-xs text-muted-foreground">{d.lastBy}</td>
-                <td className="py-2 px-2 text-xs"><div className="flex items-center gap-1"><MapPin className="h-3 w-3 text-muted-foreground" />{d.location}</div></td>
-                <td className="py-2 px-2">{d.encrypted ? <span className="text-[hsl(var(--aegis-green))] text-xs">● Encrypted</span> : <span className="text-[hsl(var(--aegis-red))] text-xs">● Plain</span>}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </GlassCard>
-
-      {/* Cross-Environment Data Flow Map */}
+      {/* Alert Feed */}
       <GlassCard>
         <div className="flex items-center gap-2 mb-4">
-          <Globe className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-muted-foreground">Cross-Environment Data Flow Map</h3>
+          <ShieldAlert className="h-4 w-4 text-primary" />
+          <h3 className="text-sm font-semibold text-muted-foreground">Alert Center — All 12 Wardens · Revertible Actions</h3>
+          <div className="ml-auto flex items-center gap-2">
+            <Badge variant="outline" className="text-[10px] cursor-pointer"><Filter className="h-2.5 w-2.5 mr-1" />Filter</Badge>
+            <Badge variant="destructive" className="text-[10px]">3 Unresolved</Badge>
+          </div>
         </div>
-        <div className="space-y-3">
-          {dataFlowMap.map((f, i) => (
-            <div key={i} className="flex items-center gap-3 p-3 rounded-lg bg-muted/20 border border-border/20">
-              <div className="flex items-center gap-2 min-w-[140px]">
-                <Server className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium">{f.from}</span>
-              </div>
-              <ArrowRight className="h-4 w-4 text-primary shrink-0" />
-              <div className="flex items-center gap-2 min-w-[140px]">
-                <Cloud className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium">{f.to}</span>
-              </div>
-              <div className="flex-1 flex items-center justify-end gap-4 text-xs">
-                <Badge variant="outline" className="text-[10px]">{f.encryption}</Badge>
-                <span className="text-[hsl(var(--aegis-green))]">● {f.status}</span>
-                <span className="text-muted-foreground">{f.volume}</span>
+        <div className="space-y-2">
+          {alerts.map((a, i) => (
+            <div key={i} className={`flex items-start gap-3 p-3 rounded-lg border transition-colors ${!a.resolved ? "bg-destructive/5 border-destructive/20" : "bg-muted/20 border-border/20 hover:bg-muted/30"}`}>
+              {a.resolved
+                ? <CheckCircle2 className="h-4 w-4 mt-0.5 text-[hsl(var(--aegis-green))] shrink-0" />
+                : <AlertTriangle className="h-4 w-4 mt-0.5 text-[hsl(var(--aegis-amber))] shrink-0" />
+              }
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between flex-wrap gap-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-[10px] text-primary">{a.id}</span>
+                    <p className="text-sm font-medium">{a.event}</p>
+                    <Badge variant={a.severity === "critical" ? "destructive" : a.severity === "high" ? "secondary" : "outline"} className="text-[10px]">{a.severity}</Badge>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline" className="text-[10px]">{a.warden}</Badge>
+                    <span className="text-[10px] text-muted-foreground font-mono">{a.tenant}</span>
+                    <span className="text-[10px] text-muted-foreground">{a.time}</span>
+                  </div>
+                </div>
+                <p className="text-xs text-muted-foreground mt-0.5">{a.detail}</p>
               </div>
             </div>
           ))}
         </div>
       </GlassCard>
-
-      <div className="grid grid-cols-12 gap-5">
-        {/* Encryption Policies */}
-        <div className="col-span-5">
-          <GlassCard className="h-full">
-            <h3 className="text-sm font-semibold text-muted-foreground mb-3">Encryption Policies</h3>
-            <div className="space-y-3">
-              {encryption.map(e => (
-                <div key={e.algo} className="p-3 rounded-lg bg-muted/30 border border-border/30">
-                  <div className="flex items-center justify-between mb-1">
-                    <div className="flex items-center gap-2">
-                      <Lock className="h-3.5 w-3.5 text-primary" />
-                      <span className="text-sm font-medium">{e.algo}</span>
-                    </div>
-                    <Badge variant="default" className="text-[10px]">Enforced</Badge>
-                  </div>
-                  <p className="text-[10px] text-muted-foreground mb-2">{e.scope}</p>
-                  <div className="h-1.5 rounded-full bg-muted">
-                    <div className="h-full rounded-full bg-primary" style={{ width: `${e.coverage}%` }} />
-                  </div>
-                  <p className="text-[10px] text-muted-foreground mt-1">{e.coverage}% coverage</p>
-                </div>
-              ))}
-            </div>
-          </GlassCard>
-        </div>
-
-        {/* DLP Alert Center */}
-        <div className="col-span-7">
-          <GlassCard className="h-full">
-            <h3 className="text-sm font-semibold text-muted-foreground mb-3">DLP Alert Center</h3>
-            <div className="space-y-2.5">
-              {dlpAlerts.map((a, i) => (
-                <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-muted/20 border border-border/20">
-                  <ShieldAlert className={`h-4 w-4 mt-0.5 shrink-0 ${a.severity === "critical" ? "text-[hsl(var(--aegis-red))]" : a.severity === "warning" ? "text-[hsl(var(--aegis-amber))]" : "text-primary"}`} />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium">{a.event}</p>
-                      <span className="text-[10px] text-muted-foreground">{a.time}</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground">{a.detail}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </GlassCard>
-        </div>
-      </div>
     </div>
   );
 }

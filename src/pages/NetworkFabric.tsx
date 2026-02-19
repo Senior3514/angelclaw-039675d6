@@ -1,11 +1,11 @@
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
-import { Network, Link2, ShieldCheck, Layers, Server, Monitor, Cloud, Cpu, Wifi, Bot, Brain, Radio, AlertTriangle, CheckCircle2, ArrowRight, Globe } from "lucide-react";
+import { Network, Link2, ShieldCheck, Layers, Server, Monitor, Cloud, Cpu, Wifi, Bot, Radio, AlertTriangle, CheckCircle2, ArrowRight, Globe, Feather } from "lucide-react";
 
 const stats = [
-  { label: "Monitored Nodes", value: "1,284", icon: Network, glow: "cyan" as const },
+  { label: "ANGELNODE Fleet", value: "1,284", icon: Radio, glow: "cyan" as const },
   { label: "Active Connections", value: "8,947", icon: Link2, glow: "cyan" as const },
-  { label: "Trust Score", value: "91%", icon: ShieldCheck, glow: "cyan" as const },
+  { label: "Halo Score", value: "91%", icon: ShieldCheck, glow: "cyan" as const },
   { label: "Micro-Segments", value: "24", icon: Layers, glow: "amber" as const },
 ];
 
@@ -35,11 +35,11 @@ const connections = [
 ];
 
 const zones = [
-  { name: "DMZ", devices: 18, policies: 12, trust: "Medium", icon: ShieldCheck, color: "var(--aegis-amber)" },
-  { name: "Internal", devices: 842, policies: 34, trust: "High", icon: Server, color: "var(--aegis-green)" },
-  { name: "Cloud", devices: 256, policies: 28, trust: "High", icon: Cloud, color: "var(--aegis-cyan)" },
-  { name: "IoT", devices: 124, policies: 8, trust: "Low", icon: Cpu, color: "var(--aegis-red)" },
-  { name: "Guest", devices: 44, policies: 4, trust: "Minimal", icon: Wifi, color: "var(--aegis-purple)" },
+  { name: "DMZ", devices: 18, policies: 12, trust: "Medium", icon: ShieldCheck },
+  { name: "Internal", devices: 842, policies: 34, trust: "High", icon: Server },
+  { name: "Cloud", devices: 256, policies: 28, trust: "High", icon: Cloud },
+  { name: "IoT", devices: 124, policies: 8, trust: "Low", icon: Cpu },
+  { name: "Guest", devices: 44, policies: 4, trust: "Minimal", icon: Wifi },
 ];
 
 const traffic = [
@@ -58,10 +58,10 @@ const aiTraffic = [
 ];
 
 const containmentFlow = [
-  { step: "Anomaly Detected", detail: "ANGELNODE sensor triggers on node IoT-Gateway", color: "var(--aegis-amber)" },
-  { step: "Risk Assessment", detail: "ANGELGRID AI scores threat at 87/100 in 0.3s", color: "var(--aegis-red)" },
-  { step: "Auto-Isolation", detail: "Micro-segment quarantine applied — 0 lateral paths", color: "var(--aegis-cyan)" },
-  { step: "Forensic Capture", detail: "Memory dump + network logs preserved autonomously", color: "var(--aegis-green)" },
+  { step: "Anomaly Detected", detail: "ANGELNODE sensor triggers on IoT-Gateway — Net Warden alerted", color: "var(--aegis-amber)" },
+  { step: "Risk Assessment", detail: "Seraph Brain scores threat at 87/100 in 0.3s via Vigil Warden", color: "var(--aegis-red)" },
+  { step: "Auto-Isolation", detail: "Iron Wing applies micro-segment quarantine — 0 lateral paths", color: "var(--aegis-cyan)" },
+  { step: "Forensic Capture", detail: "Deep Quill preserves memory dump + network logs autonomously", color: "var(--aegis-green)" },
 ];
 
 const meshStats = [
@@ -78,8 +78,12 @@ export default function NetworkFabric() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">ANGELGRID Network Fabric</h1>
-        <p className="text-sm text-muted-foreground mt-1">ANGELNODE mesh topology with AI-to-AI traffic monitoring, autonomous threat containment, and real-time micro-segmentation</p>
+        <div className="flex items-center gap-2 mb-1">
+          <Radio className="h-5 w-5 text-primary" />
+          <h1 className="text-2xl font-bold tracking-tight">ANGELNODE Fleet</h1>
+          <Badge variant="outline" className="text-[10px]">Wingspan · 1,284 Agents</Badge>
+        </div>
+        <p className="text-sm text-muted-foreground">ANGELNODE mesh topology with AI-to-AI traffic monitoring, autonomous threat containment by Iron Wing & Net Warden, and real-time micro-segmentation</p>
       </div>
 
       <div className="grid grid-cols-4 gap-4">
@@ -93,7 +97,7 @@ export default function NetworkFabric() {
 
       {/* Topology Map */}
       <GlassCard>
-        <h3 className="text-sm font-semibold text-muted-foreground mb-3">Interactive Topology Map</h3>
+        <h3 className="text-sm font-semibold text-muted-foreground mb-3">Live Mesh Topology — AngelClaw Network Fabric</h3>
         <div className="rounded-lg bg-background/50 border border-border/30 overflow-hidden">
           <svg viewBox="0 0 720 380" className="w-full h-[340px]">
             <defs>
@@ -125,7 +129,7 @@ export default function NetworkFabric() {
       <GlassCard aurora>
         <div className="flex items-center gap-2 mb-4">
           <Bot className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-muted-foreground">AI Traffic Inspection — AI-to-AI Communication Monitor</h3>
+          <h3 className="text-sm font-semibold text-muted-foreground">AI Traffic Inspection — OpenClaw Shield Monitor</h3>
         </div>
         <table className="w-full text-sm">
           <thead><tr className="border-b border-border/50 text-muted-foreground text-xs">
@@ -152,7 +156,6 @@ export default function NetworkFabric() {
       </GlassCard>
 
       <div className="grid grid-cols-12 gap-5">
-        {/* Connection Trust Table */}
         <div className="col-span-7">
           <GlassCard className="h-full">
             <h3 className="text-sm font-semibold text-muted-foreground mb-3">Connection Trust Table</h3>
@@ -180,8 +183,6 @@ export default function NetworkFabric() {
             </table>
           </GlassCard>
         </div>
-
-        {/* Micro-Segmentation */}
         <div className="col-span-5">
           <GlassCard className="h-full">
             <h3 className="text-sm font-semibold text-muted-foreground mb-3">Micro-Segmentation Zones</h3>
@@ -204,7 +205,7 @@ export default function NetworkFabric() {
       <GlassCard aurora>
         <div className="flex items-center gap-2 mb-4">
           <ShieldCheck className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-muted-foreground">Autonomous Threat Containment Flow</h3>
+          <h3 className="text-sm font-semibold text-muted-foreground">Autonomous Threat Containment — Iron Wing Response Flow</h3>
         </div>
         <div className="flex items-center gap-2">
           {containmentFlow.map((c, i) => (
@@ -233,7 +234,7 @@ export default function NetworkFabric() {
 
       {/* Traffic Flow */}
       <GlassCard>
-        <h3 className="text-sm font-semibold text-muted-foreground mb-4">Traffic Flow Summary</h3>
+        <h3 className="text-sm font-semibold text-muted-foreground mb-4">Traffic Flow Summary — Encrypted / Unencrypted</h3>
         <div className="space-y-3">
           {traffic.map((t, i) => (
             <div key={i} className="space-y-1">

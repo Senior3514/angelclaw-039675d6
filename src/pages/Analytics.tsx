@@ -1,11 +1,26 @@
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { Shield, Brain, BookOpen, Zap, ChevronRight, AlertTriangle, Monitor, Apple, Terminal, Cloud, Eye, Target } from "lucide-react";
+import { Shield, Brain, BookOpen, Zap, ChevronRight, AlertTriangle, Monitor, Apple, Terminal, Cloud, Eye, Target, Feather, Activity } from "lucide-react";
+
+const wardens = [
+  { name: "Vigil", type: "Threat Detection", status: "Active", threats: 4821, blocked: 4821, uptime: "100%" },
+  { name: "Net Warden", type: "Network", status: "Active", threats: 1284, blocked: 1279, uptime: "99.8%" },
+  { name: "Glass Eye", type: "Browser", status: "Active", threats: 342, blocked: 342, uptime: "100%" },
+  { name: "Tool Smith", type: "Toolchain", status: "Active", threats: 89, blocked: 87, uptime: "99.9%" },
+  { name: "Chronicle", type: "Timeline", status: "Active", threats: 2103, blocked: 2103, uptime: "100%" },
+  { name: "Vault Keeper", type: "Secrets", status: "Active", threats: 156, blocked: 156, uptime: "100%" },
+  { name: "Drift Watcher", type: "Behavior", status: "Active", threats: 891, blocked: 888, uptime: "99.7%" },
+  { name: "Paladin", type: "Compliance", status: "Active", threats: 34, blocked: 34, uptime: "100%" },
+  { name: "Gate Keeper", type: "API Security", status: "Active", threats: 2847, blocked: 2840, uptime: "99.9%" },
+  { name: "Iron Wing", type: "Response", status: "Active", threats: 1247, blocked: 1247, uptime: "100%" },
+  { name: "Deep Quill", type: "Forensic", status: "Active", threats: 67, blocked: 67, uptime: "100%" },
+  { name: "Scroll Keeper", type: "Audit", status: "Active", threats: 48291, blocked: 48291, uptime: "100%" },
+];
 
 const stats = [
   { label: "Threats Blocked (30d)", value: "14,892", icon: Shield, glow: "cyan" as const },
-  { label: "AI Predictions", value: "847", icon: Brain, glow: "cyan" as const },
+  { label: "Seraph Brain Intents", value: "71+", icon: Brain, glow: "cyan" as const },
   { label: "Attack Narratives", value: "23", icon: BookOpen, glow: "amber" as const },
   { label: "Avg Response Time", value: "1.2s", icon: Zap, glow: "cyan" as const },
 ];
@@ -22,11 +37,11 @@ const heatmapData: number[][] = [
 ];
 
 const attackStages = [
-  { stage: "Reconnaissance", time: "14:22", detail: "Port scanning from 194.x.x.x detected by ANGELNODE perimeter agent", severity: "info" },
-  { stage: "Weaponization", time: "14:28", detail: "Payload signature matched — polymorphic dropper variant", severity: "warning" },
-  { stage: "Delivery", time: "14:31", detail: "Spear-phishing email intercepted — attachment quarantined autonomously by ANGELGRID AI", severity: "error" },
-  { stage: "Exploitation", time: "14:31", detail: "Blocked — ANGELGRID zero-trust prevented execution on endpoint", severity: "error" },
-  { stage: "Remediation", time: "14:32", detail: "Auto-isolation triggered, threat signatures pushed to all ANGELNODEs", severity: "info" },
+  { stage: "Reconnaissance", time: "14:22", detail: "Port scanning from 194.x.x.x detected by ANGELNODE · Net Warden alerted", severity: "info" },
+  { stage: "Weaponization", time: "14:28", detail: "Payload signature matched — polymorphic dropper variant · Tool Smith flagged", severity: "warning" },
+  { stage: "Delivery", time: "14:31", detail: "Spear-phishing intercepted — attachment quarantined · Iron Wing auto-responded in 0.3s", severity: "error" },
+  { stage: "Exploitation", time: "14:31", detail: "Blocked — 540-rule zero-trust policy prevented execution · Fail-Closed enforced", severity: "error" },
+  { stage: "Remediation", time: "14:32", detail: "Iron Wing isolation triggered · signatures pushed to all 1,284 ANGELNODEs via mesh", severity: "info" },
 ];
 
 const barData = [
@@ -51,10 +66,10 @@ const aiThreatMatrix = [
 ];
 
 const predictiveTimeline = [
-  { time: "Next 2h", prediction: "Elevated phishing risk — campaign detected in adjacent sector", confidence: 94, severity: "high" },
-  { time: "Next 6h", prediction: "Potential brute-force wave targeting VPN endpoints", confidence: 87, severity: "medium" },
-  { time: "Next 12h", prediction: "AI model probing expected — adversarial input patterns emerging", confidence: 78, severity: "high" },
-  { time: "Next 24h", prediction: "Credential stuffing spike predicted based on dark web chatter", confidence: 72, severity: "medium" },
+  { time: "Next 2h", prediction: "Elevated phishing risk — campaign detected in adjacent sector · Vigil confidence 94%", confidence: 94, severity: "high" },
+  { time: "Next 6h", prediction: "Potential brute-force wave targeting VPN endpoints · Gate Keeper pre-hardened", confidence: 87, severity: "medium" },
+  { time: "Next 12h", prediction: "AI model probing expected — adversarial input patterns emerging · Glass Eye active", confidence: 78, severity: "high" },
+  { time: "Next 24h", prediction: "Credential stuffing spike predicted based on dark web chatter · Vault Keeper alerted", confidence: 72, severity: "medium" },
 ];
 
 const crossPlatform = [
@@ -68,8 +83,12 @@ export default function Analytics() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Analytics & Threat Intelligence</h1>
-        <p className="text-sm text-muted-foreground mt-1">ANGELGRID AI-driven attack narratives, AI model threat matrix, and predictive defense across every platform</p>
+        <div className="flex items-center gap-2 mb-1">
+          <Shield className="h-5 w-5 text-primary" />
+          <h1 className="text-2xl font-bold tracking-tight">Angel Legion — 12 Wardens</h1>
+          <Badge variant="outline" className="text-[10px]">All Wardens Active</Badge>
+        </div>
+        <p className="text-sm text-muted-foreground">Seraph Brain-driven attack narratives · AI model threat matrix · 12 specialized wardens · predictive defense across every platform</p>
       </div>
 
       <div className="grid grid-cols-4 gap-4">
@@ -81,11 +100,40 @@ export default function Analytics() {
         ))}
       </div>
 
+      {/* Angel Legion Warden Status */}
+      <GlassCard>
+        <div className="flex items-center gap-2 mb-4">
+          <Feather className="h-4 w-4 text-primary" />
+          <h3 className="text-sm font-semibold text-muted-foreground">Angel Legion — 12 Specialized Wardens Status</h3>
+          <Badge variant="default" className="text-[10px] ml-auto">All 12 Wardens Online</Badge>
+        </div>
+        <div className="grid grid-cols-3 gap-3">
+          {wardens.map(w => (
+            <div key={w.name} className="p-3 rounded-lg bg-muted/30 border border-border/30 hover:bg-muted/50 transition-colors">
+              <div className="flex items-center justify-between mb-2">
+                <div>
+                  <p className="text-sm font-bold text-primary">{w.name}</p>
+                  <p className="text-[10px] text-muted-foreground">{w.type}</p>
+                </div>
+                <div className="text-right">
+                  <Badge variant="default" className="text-[10px]">{w.status}</Badge>
+                  <p className="text-[10px] text-[hsl(var(--aegis-green))] mt-0.5">{w.uptime} uptime</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
+                <span>Events: <span className="text-foreground font-semibold">{w.threats.toLocaleString()}</span></span>
+                <span>Blocked: <span className="text-[hsl(var(--aegis-green))] font-semibold">{w.blocked.toLocaleString()}</span></span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </GlassCard>
+
       {/* AI Model Threat Matrix */}
       <GlassCard aurora>
         <div className="flex items-center gap-2 mb-4">
           <Target className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-muted-foreground">AI Model Threat Matrix — Threats Targeting AI Systems</h3>
+          <h3 className="text-sm font-semibold text-muted-foreground">AI Model Threat Matrix — OpenClaw Shield</h3>
         </div>
         <table className="w-full text-sm">
           <thead><tr className="border-b border-border/50 text-muted-foreground text-xs">
@@ -113,7 +161,7 @@ export default function Analytics() {
 
       {/* Threat Heatmap */}
       <GlassCard>
-        <h3 className="text-sm font-semibold text-muted-foreground mb-3">Threat Heatmap</h3>
+        <h3 className="text-sm font-semibold text-muted-foreground mb-3">Threat Heatmap — Chronicle Warden</h3>
         <div className="overflow-auto">
           <table className="w-full text-xs">
             <thead><tr><th className="py-1 px-2"></th>{heatmapDays.map(d => <th key={d} className="py-1 px-2 text-muted-foreground font-medium text-center">{d}</th>)}</tr></thead>
@@ -137,10 +185,9 @@ export default function Analytics() {
       </GlassCard>
 
       <div className="grid grid-cols-12 gap-5">
-        {/* Attack Timeline */}
         <div className="col-span-7">
           <GlassCard className="h-full">
-            <h3 className="text-sm font-semibold text-muted-foreground mb-3">Attack Timeline — MITRE ATT&CK</h3>
+            <h3 className="text-sm font-semibold text-muted-foreground mb-3">Attack Timeline — MITRE ATT&CK · Chronicle Warden</h3>
             <div className="space-y-0">
               {attackStages.map((a, i) => (
                 <div key={i} className="flex items-start gap-3 relative pl-4">
@@ -159,17 +206,16 @@ export default function Analytics() {
           </GlassCard>
         </div>
 
-        {/* AI Narrative */}
         <div className="col-span-5">
           <GlassCard aurora className="h-full">
             <div className="flex items-center gap-2 mb-3">
               <Brain className="h-4 w-4 text-primary" />
-              <h3 className="text-sm font-semibold text-muted-foreground">AI Attack Narrative</h3>
+              <h3 className="text-sm font-semibold text-muted-foreground">Seraph Brain Narrative</h3>
             </div>
             <div className="space-y-3 text-xs text-muted-foreground leading-relaxed">
-              <p>ANGELGRID AI reconstructed a coordinated attack attempt originating from Eastern European infrastructure. The adversary employed a <span className="text-primary font-medium">polymorphic dropper</span> delivered via spear-phishing targeting engineering staff.</p>
-              <p>The attack was <span className="text-[hsl(var(--aegis-green))] font-medium">neutralized autonomously</span> at the delivery phase — zero human intervention required. ANGELGRID AI predicted the lateral movement intent 3 steps ahead and pre-emptively hardened adjacent segments.</p>
-              <p>Simultaneously, <span className="text-primary font-medium">prompt injection attempts</span> targeting GPT-4o were intercepted by AI Agent Protection — input sanitization applied across all LLM endpoints within 0.8 seconds.</p>
+              <p>Seraph Brain reconstructed a coordinated attack from Eastern European infrastructure using <span className="text-primary font-medium">71 NLP intents</span>. A polymorphic dropper was delivered via spear-phishing targeting engineering staff.</p>
+              <p>The attack was <span className="text-[hsl(var(--aegis-green))] font-medium">neutralized autonomously</span> at delivery — zero human intervention. AngelClaw predicted lateral movement <span className="text-primary font-medium">3 steps ahead</span> and pre-emptively hardened adjacent segments via Iron Wing.</p>
+              <p>Simultaneously, <span className="text-primary font-medium">prompt injection attempts</span> targeting GPT-4o were blocked by Vault Keeper — input sanitization applied across all LLM endpoints in 0.8 seconds. <span className="text-[hsl(var(--aegis-green))] font-medium">Fail-Closed enforced.</span></p>
             </div>
             <div className="mt-4 pt-3 border-t border-border/30 flex justify-between items-center">
               <Badge variant="default" className="text-[10px]">Confidence: 98.7%</Badge>
@@ -183,7 +229,7 @@ export default function Analytics() {
       <GlassCard glow="cyan">
         <div className="flex items-center gap-2 mb-4">
           <Eye className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-muted-foreground">Predictive Timeline — Next 24h Forecast by ANGELGRID AI</h3>
+          <h3 className="text-sm font-semibold text-muted-foreground">Predictive Timeline — Next 24h Forecast · Seraph Brain + Vigil</h3>
         </div>
         <div className="grid grid-cols-4 gap-3">
           {predictiveTimeline.map(p => (
@@ -201,7 +247,7 @@ export default function Analytics() {
       {/* Cross-Platform Correlation */}
       <GlassCard>
         <div className="flex items-center gap-2 mb-4">
-          <Brain className="h-4 w-4 text-primary" />
+          <Activity className="h-4 w-4 text-primary" />
           <h3 className="text-sm font-semibold text-muted-foreground">Cross-Platform Correlation — Simultaneous Event Analysis</h3>
         </div>
         <div className="grid grid-cols-4 gap-3">
@@ -253,9 +299,8 @@ export default function Analytics() {
         </div>
       </div>
 
-      {/* Query Builder */}
       <GlassCard>
-        <h3 className="text-sm font-semibold text-muted-foreground mb-3">Dynamic Query Builder</h3>
+        <h3 className="text-sm font-semibold text-muted-foreground mb-3">Dynamic Query Builder — Threat Hunting DSL</h3>
         <div className="flex flex-wrap gap-2">
           {filters.map(f => (
             <Badge key={f} variant="secondary" className="cursor-pointer hover:bg-primary/20 transition-colors">{f}</Badge>

@@ -12,6 +12,8 @@ import Analytics from "./pages/Analytics";
 import Automation from "./pages/Automation";
 import DataProtection from "./pages/DataProtection";
 import SettingsPage from "./pages/SettingsPage";
+import SelfLearning from "./pages/SelfLearning";
+import PoliciesHub from "./pages/PoliciesHub";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,12 +27,14 @@ const App = () => (
         <AppLayout>
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/identity" element={<IdentityAccess />} />
             <Route path="/network" element={<NetworkFabric />} />
-            <Route path="/policy" element={<PolicyCenter />} />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route path="/automation" element={<Automation />} />
+            <Route path="/identity" element={<IdentityAccess />} />
             <Route path="/dlp" element={<DataProtection />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/policy" element={<PolicyCenter />} />
+            <Route path="/automation" element={<Automation />} />
+            <Route path="/self-learning" element={<SelfLearning />} />
+            <Route path="/policies-hub" element={<PoliciesHub />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -2,13 +2,19 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Switch } from "@/components/ui/switch";
-import { Users, UserCheck, ShieldCheck, KeyRound, Monitor, Apple, Terminal, Fingerprint, Key, Smartphone, MessageSquare, CheckCircle2, AlertTriangle, XCircle, Bot, Brain, Eye, Activity, Cpu } from "lucide-react";
+import { Users, Building2, ShieldCheck, KeyRound, Monitor, Apple, Terminal, Fingerprint, Key, Smartphone, MessageSquare, CheckCircle2, AlertTriangle, XCircle, Bot, Brain, Eye, Cpu } from "lucide-react";
 
 const stats = [
+  { label: "Active Tenants", value: "3", icon: Building2, glow: "cyan" as const },
   { label: "Total Users", value: "2,847", icon: Users, glow: "cyan" as const },
-  { label: "Active Sessions", value: "342", icon: UserCheck, glow: "cyan" as const },
   { label: "MFA Coverage", value: "96.2%", icon: ShieldCheck, glow: "cyan" as const },
   { label: "Privileged Accounts", value: "28", icon: KeyRound, glow: "amber" as const },
+];
+
+const tenants = [
+  { id: "acme-corp", name: "Acme Corp", agents: 612, users: 1420, haloScore: 96, alerts: 2, status: "Healthy" },
+  { id: "startup-xyz", name: "Startup XYZ", agents: 204, users: 890, haloScore: 88, alerts: 7, status: "Warning" },
+  { id: "dev-team", name: "Dev Team", agents: 468, users: 537, haloScore: 94, alerts: 1, status: "Healthy" },
 ];
 
 const users = [
@@ -28,11 +34,11 @@ const groups = [
 ];
 
 const timeline = [
-  { time: "2m ago", event: "Privileged session started", user: "Daniel Kessler", status: "verified", detail: "Zero-trust verified, endpoint compliant" },
-  { time: "8m ago", event: "MFA challenge passed", user: "Rachel Miriam", status: "verified", detail: "Biometric authentication via ANGELNODE Agent" },
-  { time: "15m ago", event: "Access denied — anomalous IP", user: "Anton Volkov", status: "blocked", detail: "Auto-remediation: session terminated, account locked by ANGELGRID AI" },
-  { time: "22m ago", event: "Role escalation request", user: "James Torres", status: "pending", detail: "Awaiting ANGELGRID AI risk assessment" },
-  { time: "1h ago", event: "New device enrolled", user: "Nadia Kuznetsova", status: "verified", detail: "Linux endpoint — ANGELNODE Agent v4.2 deployed" },
+  { time: "2m ago", event: "Privileged session started", user: "Daniel Kessler", status: "verified", detail: "Zero-trust verified — Scroll Keeper logged action" },
+  { time: "8m ago", event: "MFA challenge passed", user: "Rachel Miriam", status: "verified", detail: "Biometric auth via ANGELNODE · Drift Watcher: baseline match" },
+  { time: "15m ago", event: "Access denied — anomalous IP", user: "Anton Volkov", status: "blocked", detail: "Gate Keeper blocked · Seraph Brain auto-locked session" },
+  { time: "22m ago", event: "Role escalation request", user: "James Torres", status: "pending", detail: "Awaiting Seraph Brain risk assessment — Fail-Closed mode" },
+  { time: "1h ago", event: "New device enrolled", user: "Nadia Kuznetsova", status: "verified", detail: "Linux endpoint · ANGELNODE v3.0.0 deployed via Scroll Keeper" },
 ];
 
 const mfaMethods = [
@@ -51,10 +57,10 @@ const aiAgentRegistry = [
 ];
 
 const biometrics = [
-  { metric: "Keystroke Dynamics", score: 97, status: "Normal", detail: "Typing cadence matches baseline across 342 active sessions" },
+  { metric: "Keystroke Dynamics", score: 97, status: "Normal", detail: "Typing cadence matches baseline · Drift Watcher: no deviation" },
   { metric: "Mouse Behavior", score: 94, status: "Normal", detail: "Movement patterns consistent — no bot-like trajectories detected" },
-  { metric: "Session Patterns", score: 88, status: "Alert", detail: "3 users show unusual after-hours access from new geolocations" },
-  { metric: "Device Fingerprint", score: 99, status: "Normal", detail: "All registered devices match hardware signatures" },
+  { metric: "Session Patterns", score: 88, status: "Alert", detail: "3 users show unusual after-hours access · Chronicle flagged kill chain" },
+  { metric: "Device Fingerprint", score: 99, status: "Normal", detail: "All registered devices match hardware signatures · Anti-Tamper: OK" },
 ];
 
 const sessionInspector = [
@@ -75,11 +81,14 @@ export default function IdentityAccess() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Identity & Access Management</h1>
-        <p className="text-sm text-muted-foreground mt-1">ANGELNODE-powered identity governance for humans and AI agents — deployed on every endpoint and OS, enforced by ANGELGRID AI</p>
+        <div className="flex items-center gap-2 mb-1">
+          <Building2 className="h-5 w-5 text-primary" />
+          <h1 className="text-2xl font-bold tracking-tight">Tenants & Identity</h1>
+          <Badge variant="outline" className="text-[10px]">Multi-Tenant · Isolated</Badge>
+        </div>
+        <p className="text-sm text-muted-foreground">ANGELNODE-powered multi-tenant identity governance — each tenant gets isolated policies, events, alerts, and analytics · Scroll Keeper + Gate Keeper active</p>
       </div>
 
-      {/* Stats */}
       <div className="grid grid-cols-4 gap-4">
         {stats.map(s => (
           <GlassCard key={s.label} glow={s.glow} className="flex items-center gap-4">
@@ -91,6 +100,41 @@ export default function IdentityAccess() {
           </GlassCard>
         ))}
       </div>
+
+      {/* Tenant Overview */}
+      <GlassCard aurora>
+        <div className="flex items-center gap-2 mb-4">
+          <Building2 className="h-4 w-4 text-primary" />
+          <h3 className="text-sm font-semibold text-muted-foreground">Tenant Dashboard — AngelClaw Cloud</h3>
+          <Badge variant="default" className="text-[10px] ml-auto">3 Active Tenants</Badge>
+        </div>
+        <div className="grid grid-cols-3 gap-4">
+          {tenants.map(t => (
+            <div key={t.id} className="p-4 rounded-lg bg-muted/30 border border-border/30 hover:bg-muted/50 transition-colors">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <p className="font-semibold text-sm">{t.name}</p>
+                  <p className="text-[10px] text-muted-foreground font-mono">{t.id}</p>
+                </div>
+                <Badge variant={t.status === "Healthy" ? "default" : "secondary"} className="text-[10px]">{t.status}</Badge>
+              </div>
+              <div className="grid grid-cols-3 gap-2 text-center text-[10px]">
+                <div><p className="font-bold text-base">{t.agents}</p><p className="text-muted-foreground">Agents</p></div>
+                <div><p className="font-bold text-base">{t.users}</p><p className="text-muted-foreground">Users</p></div>
+                <div><p className={`font-bold text-base ${t.alerts > 5 ? "text-[hsl(var(--aegis-amber))]" : "text-[hsl(var(--aegis-green))]"}`}>{t.alerts}</p><p className="text-muted-foreground">Alerts</p></div>
+              </div>
+              <div className="mt-3">
+                <div className="flex justify-between text-[10px] text-muted-foreground mb-1">
+                  <span>Halo Score</span><span className="text-primary font-semibold">{t.haloScore}</span>
+                </div>
+                <div className="h-1.5 rounded-full bg-muted">
+                  <div className={`h-full rounded-full ${t.haloScore > 90 ? "bg-[hsl(var(--aegis-green))]" : "bg-[hsl(var(--aegis-amber))]"}`} style={{ width: `${t.haloScore}%` }} />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </GlassCard>
 
       {/* User Directory */}
       <GlassCard>
@@ -136,7 +180,7 @@ export default function IdentityAccess() {
       <GlassCard aurora>
         <div className="flex items-center gap-2 mb-4">
           <Bot className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-muted-foreground">AI Agent Identity Registry</h3>
+          <h3 className="text-sm font-semibold text-muted-foreground">AI Agent Identity Registry — OpenClaw Governed</h3>
           <Badge variant="default" className="text-[10px] ml-auto">{aiAgentRegistry.length} Managed AI Agents</Badge>
         </div>
         <div className="overflow-auto">
@@ -166,7 +210,6 @@ export default function IdentityAccess() {
       </GlassCard>
 
       <div className="grid grid-cols-12 gap-5">
-        {/* Groups & Policies */}
         <div className="col-span-5">
           <GlassCard className="h-full">
             <h3 className="text-sm font-semibold text-muted-foreground mb-4">Groups & Policies</h3>
@@ -185,11 +228,9 @@ export default function IdentityAccess() {
             </div>
           </GlassCard>
         </div>
-
-        {/* Access Activity Timeline */}
         <div className="col-span-7">
           <GlassCard className="h-full">
-            <h3 className="text-sm font-semibold text-muted-foreground mb-4">Access Activity Timeline</h3>
+            <h3 className="text-sm font-semibold text-muted-foreground mb-4">Access Activity — Chronicle Warden Timeline</h3>
             <div className="space-y-3">
               {timeline.map((t, i) => (
                 <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-muted/20 border border-border/20">
@@ -210,11 +251,11 @@ export default function IdentityAccess() {
         </div>
       </div>
 
-      {/* Behavioral Biometrics Panel */}
+      {/* Behavioral Biometrics — Drift Watcher */}
       <GlassCard>
         <div className="flex items-center gap-2 mb-4">
           <Brain className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-muted-foreground">Behavioral Biometrics — ANGELGRID AI Analysis</h3>
+          <h3 className="text-sm font-semibold text-muted-foreground">Behavioral Biometrics — Drift Watcher Analysis</h3>
         </div>
         <div className="grid grid-cols-4 gap-3">
           {biometrics.map(b => (
@@ -237,7 +278,7 @@ export default function IdentityAccess() {
       <GlassCard glow="cyan">
         <div className="flex items-center gap-2 mb-4">
           <Eye className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-muted-foreground">Zero-Trust Session Inspector — Continuous Verification</h3>
+          <h3 className="text-sm font-semibold text-muted-foreground">Zero-Trust Session Inspector — Continuous Verification · Fail-Closed</h3>
         </div>
         <div className="space-y-3">
           {sessionInspector.map(s => (
