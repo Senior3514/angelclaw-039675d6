@@ -2,28 +2,54 @@ import { useState } from "react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { Building2, Users, HardDrive, ShieldCheck, Brain, Wrench, Eye, Activity, Bell, Mail, Globe, Smartphone, MessageSquare, Monitor, Apple, Terminal, Cloud, Server, Clock, Palette, Languages, Timer, Database, Bot, Cpu, CheckCircle2, Settings } from "lucide-react";
+import { Building2, HardDrive, ShieldCheck, Brain, Wrench, Eye, Activity, Bell, Globe, Smartphone, Monitor, Apple, Terminal, Cloud, Server, Clock, Palette, Languages, Timer, Database, Bot, Cpu, CheckCircle2, Feather, Key, Lock } from "lucide-react";
 
 const systemToggles = [
-  { name: "Autonomous Protection", desc: "AI-driven threat response without human intervention", icon: ShieldCheck, default: true },
-  { name: "AI Threat Prediction", desc: "Predictive modeling for emerging attack vectors", icon: Brain, default: true },
-  { name: "Auto-Remediation", desc: "Automatic isolation and patching of compromised endpoints", icon: Wrench, default: true },
-  { name: "Zero-Trust Enforcement", desc: "Continuous verification of all access requests", icon: Eye, default: true },
-  { name: "Real-time Monitoring", desc: "Live telemetry ingestion from all managed agents", icon: Activity, default: true },
+  { name: "Autonomous Protection", desc: "AngelClaw intervenes only when genuinely dangerous — everything else flows freely", icon: ShieldCheck, default: true },
+  { name: "Seraph Brain NLP", desc: "Natural language security ops in English and Hebrew · 71+ intents", icon: Brain, default: true },
+  { name: "Self-Hardening Engine", desc: "Autonomous security weakness detection and correction with revert", icon: Wrench, default: true },
+  { name: "Zero-Trust Enforcement", desc: "Default-deny · 540 rules · Fail-Closed when engine unreachable", icon: Eye, default: true },
+  { name: "Anti-Tamper ENFORCE", desc: "Binary checksum verification · heartbeat monitoring · Iron Wing auto-restore", icon: Lock, default: true },
+  { name: "Self-Learning Feedback", desc: "Track operator feedback to improve suggestions over time", icon: Activity, default: true },
 ];
 
-const notifChannels = ["Email", "In-App", "Webhook", "SMS"];
+const notifChannels = ["Email", "Slack", "Discord", "Webhook"];
 const notifLevels = ["Critical", "Warning", "Info"];
 const notifDefaults: Record<string, Record<string, boolean>> = {
   Email: { Critical: true, Warning: true, Info: false },
-  "In-App": { Critical: true, Warning: true, Info: true },
+  Slack: { Critical: true, Warning: true, Info: false },
+  Discord: { Critical: true, Warning: false, Info: false },
   Webhook: { Critical: true, Warning: false, Info: false },
-  SMS: { Critical: true, Warning: false, Info: false },
 };
 
-const platformStats = [
-  { label: "Uptime", value: "99.99%", icon: Clock },
-  { label: "Endpoints Protected", value: "1,284", icon: Monitor },
+const fleetAgents = [
+  { os: "Windows", version: "v3.0.0", deployed: 612, upToDate: 608, pending: 4, health: 99.2 },
+  { os: "macOS", version: "v3.0.0", deployed: 358, upToDate: 358, pending: 0, health: 99.8 },
+  { os: "Linux", version: "v3.0.0", deployed: 204, upToDate: 198, pending: 6, health: 98.4 },
+  { os: "iOS", version: "v3.0.0", deployed: 68, upToDate: 68, pending: 0, health: 100 },
+  { os: "Android", version: "v3.0.0", deployed: 42, upToDate: 40, pending: 2, health: 97.6 },
+];
+
+const aiModelGovernance = [
+  { model: "GPT-4o", status: "Allowed", rateLimit: "15K req/hr", dataBoundary: "Non-Confidential", provider: "OpenAI" },
+  { model: "Claude 3.5 Sonnet", status: "Allowed", rateLimit: "8K req/hr", dataBoundary: "Internal only", provider: "Anthropic" },
+  { model: "Llama 3.1 (Ollama)", status: "Allowed", rateLimit: "Unlimited", dataBoundary: "All scopes", provider: "Self-hosted" },
+  { model: "Gemini Pro", status: "Restricted", rateLimit: "2K req/hr", dataBoundary: "Public only", provider: "Google" },
+  { model: "Unknown Models", status: "Blocked", rateLimit: "0", dataBoundary: "Blocked", provider: "Any" },
+];
+
+const complianceFrameworks = [
+  { name: "SOC 2 Type II", status: "Compliant", lastAudit: "2h ago", controls: 94, passing: 94, icon: ShieldCheck, warden: "Scroll Keeper" },
+  { name: "ISO 27001", status: "Compliant", lastAudit: "4h ago", controls: 114, passing: 113, icon: CheckCircle2, warden: "Paladin" },
+  { name: "GDPR", status: "Compliant", lastAudit: "1h ago", controls: 67, passing: 67, icon: Eye, warden: "Paladin" },
+  { name: "HIPAA", status: "Review", lastAudit: "6h ago", controls: 45, passing: 43, icon: Activity, warden: "Paladin" },
+];
+
+const rbacRoles = [
+  { role: "super_admin", users: 2, permissions: "Full access · all tenants", apiKey: true },
+  { role: "tenant_admin", users: 8, permissions: "Tenant-scoped full access", apiKey: true },
+  { role: "soc_analyst", users: 34, permissions: "Read + alert management", apiKey: false },
+  { role: "readonly", users: 56, permissions: "Read-only across all modules", apiKey: false },
 ];
 
 const osCoverage = [
@@ -35,32 +61,9 @@ const osCoverage = [
 ];
 
 const envs = [
-  { name: "Cloud", icon: Cloud, status: "Active" },
-  { name: "On-Premises", icon: Server, status: "Active" },
-  { name: "Hybrid", icon: Globe, status: "Active" },
-];
-
-const fleetAgents = [
-  { os: "Windows", version: "v4.2.1", deployed: 612, upToDate: 608, pending: 4, health: 99.2 },
-  { os: "macOS", version: "v4.2.1", deployed: 358, upToDate: 358, pending: 0, health: 99.8 },
-  { os: "Linux", version: "v4.2.0", deployed: 204, upToDate: 198, pending: 6, health: 98.4 },
-  { os: "iOS", version: "v4.1.9", deployed: 68, upToDate: 68, pending: 0, health: 100 },
-  { os: "Android", version: "v4.1.8", deployed: 42, upToDate: 40, pending: 2, health: 97.6 },
-];
-
-const aiModelGovernance = [
-  { model: "GPT-4o", status: "Allowed", rateLimit: "15K req/hr", dataBoundary: "Non-Confidential", provider: "OpenAI" },
-  { model: "Claude 3.5", status: "Allowed", rateLimit: "8K req/hr", dataBoundary: "Internal only", provider: "Anthropic" },
-  { model: "Llama 3.1", status: "Allowed", rateLimit: "Unlimited", dataBoundary: "All scopes", provider: "Self-hosted" },
-  { model: "Gemini Pro", status: "Restricted", rateLimit: "2K req/hr", dataBoundary: "Public only", provider: "Google" },
-  { model: "Unknown Models", status: "Blocked", rateLimit: "0", dataBoundary: "Blocked", provider: "Any" },
-];
-
-const complianceFrameworks = [
-  { name: "SOC 2 Type II", status: "Compliant", lastAudit: "2h ago", controls: 94, passing: 94, icon: ShieldCheck },
-  { name: "ISO 27001", status: "Compliant", lastAudit: "4h ago", controls: 114, passing: 113, icon: CheckCircle2 },
-  { name: "GDPR", status: "Compliant", lastAudit: "1h ago", controls: 67, passing: 67, icon: Eye },
-  { name: "HIPAA", status: "Review", lastAudit: "6h ago", controls: 45, passing: 43, icon: Activity },
+  { name: "Cloud (AngelClaw)", icon: Cloud, status: "Active", port: "8500" },
+  { name: "On-Premises", icon: Server, status: "Active", port: "8400" },
+  { name: "Hybrid", icon: Globe, status: "Active", port: "Both" },
 ];
 
 export default function SettingsPage() {
@@ -74,23 +77,29 @@ export default function SettingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Settings & Platform Control</h1>
-        <p className="text-sm text-muted-foreground mt-1">Tenant management, ANGELNODE fleet management, AI model governance, and compliance automation</p>
+        <div className="flex items-center gap-2 mb-1">
+          <Feather className="h-5 w-5 text-primary" />
+          <h1 className="text-2xl font-bold tracking-tight">Settings & Platform Control</h1>
+          <Badge variant="outline" className="text-[10px]">v3.0.0 · Dominion</Badge>
+        </div>
+        <p className="text-sm text-muted-foreground">Tenant management · ANGELNODE fleet · AI model governance · compliance automation · custom RBAC · backup & restore</p>
       </div>
 
       {/* Tenant Info */}
       <GlassCard aurora>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="p-3 rounded-lg bg-primary/10"><Building2 className="h-6 w-6 text-primary" /></div>
+            <div className="p-3 rounded-lg bg-primary/10"><Feather className="h-6 w-6 text-primary" /></div>
             <div>
-              <h3 className="text-lg font-bold">ANGELGRID Enterprise</h3>
-              <p className="text-xs text-muted-foreground">Organization ID: ANG-2847-ENT · Autonomous AI Defense Fabric</p>
+              <h3 className="text-lg font-bold">AngelClaw Enterprise</h3>
+              <p className="text-xs text-muted-foreground">Organization ID: ACL-2847-ENT · Guardian angel, not gatekeeper.</p>
+              <p className="text-xs text-muted-foreground font-mono">Cloud API: :8500 · ANGELNODE: :8400 · CLI: angelclawctl</p>
             </div>
           </div>
           <div className="flex items-center gap-6 text-sm">
             <div className="text-center"><p className="font-bold">Enterprise</p><p className="text-[10px] text-muted-foreground">Plan Tier</p></div>
-            <div className="text-center"><p className="font-bold">247</p><p className="text-[10px] text-muted-foreground">Members</p></div>
+            <div className="text-center"><p className="font-bold">3</p><p className="text-[10px] text-muted-foreground">Tenants</p></div>
+            <div className="text-center"><p className="font-bold">1,284</p><p className="text-[10px] text-muted-foreground">ANGELNODEs</p></div>
             <div className="text-center"><p className="font-bold">14</p><p className="text-[10px] text-muted-foreground">AI Agents</p></div>
             <div className="text-center">
               <p className="font-bold">78.4%</p>
@@ -105,7 +114,7 @@ export default function SettingsPage() {
       <GlassCard>
         <div className="flex items-center gap-2 mb-4">
           <Cpu className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-muted-foreground">ANGELNODE Fleet Management</h3>
+          <h3 className="text-sm font-semibold text-muted-foreground">ANGELNODE Fleet Management — Wingspan</h3>
           <Badge variant="default" className="text-[10px] ml-auto">{fleetAgents.reduce((a, f) => a + f.deployed, 0).toLocaleString()} Total Agents</Badge>
         </div>
         <table className="w-full text-sm">
@@ -136,7 +145,7 @@ export default function SettingsPage() {
       <GlassCard aurora>
         <div className="flex items-center gap-2 mb-4">
           <Bot className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-muted-foreground">AI Model Governance</h3>
+          <h3 className="text-sm font-semibold text-muted-foreground">AI Model Governance — Ollama Local · External APIs</h3>
         </div>
         <table className="w-full text-sm">
           <thead><tr className="border-b border-border/50 text-muted-foreground text-xs">
@@ -164,16 +173,17 @@ export default function SettingsPage() {
       <GlassCard>
         <div className="flex items-center gap-2 mb-4">
           <ShieldCheck className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-muted-foreground">Compliance Automation — Continuous Audit</h3>
+          <h3 className="text-sm font-semibold text-muted-foreground">Compliance Automation — Paladin + Scroll Keeper Continuous Audit</h3>
         </div>
         <div className="grid grid-cols-4 gap-3">
           {complianceFrameworks.map(c => (
             <div key={c.name} className="p-4 rounded-lg bg-muted/30 border border-border/30">
-              <div className="flex items-center gap-2 mb-3">
+              <div className="flex items-center gap-2 mb-2">
                 <c.icon className="h-4 w-4 text-primary" />
                 <span className="text-sm font-semibold">{c.name}</span>
               </div>
               <Badge variant={c.status === "Compliant" ? "default" : "secondary"} className="text-[10px] mb-2">{c.status}</Badge>
+              <p className="text-[10px] text-muted-foreground mb-2">Warden: {c.warden}</p>
               <div className="mt-2">
                 <div className="flex justify-between text-[10px] text-muted-foreground mb-1">
                   <span>Controls</span><span>{c.passing}/{c.controls}</span>
@@ -182,7 +192,7 @@ export default function SettingsPage() {
                   <div className={`h-full rounded-full ${c.passing === c.controls ? "bg-[hsl(var(--aegis-green))]" : "bg-[hsl(var(--aegis-amber))]"}`} style={{ width: `${(c.passing / c.controls) * 100}%` }} />
                 </div>
               </div>
-              <p className="text-[10px] text-muted-foreground mt-2">Last audit: {c.lastAudit}</p>
+              <p className="text-[10px] text-muted-foreground mt-2">Last: {c.lastAudit}</p>
             </div>
           ))}
         </div>
@@ -192,7 +202,7 @@ export default function SettingsPage() {
         {/* System Configuration */}
         <div className="col-span-7">
           <GlassCard className="h-full">
-            <h3 className="text-sm font-semibold text-muted-foreground mb-4">System Configuration</h3>
+            <h3 className="text-sm font-semibold text-muted-foreground mb-4">System Configuration — AngelClaw Core</h3>
             <div className="space-y-3">
               {systemToggles.map((t, i) => (
                 <div key={t.name} className="flex items-center justify-between p-3 rounded-lg bg-muted/30 border border-border/30">
@@ -211,9 +221,9 @@ export default function SettingsPage() {
         </div>
 
         {/* Notification Preferences */}
-        <div className="col-span-5">
-          <GlassCard className="h-full">
-            <h3 className="text-sm font-semibold text-muted-foreground mb-4">Notification Preferences</h3>
+        <div className="col-span-5 space-y-5">
+          <GlassCard>
+            <h3 className="text-sm font-semibold text-muted-foreground mb-4">Notification Channels — Slack, Discord, Webhook</h3>
             <table className="w-full text-xs">
               <thead><tr className="border-b border-border/50">
                 <th className="text-left py-2 px-1 font-medium text-muted-foreground">Channel</th>
@@ -233,6 +243,28 @@ export default function SettingsPage() {
               </tbody>
             </table>
           </GlassCard>
+
+          {/* RBAC */}
+          <GlassCard>
+            <div className="flex items-center gap-2 mb-3">
+              <Key className="h-4 w-4 text-primary" />
+              <h3 className="text-sm font-semibold text-muted-foreground">Custom RBAC Roles</h3>
+            </div>
+            <div className="space-y-2">
+              {rbacRoles.map(r => (
+                <div key={r.role} className="flex items-center justify-between p-2.5 rounded-lg bg-muted/30 border border-border/30">
+                  <div>
+                    <p className="text-xs font-mono font-bold text-primary">{r.role}</p>
+                    <p className="text-[10px] text-muted-foreground">{r.permissions}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] text-muted-foreground">{r.users} users</span>
+                    {r.apiKey && <Badge variant="outline" className="text-[10px]">API Key</Badge>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </GlassCard>
         </div>
       </div>
 
@@ -240,21 +272,7 @@ export default function SettingsPage() {
       <div className="grid grid-cols-12 gap-5">
         <div className="col-span-4">
           <GlassCard className="h-full">
-            <h3 className="text-sm font-semibold text-muted-foreground mb-3">Platform Stats</h3>
-            <div className="space-y-3">
-              {platformStats.map(p => (
-                <div key={p.label} className="flex items-center gap-3 p-3 rounded-lg bg-muted/30">
-                  <p.icon className="h-4 w-4 text-primary" />
-                  <div><p className="text-lg font-bold">{p.value}</p><p className="text-[10px] text-muted-foreground">{p.label}</p></div>
-                </div>
-              ))}
-            </div>
-          </GlassCard>
-        </div>
-
-        <div className="col-span-4">
-          <GlassCard className="h-full">
-            <h3 className="text-sm font-semibold text-muted-foreground mb-3">OS Coverage</h3>
+            <h3 className="text-sm font-semibold text-muted-foreground mb-3">OS Coverage — Fleet</h3>
             <div className="space-y-2">
               {osCoverage.map(o => (
                 <div key={o.name} className="flex items-center gap-3">
@@ -270,41 +288,42 @@ export default function SettingsPage() {
 
         <div className="col-span-4">
           <GlassCard className="h-full">
-            <h3 className="text-sm font-semibold text-muted-foreground mb-3">Environments</h3>
+            <h3 className="text-sm font-semibold text-muted-foreground mb-3">Active Environments</h3>
             <div className="space-y-2.5">
               {envs.map(e => (
                 <div key={e.name} className="flex items-center justify-between p-3 rounded-lg bg-muted/30 border border-border/30">
-                  <div className="flex items-center gap-2"><e.icon className="h-4 w-4 text-primary" /><span className="text-sm font-medium">{e.name}</span></div>
+                  <div className="flex items-center gap-2"><e.icon className="h-4 w-4 text-primary" /><div><p className="text-sm font-medium">{e.name}</p><p className="text-[10px] text-muted-foreground font-mono">:{e.port}</p></div></div>
                   <Badge variant="default" className="text-[10px]">{e.status}</Badge>
                 </div>
               ))}
             </div>
           </GlassCard>
         </div>
-      </div>
 
-      {/* Global Preferences */}
-      <GlassCard>
-        <h3 className="text-sm font-semibold text-muted-foreground mb-4">Global Preferences</h3>
-        <div className="grid grid-cols-4 gap-4">
-          <div className="p-3 rounded-lg bg-muted/30 border border-border/30">
-            <div className="flex items-center gap-2 mb-2"><Palette className="h-4 w-4 text-primary" /><span className="text-xs font-medium">Theme</span></div>
-            <p className="text-sm font-semibold">Cyber Angels (Dark)</p>
-          </div>
-          <div className="p-3 rounded-lg bg-muted/30 border border-border/30">
-            <div className="flex items-center gap-2 mb-2"><Languages className="h-4 w-4 text-primary" /><span className="text-xs font-medium">Language</span></div>
-            <p className="text-sm font-semibold">English (US)</p>
-          </div>
-          <div className="p-3 rounded-lg bg-muted/30 border border-border/30">
-            <div className="flex items-center gap-2 mb-2"><Timer className="h-4 w-4 text-primary" /><span className="text-xs font-medium">Timezone</span></div>
-            <p className="text-sm font-semibold">UTC+02:00 (Jerusalem)</p>
-          </div>
-          <div className="p-3 rounded-lg bg-muted/30 border border-border/30">
-            <div className="flex items-center gap-2 mb-2"><Database className="h-4 w-4 text-primary" /><span className="text-xs font-medium">Data Retention</span></div>
-            <p className="text-sm font-semibold">90 Days</p>
-          </div>
+        <div className="col-span-4">
+          <GlassCard className="h-full">
+            <h3 className="text-sm font-semibold text-muted-foreground mb-3">Global Preferences</h3>
+            <div className="space-y-2.5">
+              <div className="p-3 rounded-lg bg-muted/30 border border-border/30">
+                <div className="flex items-center gap-2 mb-1"><Palette className="h-4 w-4 text-primary" /><span className="text-xs font-medium">Theme</span></div>
+                <p className="text-sm font-semibold">Cyber Angels (Dark)</p>
+              </div>
+              <div className="p-3 rounded-lg bg-muted/30 border border-border/30">
+                <div className="flex items-center gap-2 mb-1"><Languages className="h-4 w-4 text-primary" /><span className="text-xs font-medium">Language</span></div>
+                <p className="text-sm font-semibold">English + Hebrew</p>
+              </div>
+              <div className="p-3 rounded-lg bg-muted/30 border border-border/30">
+                <div className="flex items-center gap-2 mb-1"><Database className="h-4 w-4 text-primary" /><span className="text-xs font-medium">Data Retention</span></div>
+                <p className="text-sm font-semibold">90 Days</p>
+              </div>
+              <div className="p-3 rounded-lg bg-muted/30 border border-border/30">
+                <div className="flex items-center gap-2 mb-1"><Clock className="h-4 w-4 text-primary" /><span className="text-xs font-medium">Uptime</span></div>
+                <p className="text-sm font-semibold text-[hsl(var(--aegis-green))]">99.99%</p>
+              </div>
+            </div>
+          </GlassCard>
         </div>
-      </GlassCard>
+      </div>
     </div>
   );
 }

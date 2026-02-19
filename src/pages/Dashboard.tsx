@@ -6,14 +6,14 @@ import { ActiveAlertsFeed } from "@/components/dashboard/ActiveAlertsFeed";
 import { NetworkTrustBar } from "@/components/dashboard/NetworkTrustBar";
 import { ComplianceHealth } from "@/components/dashboard/ComplianceHealth";
 import { Badge } from "@/components/ui/badge";
-import { Monitor, Apple, Terminal, Smartphone, Bot, Brain, ShieldCheck, Zap, Cpu, Eye, Radio } from "lucide-react";
+import { Monitor, Apple, Terminal, Smartphone, Bot, Brain, ShieldCheck, Zap, Cpu, Eye, Radio, Feather, Activity, Users, CheckCircle2 } from "lucide-react";
 
 const fleetNodes = [
-  { os: "Windows", icon: Monitor, count: 612, version: "v4.2.1", health: 99.2 },
-  { os: "macOS", icon: Apple, count: 358, version: "v4.2.1", health: 99.8 },
-  { os: "Linux", icon: Terminal, count: 204, version: "v4.2.0", health: 98.4 },
-  { os: "iOS", icon: Smartphone, count: 68, version: "v4.1.9", health: 100 },
-  { os: "Android", icon: Smartphone, count: 42, version: "v4.1.8", health: 97.6 },
+  { os: "Windows", icon: Monitor, count: 612, version: "v3.0.0", health: 99.2 },
+  { os: "macOS", icon: Apple, count: 358, version: "v3.0.0", health: 99.8 },
+  { os: "Linux", icon: Terminal, count: 204, version: "v3.0.0", health: 98.4 },
+  { os: "iOS", icon: Smartphone, count: 68, version: "v3.0.0", health: 100 },
+  { os: "Android", icon: Smartphone, count: 42, version: "v3.0.0", health: 97.6 },
 ];
 
 const aiAgents = [
@@ -32,21 +32,55 @@ const predictiveStats = [
   { label: "Auto-Remediations", value: "4,218", icon: Zap },
 ];
 
+const wingspanStats = [
+  { label: "Halo Score", value: "94", desc: "Org-wide security posture", icon: Feather, color: "var(--aegis-cyan)" },
+  { label: "Wingspan", value: "1,284", desc: "ANGELNODEs deployed", icon: Radio, color: "var(--aegis-green)" },
+  { label: "Active Tenants", value: "3", desc: "Isolated environments", icon: Users, color: "var(--aegis-purple)" },
+  { label: "Events Today", value: "48,291", desc: "Analyzed by Seraph Brain", icon: Activity, color: "var(--aegis-amber)" },
+];
+
 const riskColor = (r: number) => r > 25 ? "text-[hsl(var(--aegis-amber))]" : "text-[hsl(var(--aegis-green))]";
 
 export default function Dashboard() {
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">ANGELGRID Command Overview</h1>
-        <p className="text-sm text-muted-foreground mt-1">Autonomous AI Defense Fabric — real-time posture across every endpoint, AI agent, and autonomous system in SaaS, Hybrid & On-Prem environments</p>
+      <div className="flex items-start justify-between">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <Feather className="h-5 w-5 text-primary" />
+            <h1 className="text-2xl font-bold tracking-tight">AngelClaw Command Center</h1>
+            <Badge variant="outline" className="text-[10px] font-mono">v3.0.0 · Dominion</Badge>
+          </div>
+          <p className="text-sm text-muted-foreground">Guardian angel, not gatekeeper — autonomous AI defense fabric protecting every endpoint, AI agent, and autonomous system across SaaS, Hybrid & On-Prem</p>
+        </div>
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">
+          <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
+          <span className="text-xs font-semibold text-primary">All Wardens Active</span>
+        </div>
+      </div>
+
+      {/* Wingspan / Halo Score overview */}
+      <div className="grid grid-cols-4 gap-4">
+        {wingspanStats.map(s => (
+          <GlassCard key={s.label} className="flex items-center gap-4">
+            <div className="p-2.5 rounded-lg" style={{ backgroundColor: `hsl(${s.color} / 0.1)` }}>
+              <s.icon className="h-5 w-5" style={{ color: `hsl(${s.color})` }} />
+            </div>
+            <div>
+              <p className="text-2xl font-bold">{s.value}</p>
+              <p className="text-xs font-medium leading-tight">{s.label}</p>
+              <p className="text-[10px] text-muted-foreground">{s.desc}</p>
+            </div>
+          </GlassCard>
+        ))}
       </div>
 
       {/* Top row */}
       <div className="grid grid-cols-12 gap-5">
         <div className="col-span-3">
           <GlassCard aurora className="h-full flex flex-col items-center justify-center animate-shield-pulse">
-            <SecurityPostureGauge score={87} />
+            <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-2 font-semibold">Halo Score</p>
+            <SecurityPostureGauge score={94} />
           </GlassCard>
         </div>
         <div className="col-span-5">
@@ -94,7 +128,7 @@ export default function Dashboard() {
       <GlassCard>
         <div className="flex items-center gap-2 mb-4">
           <Radio className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-muted-foreground">ANGELNODE Fleet Status</h3>
+          <h3 className="text-sm font-semibold text-muted-foreground">ANGELNODE Fleet — Wingspan</h3>
           <Badge variant="default" className="text-[10px] ml-auto">{fleetNodes.reduce((a, n) => a + n.count, 0).toLocaleString()} Agents Deployed</Badge>
         </div>
         <div className="grid grid-cols-5 gap-3">
@@ -117,7 +151,7 @@ export default function Dashboard() {
       <GlassCard aurora>
         <div className="flex items-center gap-2 mb-4">
           <Bot className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-muted-foreground">AI Agent Protection Panel</h3>
+          <h3 className="text-sm font-semibold text-muted-foreground">AI Agent Protection Panel — OpenClaw Shield</h3>
           <Badge variant="default" className="text-[10px] ml-auto">{aiAgents.length} AI Agents Monitored</Badge>
         </div>
         <div className="grid grid-cols-3 gap-3">
@@ -137,19 +171,21 @@ export default function Dashboard() {
         </div>
       </GlassCard>
 
-      {/* Predictive Defense Ticker */}
+      {/* Seraph Brain Ticker */}
       <GlassCard glow="cyan">
         <div className="flex items-center gap-3">
           <Brain className="h-5 w-5 text-primary shrink-0" />
           <div className="flex-1 overflow-hidden">
             <div className="flex items-center gap-6 animate-marquee">
-              <span className="text-sm whitespace-nowrap"><span className="text-primary font-semibold">ANGELGRID AI</span> predicted and blocked <span className="font-bold text-[hsl(var(--aegis-green))]">847 attack vectors</span> in the last hour</span>
+              <span className="text-sm whitespace-nowrap"><span className="text-primary font-semibold">Seraph Brain</span> predicted and blocked <span className="font-bold text-[hsl(var(--aegis-green))]">847 attack vectors</span> in the last hour · 71+ intents active</span>
               <span className="text-muted-foreground">•</span>
-              <span className="text-sm whitespace-nowrap"><span className="font-semibold text-primary">3-step-ahead prediction</span> neutralized lateral movement attempt from 194.x.x.x</span>
+              <span className="text-sm whitespace-nowrap"><span className="font-semibold text-primary">Vigil Warden</span> neutralized lateral movement attempt from 194.x.x.x — 3-step prediction</span>
               <span className="text-muted-foreground">•</span>
-              <span className="text-sm whitespace-nowrap">Auto-remediation applied <span className="font-bold text-[hsl(var(--aegis-green))]">142 patches</span> across all OS platforms — zero downtime</span>
+              <span className="text-sm whitespace-nowrap"><span className="font-semibold text-primary">Iron Wing</span> applied <span className="font-bold text-[hsl(var(--aegis-green))]">142 patches</span> across all OS platforms — zero downtime</span>
               <span className="text-muted-foreground">•</span>
-              <span className="text-sm whitespace-nowrap"><span className="font-semibold text-primary">AI Agent Protection:</span> blocked prompt injection targeting GPT-4o Production instance</span>
+              <span className="text-sm whitespace-nowrap"><span className="font-semibold text-primary">Vault Keeper</span> blocked prompt injection targeting GPT-4o · Fail-Closed enforced</span>
+              <span className="text-muted-foreground">•</span>
+              <span className="text-sm whitespace-nowrap"><span className="font-semibold text-primary">1,848 tests passing</span> · 50+ API endpoints · 15+ DB tables · 12 wardens online</span>
             </div>
           </div>
           <Cpu className="h-5 w-5 text-primary shrink-0 animate-pulse" />

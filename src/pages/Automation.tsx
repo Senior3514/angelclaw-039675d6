@@ -1,86 +1,68 @@
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
-import { Bot, Play, CheckCircle2, Timer, Zap, Brain, Target, Cog, FileText, ArrowDown, Link2, Mail, Cloud, Shield, MonitorSmartphone, Wrench, Server, Globe, Activity } from "lucide-react";
+import { BarChart, Bar, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { Shield, Brain, BookOpen, Zap, Eye, Target, Activity, Monitor, Apple, Terminal, Cloud, BarChart3 } from "lucide-react";
 
 const stats = [
-  { label: "Active Playbooks", value: "34", icon: Bot, glow: "cyan" as const },
-  { label: "Executions Today", value: "1,247", icon: Play, glow: "cyan" as const },
-  { label: "Success Rate", value: "99.2%", icon: CheckCircle2, glow: "cyan" as const },
-  { label: "Avg Duration", value: "3.4s", icon: Timer, glow: "amber" as const },
+  { label: "Events Analyzed (30d)", value: "14,892K", icon: Shield, glow: "cyan" as const },
+  { label: "Seraph Brain Queries", value: "48,291", icon: Brain, glow: "cyan" as const },
+  { label: "Incident Reports", value: "23", icon: BookOpen, glow: "amber" as const },
+  { label: "Avg Detection Time", value: "0.3s", icon: Zap, glow: "cyan" as const },
 ];
 
-const playbooks = [
-  { name: "Ransomware Kill Chain", desc: "ANGELGRID AI autonomous detection, isolation, and rollback", trigger: "AI Detection", runs: 342, lastRun: "2m ago", status: "Active" },
-  { name: "Phishing Response", desc: "Email quarantine, ANGELNODE notification, IOC extraction", trigger: "Email Gateway", runs: 1204, lastRun: "8m ago", status: "Active" },
-  { name: "Privilege Escalation Block", desc: "ANGELGRID zero-trust verification and session termination", trigger: "Behavior Anomaly", runs: 89, lastRun: "15m ago", status: "Active" },
-  { name: "Cloud Drift Remediation", desc: "ANGELGRID Cloud auto-correct IaC drift across multi-cloud", trigger: "Scheduled", runs: 567, lastRun: "1h ago", status: "Active" },
-  { name: "Endpoint Compliance Check", desc: "ANGELNODE patch level, agent version, config validation", trigger: "Continuous", runs: 4892, lastRun: "1m ago", status: "Active" },
-  { name: "Threat Intel Enrichment", desc: "ANGELGRID AI IOC correlation with global threat feeds", trigger: "New Alert", runs: 2103, lastRun: "3m ago", status: "Active" },
-  { name: "AI Prompt Injection Defense", desc: "Real-time LLM input sanitization and adversarial pattern blocking", trigger: "AI Detection", runs: 1847, lastRun: "30s ago", status: "Active" },
-  { name: "Agent Behavioral Baseline", desc: "Continuous AI agent behavior monitoring with drift detection", trigger: "Continuous", runs: 3421, lastRun: "1m ago", status: "Active" },
-  { name: "Model Exfiltration Guard", desc: "Prevent unauthorized model weight extraction and API abuse", trigger: "AI Detection", runs: 234, lastRun: "5m ago", status: "Active" },
+const seraphIntents = [
+  { intent: "Scan the system", calls: 4821, success: 4821, lang: "EN/HE" },
+  { intent: "Show me threats", calls: 3402, success: 3400, lang: "EN/HE" },
+  { intent: "Anti-tamper status", calls: 2847, success: 2847, lang: "EN/HE" },
+  { intent: "Legion status", calls: 2104, success: 2104, lang: "EN" },
+  { intent: "Quarantine agent", calls: 891, success: 888, lang: "EN/HE" },
+  { intent: "Self-hardening status", calls: 756, success: 756, lang: "EN" },
+  { intent: "Feedback loop status", calls: 634, success: 634, lang: "EN" },
+  { intent: "Org overview", calls: 1247, success: 1247, lang: "EN/HE" },
 ];
 
-const workflowSteps = [
-  { label: "Trigger", detail: "Threat detected", icon: Zap },
-  { label: "Analyze", detail: "AI risk assessment", icon: Brain },
-  { label: "Decide", detail: "Policy evaluation", icon: Target },
-  { label: "Act", detail: "Auto-remediate", icon: Cog },
-  { label: "Report", detail: "Log & notify", icon: FileText },
+const orgMetrics = [
+  { day: "Mon", events: 8420, blocked: 8415, autoFixed: 7890 },
+  { day: "Tue", events: 9102, blocked: 9098, autoFixed: 8540 },
+  { day: "Wed", events: 11203, blocked: 11198, autoFixed: 10890 },
+  { day: "Thu", events: 10847, blocked: 10840, autoFixed: 10120 },
+  { day: "Fri", events: 13421, blocked: 13418, autoFixed: 12890 },
+  { day: "Sat", events: 6234, blocked: 6230, autoFixed: 5980 },
+  { day: "Sun", events: 5891, blocked: 5888, autoFixed: 5640 },
 ];
 
-const connectors = [
-  { name: "SIEM", status: "Connected", icon: Shield },
-  { name: "SOAR", status: "Connected", icon: Bot },
-  { name: "EDR", status: "Connected", icon: MonitorSmartphone },
-  { name: "Cloud", status: "Connected", icon: Cloud },
-  { name: "Email", status: "Connected", icon: Mail },
+const platformData = [
+  { name: "Windows", events: 4821, blocked: 4819 },
+  { name: "macOS", events: 2104, blocked: 2103 },
+  { name: "Linux", events: 1847, blocked: 1846 },
+  { name: "Cloud", events: 6120, blocked: 6118 },
+  { name: "Mobile", events: 342, blocked: 342 },
 ];
 
-const apiEndpoints = [
-  { method: "GET", path: "/api/v2/threats", desc: "List active threats" },
-  { method: "POST", path: "/api/v2/playbooks/execute", desc: "Trigger playbook execution" },
-  { method: "GET", path: "/api/v2/endpoints", desc: "Query managed endpoints" },
-  { method: "PUT", path: "/api/v2/policies/{id}", desc: "Update policy configuration" },
-  { method: "DELETE", path: "/api/v2/quarantine/{id}", desc: "Release quarantined item" },
-  { method: "GET", path: "/api/v2/audit/logs", desc: "Fetch audit trail" },
+const seraphStats = [
+  { label: "NLP Intents", value: "71+", icon: Brain },
+  { label: "API Endpoints", value: "50+", icon: Target },
+  { label: "DB Tables", value: "15+", icon: BookOpen },
+  { label: "Tests Passing", value: "1,848", icon: Shield },
 ];
 
-const recentRuns = [
-  { id: "EXE-4821", playbook: "Ransomware Kill Chain", trigger: "AI Detection", duration: "2.1s", status: "Success", time: "2m ago" },
-  { id: "EXE-4820", playbook: "Phishing Response", trigger: "Email Gateway", duration: "4.8s", status: "Success", time: "8m ago" },
-  { id: "EXE-4819", playbook: "Privilege Escalation Block", trigger: "Behavior Anomaly", duration: "1.2s", status: "Success", time: "15m ago" },
-  { id: "EXE-4818", playbook: "Endpoint Compliance Check", trigger: "Continuous", duration: "6.4s", status: "Success", time: "18m ago" },
-  { id: "EXE-4817", playbook: "AI Prompt Injection Defense", trigger: "AI Detection", duration: "0.8s", status: "Success", time: "22m ago" },
+const crossPlatform = [
+  { platform: "Windows", icon: Monitor, events: 4821, correlated: 342, autoFixed: 338 },
+  { platform: "macOS", icon: Apple, events: 2104, correlated: 156, autoFixed: 155 },
+  { platform: "Linux", icon: Terminal, events: 1847, correlated: 98, autoFixed: 97 },
+  { platform: "Cloud", icon: Cloud, events: 6120, correlated: 451, autoFixed: 449 },
 ];
-
-const playbookSuggestions = [
-  { name: "LLM Output Watermarking", reason: "ANGELGRID AI detected 23 unauthorized model outputs in external channels", confidence: 94, impact: "6 AI agents" },
-  { name: "Cross-Cloud Session Binding", reason: "Session hijacking patterns emerging across hybrid environments", confidence: 88, impact: "All cloud endpoints" },
-  { name: "Autonomous Agent Sandboxing", reason: "New autonomous agents deployed without behavioral baseline", confidence: 91, impact: "3 new AI agents" },
-];
-
-const crossEnvOrchestration = [
-  { env: "SaaS", icon: Cloud, activeRemediations: 12, status: "Synced", latency: "1.2s" },
-  { env: "On-Premises", icon: Server, activeRemediations: 8, status: "Synced", latency: "0.8s" },
-  { env: "Hybrid", icon: Globe, activeRemediations: 5, status: "Synced", latency: "2.1s" },
-];
-
-const selfHealingMetrics = [
-  { label: "Patches Applied", value: "1,842", desc: "Zero-downtime autonomous patching", icon: Wrench },
-  { label: "Configs Corrected", value: "456", desc: "Drift detection and auto-correction", icon: Cog },
-  { label: "Threats Neutralized", value: "12,491", desc: "Without human intervention", icon: Shield },
-  { label: "Mean Time to Heal", value: "2.8s", desc: "From detection to resolution", icon: Activity },
-];
-
-const methodColor = (m: string) => m === "GET" ? "bg-[hsl(var(--aegis-green))]/20 text-[hsl(var(--aegis-green))]" : m === "POST" ? "bg-primary/20 text-primary" : m === "PUT" ? "bg-[hsl(var(--aegis-amber))]/20 text-[hsl(var(--aegis-amber))]" : "bg-destructive/20 text-destructive";
 
 export default function Automation() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Automation & Orchestration</h1>
-        <p className="text-sm text-muted-foreground mt-1">ANGELGRID autonomous playbooks with AI-agent-specific defense, self-healing metrics, and cross-environment orchestration</p>
+        <div className="flex items-center gap-2 mb-1">
+          <BarChart3 className="h-5 w-5 text-primary" />
+          <h1 className="text-2xl font-bold tracking-tight">Analytics & Intelligence</h1>
+          <Badge variant="outline" className="text-[10px]">Seraph Brain · 71+ Intents</Badge>
+        </div>
+        <p className="text-sm text-muted-foreground">Seraph Brain natural language security operations in English and Hebrew · event replay · threat hunting DSL · 48,291 daily queries processed</p>
       </div>
 
       <div className="grid grid-cols-4 gap-4">
@@ -92,167 +74,122 @@ export default function Automation() {
         ))}
       </div>
 
-      {/* Self-Healing Metrics */}
+      {/* Seraph Brain Stats */}
       <div className="grid grid-cols-4 gap-4">
-        {selfHealingMetrics.map(m => (
-          <GlassCard key={m.label} glow="cyan">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-primary/10"><m.icon className="h-5 w-5 text-primary" /></div>
-              <div>
-                <p className="text-xl font-bold">{m.value}</p>
-                <p className="text-xs font-medium">{m.label}</p>
-                <p className="text-[10px] text-muted-foreground">{m.desc}</p>
-              </div>
-            </div>
+        {seraphStats.map(s => (
+          <GlassCard key={s.label} glow="cyan" className="flex items-center gap-4">
+            <div className="p-2.5 rounded-lg bg-primary/10"><s.icon className="h-5 w-5 text-primary" /></div>
+            <div><p className="text-2xl font-bold">{s.value}</p><p className="text-xs text-muted-foreground">{s.label}</p></div>
           </GlassCard>
         ))}
       </div>
 
-      {/* Playbook Gallery */}
-      <GlassCard>
-        <h3 className="text-sm font-semibold text-muted-foreground mb-4">Playbook Gallery</h3>
-        <div className="grid grid-cols-3 gap-3">
-          {playbooks.map(p => (
-            <div key={p.name} className="p-3 rounded-lg bg-muted/30 border border-border/30 hover:bg-muted/50 transition-colors">
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-sm font-medium">{p.name}</span>
-                <Badge variant="default" className="text-[10px]">{p.status}</Badge>
-              </div>
-              <p className="text-[10px] text-muted-foreground mb-2">{p.desc}</p>
-              <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
-                <span>⚡ {p.trigger}</span>
-                <span>{p.runs.toLocaleString()} runs</span>
-                <span>{p.lastRun}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </GlassCard>
-
-      {/* AI-Powered Playbook Suggestions */}
+      {/* Seraph Brain Intent Dashboard */}
       <GlassCard aurora>
         <div className="flex items-center gap-2 mb-4">
           <Brain className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-muted-foreground">AI-Powered Playbook Suggestions</h3>
+          <h3 className="text-sm font-semibold text-muted-foreground">Seraph Brain — Top NLP Intents (English + Hebrew)</h3>
         </div>
-        <div className="space-y-3">
-          {playbookSuggestions.map(s => (
-            <div key={s.name} className="flex items-center justify-between p-3 rounded-lg bg-muted/20 border border-border/20">
-              <div className="flex items-center gap-3">
-                <Zap className="h-4 w-4 text-primary shrink-0" />
-                <div>
-                  <p className="text-sm font-medium">{s.name}</p>
-                  <p className="text-[10px] text-muted-foreground">{s.reason}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <Badge variant="outline" className="text-[10px]">{s.impact}</Badge>
-                <span className="text-xs text-primary font-semibold">{s.confidence}%</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </GlassCard>
-
-      {/* Cross-Environment Orchestration */}
-      <GlassCard>
-        <div className="flex items-center gap-2 mb-4">
-          <Globe className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-muted-foreground">Cross-Environment Orchestration — Simultaneous Remediation</h3>
-        </div>
-        <div className="grid grid-cols-3 gap-4">
-          {crossEnvOrchestration.map(e => (
-            <div key={e.env} className="p-4 rounded-lg bg-muted/30 border border-border/30 text-center">
-              <e.icon className="h-6 w-6 mx-auto mb-2 text-primary" />
-              <p className="text-sm font-semibold">{e.env}</p>
-              <p className="text-2xl font-bold mt-1">{e.activeRemediations}</p>
-              <p className="text-[10px] text-muted-foreground">active remediations</p>
-              <div className="mt-2 pt-2 border-t border-border/30 flex justify-center gap-3 text-[10px]">
-                <span className="text-[hsl(var(--aegis-green))]">● {e.status}</span>
-                <span className="text-muted-foreground">{e.latency} latency</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </GlassCard>
-
-      <div className="grid grid-cols-12 gap-5">
-        {/* Workflow Editor */}
-        <div className="col-span-5">
-          <GlassCard aurora className="h-full">
-            <h3 className="text-sm font-semibold text-muted-foreground mb-4">Workflow Engine</h3>
-            <div className="flex flex-col items-center gap-0">
-              {workflowSteps.map((w, i) => (
-                <div key={w.label} className="flex flex-col items-center">
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/40 border border-border/40 w-56">
-                    <w.icon className="h-4 w-4 text-primary shrink-0" />
-                    <div>
-                      <p className="text-xs font-semibold">{w.label}</p>
-                      <p className="text-[10px] text-muted-foreground">{w.detail}</p>
+        <div className="overflow-auto">
+          <table className="w-full text-sm">
+            <thead><tr className="border-b border-border/50 text-muted-foreground text-xs">
+              <th className="text-left py-2 px-2 font-medium">Intent</th>
+              <th className="text-left py-2 px-2 font-medium">Languages</th>
+              <th className="text-left py-2 px-2 font-medium">Calls (30d)</th>
+              <th className="text-left py-2 px-2 font-medium">Success</th>
+              <th className="text-left py-2 px-2 font-medium">Rate</th>
+            </tr></thead>
+            <tbody>
+              {seraphIntents.map(i => (
+                <tr key={i.intent} className="border-b border-border/20 hover:bg-muted/20">
+                  <td className="py-2 px-2 font-mono text-sm text-primary">{i.intent}</td>
+                  <td className="py-2 px-2"><Badge variant="outline" className="text-[10px]">{i.lang}</Badge></td>
+                  <td className="py-2 px-2 text-xs font-semibold">{i.calls.toLocaleString()}</td>
+                  <td className="py-2 px-2 text-xs text-[hsl(var(--aegis-green))] font-semibold">{i.success.toLocaleString()}</td>
+                  <td className="py-2 px-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-16 h-1.5 rounded-full bg-muted overflow-hidden">
+                        <div className="h-full rounded-full bg-[hsl(var(--aegis-green))]" style={{ width: `${(i.success / i.calls) * 100}%` }} />
+                      </div>
+                      <span className="text-xs text-muted-foreground">{((i.success / i.calls) * 100).toFixed(1)}%</span>
                     </div>
-                  </div>
-                  {i < workflowSteps.length - 1 && <ArrowDown className="h-4 w-4 text-primary/40 my-1" />}
-                </div>
+                  </td>
+                </tr>
               ))}
-            </div>
+            </tbody>
+          </table>
+        </div>
+      </GlassCard>
+
+      {/* Charts */}
+      <div className="grid grid-cols-12 gap-5">
+        <div className="col-span-8">
+          <GlassCard>
+            <h3 className="text-sm font-semibold text-muted-foreground mb-3">Weekly Event Trend — Detected vs Blocked vs Auto-Fixed</h3>
+            <ResponsiveContainer width="100%" height={240}>
+              <AreaChart data={orgMetrics}>
+                <defs>
+                  <linearGradient id="gEvents" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="hsl(var(--aegis-amber))" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="hsl(var(--aegis-amber))" stopOpacity={0} />
+                  </linearGradient>
+                  <linearGradient id="gBlocked" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+                  </linearGradient>
+                  <linearGradient id="gFixed" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="hsl(var(--aegis-green))" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="hsl(var(--aegis-green))" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="day" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }} />
+                <YAxis tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }} />
+                <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }} />
+                <Area type="monotone" dataKey="events" stroke="hsl(var(--aegis-amber))" fill="url(#gEvents)" strokeWidth={2} />
+                <Area type="monotone" dataKey="blocked" stroke="hsl(var(--primary))" fill="url(#gBlocked)" strokeWidth={2} />
+                <Area type="monotone" dataKey="autoFixed" stroke="hsl(var(--aegis-green))" fill="url(#gFixed)" strokeWidth={2} />
+              </AreaChart>
+            </ResponsiveContainer>
           </GlassCard>
         </div>
-
-        {/* Connectors + API */}
-        <div className="col-span-7 space-y-5">
-          <GlassCard>
-            <h3 className="text-sm font-semibold text-muted-foreground mb-3">Connectors Gallery</h3>
-            <div className="grid grid-cols-5 gap-2">
-              {connectors.map(c => (
-                <div key={c.name} className="text-center p-3 rounded-lg bg-muted/30 border border-border/30">
-                  <c.icon className="h-5 w-5 text-primary mx-auto mb-1" />
-                  <p className="text-xs font-medium">{c.name}</p>
-                  <p className="text-[10px] text-[hsl(var(--aegis-green))]">● {c.status}</p>
-                </div>
-              ))}
-            </div>
-          </GlassCard>
-
-          <GlassCard>
-            <h3 className="text-sm font-semibold text-muted-foreground mb-3">API Explorer</h3>
-            <div className="space-y-1.5">
-              {apiEndpoints.map((e, i) => (
-                <div key={i} className="flex items-center gap-3 p-2 rounded bg-muted/20 hover:bg-muted/40 transition-colors">
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${methodColor(e.method)}`}>{e.method}</span>
-                  <code className="text-xs font-mono text-primary">{e.path}</code>
-                  <span className="text-[10px] text-muted-foreground ml-auto">{e.desc}</span>
-                </div>
-              ))}
-            </div>
+        <div className="col-span-4">
+          <GlassCard className="h-full">
+            <h3 className="text-sm font-semibold text-muted-foreground mb-3">Events by Platform</h3>
+            <ResponsiveContainer width="100%" height={240}>
+              <BarChart data={platformData} layout="vertical">
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis type="number" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 9 }} />
+                <YAxis dataKey="name" type="category" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }} width={55} />
+                <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }} />
+                <Bar dataKey="events" fill="hsl(var(--aegis-amber) / 0.6)" radius={[0, 4, 4, 0]} />
+                <Bar dataKey="blocked" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
           </GlassCard>
         </div>
       </div>
 
-      {/* Recent Runs */}
+      {/* Cross-Platform */}
       <GlassCard>
-        <h3 className="text-sm font-semibold text-muted-foreground mb-3">Recent Runs</h3>
-        <table className="w-full text-sm">
-          <thead><tr className="border-b border-border/50 text-xs text-muted-foreground">
-            <th className="text-left py-2 px-2 font-medium">ID</th>
-            <th className="text-left py-2 px-2 font-medium">Playbook</th>
-            <th className="text-left py-2 px-2 font-medium">Trigger</th>
-            <th className="text-left py-2 px-2 font-medium">Duration</th>
-            <th className="text-left py-2 px-2 font-medium">Status</th>
-            <th className="text-left py-2 px-2 font-medium">Time</th>
-          </tr></thead>
-          <tbody>
-            {recentRuns.map(r => (
-              <tr key={r.id} className="border-b border-border/20 hover:bg-muted/20">
-                <td className="py-2 px-2 font-mono text-xs text-primary">{r.id}</td>
-                <td className="py-2 px-2 font-medium">{r.playbook}</td>
-                <td className="py-2 px-2 text-muted-foreground text-xs">{r.trigger}</td>
-                <td className="py-2 px-2 text-xs">{r.duration}</td>
-                <td className="py-2 px-2"><Badge variant={r.status === "Success" ? "default" : "secondary"} className="text-[10px]">{r.status}</Badge></td>
-                <td className="py-2 px-2 text-xs text-muted-foreground">{r.time}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="flex items-center gap-2 mb-4">
+          <Activity className="h-4 w-4 text-primary" />
+          <h3 className="text-sm font-semibold text-muted-foreground">Cross-Platform Event Correlation — Simultaneous Analysis</h3>
+        </div>
+        <div className="grid grid-cols-4 gap-3">
+          {crossPlatform.map(c => (
+            <div key={c.platform} className="p-4 rounded-lg bg-muted/30 border border-border/30 text-center">
+              <c.icon className="h-6 w-6 mx-auto mb-2 text-primary" />
+              <p className="text-sm font-semibold">{c.platform}</p>
+              <p className="text-xl font-bold mt-1">{c.events.toLocaleString()}</p>
+              <p className="text-[10px] text-muted-foreground">events analyzed</p>
+              <div className="mt-2 pt-2 border-t border-border/30 grid grid-cols-2 gap-1 text-[10px]">
+                <div><p className="font-semibold text-primary">{c.correlated}</p><p className="text-muted-foreground">Correlated</p></div>
+                <div><p className="font-semibold text-[hsl(var(--aegis-green))]">{c.autoFixed}</p><p className="text-muted-foreground">Auto-Fixed</p></div>
+              </div>
+            </div>
+          ))}
+        </div>
       </GlassCard>
     </div>
   );
