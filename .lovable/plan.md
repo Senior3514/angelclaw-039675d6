@@ -1,75 +1,69 @@
 
+# Nuclear Simplification: One Story, Zero Clutter
 
-# Maximum Simplification: Anti-Evil AGI Core
+## What's Still Wrong (Specifically)
 
-## What the User Is Saying
+The structure is right (3 sections). The **content inside each section** is still dense:
 
-The dashboard still has too many separate GlassCards, too many numbers, too many labeled sections. The Settings page is also extremely information-dense with 7+ separate panels. The user wants the product to feel like ONE bold statement: **AngelClaw stops Evil AGI. Period.**
+- Left card: gauge + 3 stat sub-cards = two separate visual units in one card
+- Right card: section header + Fail-Closed pill + 3 intercept counters + live feed header + feed items with warden badges + timestamps = ~7 visual layers
+- Angel Legion strip: icons + names + pulse + badge = 4 elements per warden chip
+- Bottom: separate Seraph Brain card with header + CPU icon + 3 lines of text
+- `ActiveAlertsFeed`: each row has icon + message + warden badge + time = 4 fields
 
----
+## The New Rule: Every Section = One Thought
 
-## Dashboard: Reduce to 3 Sections (from 5)
+- **Top row**: Gauge on the left. On the right: the 3 intercept numbers (HUGE, no labels beyond the number type), then 2 live alert lines below with NO warden badge, NO timestamp — just the message.
+- **Angel Legion**: 6 names only + green dot. Remove icons. Remove badge.
+- **Bottom**: Chart fills left. Seraph Brain = 2 short lines max, no card header, no CPU icon — just text.
+- **`ActiveAlertsFeed`**: Show 2 alerts max. Each = colored dot + 1-line message. Remove warden badge, remove time, remove icon, remove border styling complexity.
 
-The current 5 GlassCards get collapsed into 3 — less chrome, more signal:
+## Exact Cuts Per File
 
-### New Structure
+### `src/pages/Dashboard.tsx`
+
+1. **Remove** the 3 mini stat sub-cards under the gauge (ANGELNODEs, Threats, Uptime) — the Halo score alone is the signal
+2. **Remove** the "Evil AGI Shield" sub-header row (Sword icon + label + Fail-Closed pill) from inside the right GlassCard — already in header
+3. **Intercept counters**: remove the icon from each counter tile — number + label only, no border-left color trick
+4. **Seraph Brain**: remove the card header (Brain icon + "Seraph Brain" label + Cpu icon) — just the 2 ticker lines inline
+5. **Angel Legion**: remove `w.icon` from each chip — name + pulse dot only
+6. **Remove** the `Badge` "6/6 Active" from the Legion strip
+7. **tickerItems**: reduce to 2 items
+
+### `src/components/dashboard/ActiveAlertsFeed.tsx`
+
+1. **Cap** alerts to 2 visible items
+2. **Remove** the warden badge span from each row
+3. **Remove** the timestamp span from each row
+4. **Simplify** each row to: colored severity dot + message text — nothing else
+5. **Remove** the "criticalCount" badge from the header — just the LIVE dot + text
+
+## Visual Result
 
 ```text
-┌─────────────────────────────────────────────────────────┐
-│  AngelClaw  ·  Halo 94  ·  All Wardens Active  ·  Fail-Closed  │
-├────────────────────┬────────────────────────────────────┤
-│   HALO GAUGE       │   3 counters, stacked vertically   │
-│   (large ring)     │   Injections  |  Jailbreaks  |     │
-│                    │   Model Poisoning                   │
-│                    │   ────────────────────────────     │
-│                    │   Live feed: 3 rows max, no title  │
-├────────────────────┴────────────────────────────────────┤
-│  ANGEL LEGION  ·  6 wardens  ·  1 row, no grid border  │
-├─────────────────────────────────────────────────────────┤
-│  Threat chart (left)  |  Seraph Brain: 2 lines (right) │
-└─────────────────────────────────────────────────────────┘
+Header: AngelClaw · Halo:94 · All Wardens Active · Fail-Closed
+
+┌──────────────┬──────────────────────────────────────────┐
+│  Halo gauge  │  1,247   89   12                         │
+│  (ring only) │  Injections · Jailbreaks · Poisoning     │
+│              │  ─────────────────────────────────────   │
+│              │  ● Prompt injection blocked               │
+│              │  ● Jailbreak neutralized                  │
+└──────────────┴──────────────────────────────────────────┘
+
+  Angel Legion:  Seraph Brain ●  Vault Keeper ●  Glass Eye ●  Vigil ●  Paladin ●  Gate Keeper ●
+
+┌─────────────────────────────┬────────────────────────────┐
+│  Threat chart               │  847 vectors blocked       │
+│                             │  lateral movement stopped  │
+└─────────────────────────────┴────────────────────────────┘
 ```
 
-**What gets removed from Dashboard:**
-- The "Evil AGI Shield" as a separate full-width GlassCard → merged into the top row right column
-- The "Angel Legion" as a full GlassCard → becomes a minimal horizontal strip (6 dots + names)
-- The interception table (3 rows) → removed entirely. The 3 numbers tell the story alone.
-- Seraph Brain as its own card → folded into bottom row alongside chart
-
-**What remains (absolute minimum):**
-1. **Header** — 1 line, 3 pills
-2. **Top row** — Halo gauge left | 3 intercept numbers + 3 live alerts right
-3. **Angel Legion strip** — 6 wardens as a single inline row of chips
-4. **Bottom row** — Threat chart | 2 Seraph Brain lines
-
----
-
-## Settings Page: Reduce to 4 Sections (from 7)
-
-Currently has: Tenant Info, System Toggles, Anti-Tamper (huge), Fleet table, Notification Matrix, AI Model Governance, Compliance, RBAC = **8 panels**.
-
-Slim to:
-
-| Keep | Cut |
-|---|---|
-| Tenant card (trimmed to 3 stats) | Remove the Anti-Tamper full audit trail table (keep mode selector only) |
-| System Toggles (keep 6, remove descriptions) | Remove Fleet table (it lives in its own page) |
-| Anti-Tamper mode selector + 2 stats only | Remove Notification Matrix |
-| RBAC roles (3 rows, simplified) | Remove Compliance frameworks (lives in its own page) |
-
----
+Clean. 2 seconds. Done.
 
 ## Files Changed
 
 | File | Change |
 |---|---|
-| `src/pages/Dashboard.tsx` | Collapse to 3 sections: top row merges gauge + intercept counters + live feed; Angel Legion becomes a single horizontal chip strip; remove standalone Evil AGI Shield card and interception table |
-| `src/components/dashboard/ActiveAlertsFeed.tsx` | Cap to 3 alerts max, remove dismiss button (reduces visual noise), shorter message strings |
-| `src/pages/SettingsPage.tsx` | Cut from 8 panels to 4: remove Anti-Tamper audit table, Fleet table, Notification Matrix, Compliance frameworks |
-
----
-
-## Visual Principle
-
-Every section should pass the **"one glance" test**: you see it, you understand it in under 2 seconds, and you move on. No tables where a number works. No 7 columns where 3 work. No separate card where an inline row works.
-
+| `src/pages/Dashboard.tsx` | Remove gauge sub-cards, remove inner card header for Evil AGI Shield, remove icons from intercepts, simplify Legion strip (no icons, no badge), reduce ticker to 2 lines with no header |
+| `src/components/dashboard/ActiveAlertsFeed.tsx` | Cap to 2 items, remove warden badge, remove timestamp, remove icon — severity dot + message only |
