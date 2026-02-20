@@ -6,7 +6,7 @@ import { ActiveAlertsFeed } from "@/components/dashboard/ActiveAlertsFeed";
 import { NetworkTrustBar } from "@/components/dashboard/NetworkTrustBar";
 import { ComplianceHealth } from "@/components/dashboard/ComplianceHealth";
 import { Badge } from "@/components/ui/badge";
-import { Monitor, Apple, Terminal, Smartphone, Bot, Brain, ShieldCheck, Zap, Cpu, Eye, Radio, Feather, Activity, Users, CheckCircle2 } from "lucide-react";
+import { Monitor, Apple, Terminal, Smartphone, Bot, Brain, ShieldCheck, Zap, Cpu, Eye, Radio, Feather, Activity, Users, CheckCircle2, ShieldAlert, Lock } from "lucide-react";
 
 const fleetNodes = [
   { os: "Windows", icon: Monitor, count: 612, version: "v3.0.0", health: 99.2 },
@@ -170,6 +170,85 @@ export default function Dashboard() {
           ))}
         </div>
       </GlassCard>
+
+      {/* Evil AGI Shield Panel */}
+      {(() => {
+        const evilAgiStats = [
+          { label: "Prompt Injections Blocked", value: "1,247", color: "var(--aegis-red)" },
+          { label: "Jailbreaks Neutralized", value: "89", color: "var(--aegis-amber)" },
+          { label: "Model Poisoning Stopped", value: "12", color: "var(--aegis-cyan)" },
+        ];
+        const interceptions = [
+          { agent: "GPT-4o Production", attack: "Prompt Injection", warden: "Vault Keeper", status: "Blocked", time: "1m ago" },
+          { agent: "Claude 3.5 Sonnet", attack: "Jailbreak", warden: "Seraph Brain", status: "Neutralized", time: "4m ago" },
+          { agent: "Data Pipeline Agent", attack: "Data Exfil", warden: "Paladin", status: "Blocked", time: "9m ago" },
+          { agent: "Customer Support Bot", attack: "Adversarial Input", warden: "Glass Eye", status: "Neutralized", time: "14m ago" },
+          { agent: "Code Review Copilot", attack: "Model Poisoning", warden: "Vault Keeper", status: "Monitoring", time: "22m ago" },
+          { agent: "Threat Intel Analyzer", attack: "Agent Hijack", warden: "Vigil", status: "Blocked", time: "38m ago" },
+        ];
+        const statusStyle: Record<string, string> = {
+          Blocked: "bg-[hsl(var(--aegis-red)/0.15)] text-[hsl(var(--aegis-red))] border border-[hsl(var(--aegis-red)/0.3)]",
+          Neutralized: "bg-[hsl(var(--aegis-green)/0.15)] text-[hsl(var(--aegis-green))] border border-[hsl(var(--aegis-green)/0.3)]",
+          Monitoring: "bg-[hsl(var(--aegis-amber)/0.15)] text-[hsl(var(--aegis-amber))] border border-[hsl(var(--aegis-amber)/0.3)]",
+        };
+        return (
+          <GlassCard aurora>
+            <div className="flex items-center gap-3 mb-4">
+              <ShieldAlert className="h-5 w-5 text-primary shrink-0" />
+              <div>
+                <h3 className="text-sm font-semibold leading-tight">Evil AGI Shield — OpenClaw Defense Layer</h3>
+                <p className="text-[10px] text-muted-foreground">Active interception of offensive AI threats targeting protected agents</p>
+              </div>
+              <div className="ml-auto flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[hsl(var(--aegis-green)/0.12)] border border-[hsl(var(--aegis-green)/0.3)]">
+                <Lock className="w-3 h-3 text-[hsl(var(--aegis-green))]" />
+                <span className="text-[10px] font-bold text-[hsl(var(--aegis-green))] tracking-wide">Fail-Closed Active</span>
+              </div>
+            </div>
+
+            {/* Stats row */}
+            <div className="grid grid-cols-3 gap-3 mb-4">
+              {evilAgiStats.map(s => (
+                <div key={s.label} className="p-3 rounded-lg bg-muted/30 border border-border/30 text-center">
+                  <p className="text-2xl font-bold" style={{ color: `hsl(${s.color})` }}>{s.value}</p>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">{s.label}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Interception table */}
+            <table className="w-full text-xs mb-4">
+              <thead>
+                <tr className="border-b border-border/50 text-muted-foreground">
+                  <th className="text-left py-2 px-2 font-medium">Target Agent</th>
+                  <th className="text-left py-2 px-2 font-medium">Attack Type</th>
+                  <th className="text-left py-2 px-2 font-medium">Warden</th>
+                  <th className="text-left py-2 px-2 font-medium">Status</th>
+                  <th className="text-left py-2 px-2 font-medium">Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                {interceptions.map((row, i) => (
+                  <tr key={i} className="border-b border-border/20 hover:bg-muted/20">
+                    <td className="py-2 px-2 font-medium">{row.agent}</td>
+                    <td className="py-2 px-2 text-muted-foreground">{row.attack}</td>
+                    <td className="py-2 px-2 text-primary font-semibold">{row.warden}</td>
+                    <td className="py-2 px-2">
+                      <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${statusStyle[row.status]}`}>{row.status}</span>
+                    </td>
+                    <td className="py-2 px-2 text-muted-foreground">{row.time}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            {/* Protection mode footer */}
+            <div className="flex items-center gap-2 pt-2 border-t border-border/30">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[hsl(var(--aegis-green)/0.12)] text-[hsl(var(--aegis-green))] border border-[hsl(var(--aegis-green)/0.3)]">Fail-Closed</span>
+              <p className="text-[10px] text-muted-foreground">If AngelClaw is unreachable, all AI agent actions are automatically blocked — no exceptions.</p>
+            </div>
+          </GlassCard>
+        );
+      })()}
 
       {/* Seraph Brain Ticker */}
       <GlassCard glow="cyan">
