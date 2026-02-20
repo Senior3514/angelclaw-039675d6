@@ -1,43 +1,61 @@
 
-# Dashboard Radical Slim-Down: Core Identity Only
 
-## The Problem (Specific)
+# Maximum Simplification: Anti-Evil AGI Core
 
-The current dashboard structure is already correct (5 sections, right narrative). But it's still overwhelming because:
-- **ActiveAlertsFeed**: 15-item alert pool cycling every 4s — too noisy, too much text per item
-- **Angel Legion**: 12 wardens each showing a large "blocked" number — becomes a number dump
-- **Seraph Brain Ticker**: 5 items of dense text — nobody reads all of it
-- **Evil AGI Shield**: 6 agents + 6 interception rows + 3 counters + footer = too much inside one card
-- **Interception table**: 5 columns × 6 rows of data — cognitive overload
+## What the User Is Saying
 
-## The Fix: Trim Everything to Its Essence
-
-Same 5 sections. Same structure. Just drastically less data, shorter text, more breathing room.
+The dashboard still has too many separate GlassCards, too many numbers, too many labeled sections. The Settings page is also extremely information-dense with 7+ separate panels. The user wants the product to feel like ONE bold statement: **AngelClaw stops Evil AGI. Period.**
 
 ---
 
-## Section-by-Section Cuts
+## Dashboard: Reduce to 3 Sections (from 5)
 
-### Section 1 — Header (no change needed, already clean)
+The current 5 GlassCards get collapsed into 3 — less chrome, more signal:
 
-### Section 2 — Halo Gauge + Live Feed
-- **Gauge**: keep as-is (it's already minimal)
-- **ActiveAlertsFeed**: reduce pool from 15 items → **5 items**, shorter 1-line messages, remove the filter tabs (All / Critical / Warning / Info adds clutter), keep just the LIVE badge + dismiss. Max visible = 4 rows.
+### New Structure
 
-### Section 3 — Evil AGI Shield
-- **Left side**: Keep the 3 counters (core identity) — but reduce to **simpler numbers** (no thousands with commas needed to feel dramatic)
-- **Remove the 6-agent compact grid** entirely — it adds nothing to the Evil AGI story. The agents are implied.
-- **Right side**: Reduce interception table from 6 rows → **3 rows**, drop the "Time" column, keep Agent | Attack | Warden | Status (4 cols)
-- **Footer**: Keep the Fail-Closed guarantee (1 line only)
+```text
+┌─────────────────────────────────────────────────────────┐
+│  AngelClaw  ·  Halo 94  ·  All Wardens Active  ·  Fail-Closed  │
+├────────────────────┬────────────────────────────────────┤
+│   HALO GAUGE       │   3 counters, stacked vertically   │
+│   (large ring)     │   Injections  |  Jailbreaks  |     │
+│                    │   Model Poisoning                   │
+│                    │   ────────────────────────────     │
+│                    │   Live feed: 3 rows max, no title  │
+├────────────────────┴────────────────────────────────────┤
+│  ANGEL LEGION  ·  6 wardens  ·  1 row, no grid border  │
+├─────────────────────────────────────────────────────────┤
+│  Threat chart (left)  |  Seraph Brain: 2 lines (right) │
+└─────────────────────────────────────────────────────────┘
+```
 
-### Section 4 — Angel Legion
-- Reduce from **12 wardens → 6 wardens** (the most important ones)
-- Remove the "blocked" number from each card — just name + specialty + green dot
-- 3-col grid instead of 4-col (more breathing room per card)
+**What gets removed from Dashboard:**
+- The "Evil AGI Shield" as a separate full-width GlassCard → merged into the top row right column
+- The "Angel Legion" as a full GlassCard → becomes a minimal horizontal strip (6 dots + names)
+- The interception table (3 rows) → removed entirely. The 3 numbers tell the story alone.
+- Seraph Brain as its own card → folded into bottom row alongside chart
 
-### Section 5 — Seraph Brain Ticker + Threat Chart
-- Reduce ticker from **5 items → 3 items**, shorter text per item (max 10 words each)
-- Threat chart stays as-is
+**What remains (absolute minimum):**
+1. **Header** — 1 line, 3 pills
+2. **Top row** — Halo gauge left | 3 intercept numbers + 3 live alerts right
+3. **Angel Legion strip** — 6 wardens as a single inline row of chips
+4. **Bottom row** — Threat chart | 2 Seraph Brain lines
+
+---
+
+## Settings Page: Reduce to 4 Sections (from 7)
+
+Currently has: Tenant Info, System Toggles, Anti-Tamper (huge), Fleet table, Notification Matrix, AI Model Governance, Compliance, RBAC = **8 panels**.
+
+Slim to:
+
+| Keep | Cut |
+|---|---|
+| Tenant card (trimmed to 3 stats) | Remove the Anti-Tamper full audit trail table (keep mode selector only) |
+| System Toggles (keep 6, remove descriptions) | Remove Fleet table (it lives in its own page) |
+| Anti-Tamper mode selector + 2 stats only | Remove Notification Matrix |
+| RBAC roles (3 rows, simplified) | Remove Compliance frameworks (lives in its own page) |
 
 ---
 
@@ -45,14 +63,13 @@ Same 5 sections. Same structure. Just drastically less data, shorter text, more 
 
 | File | Change |
 |---|---|
-| `src/pages/Dashboard.tsx` | Remove agent grid from Evil AGI panel, trim interception table to 3 rows, trim wardens to 6, simplify warden cards |
-| `src/components/dashboard/ActiveAlertsFeed.tsx` | Reduce pool to 5 items, shorter messages, remove filter tabs, cap max-height tighter |
+| `src/pages/Dashboard.tsx` | Collapse to 3 sections: top row merges gauge + intercept counters + live feed; Angel Legion becomes a single horizontal chip strip; remove standalone Evil AGI Shield card and interception table |
+| `src/components/dashboard/ActiveAlertsFeed.tsx` | Cap to 3 alerts max, remove dismiss button (reduces visual noise), shorter message strings |
+| `src/pages/SettingsPage.tsx` | Cut from 8 panels to 4: remove Anti-Tamper audit table, Fleet table, Notification Matrix, Compliance frameworks |
 
-## Result
+---
 
-The dashboard tells ONE story in ONE glance:
-- **Halo 94** — are we safe?
-- **Live feed** — what's happening right now? (4 items max, no tab UI)
-- **Evil AGI Shield** — 3 numbers + 3 interceptions = the fight at a glance
-- **6 Wardens** — who's defending us? (name + role only)
-- **Seraph Brain** — 3 short intel lines
+## Visual Principle
+
+Every section should pass the **"one glance" test**: you see it, you understand it in under 2 seconds, and you move on. No tables where a number works. No 7 columns where 3 work. No separate card where an inline row works.
+
