@@ -17,12 +17,9 @@ const evilAgiStats = [
 ];
 
 const interceptions = [
-  { agent: "GPT-4o Production", attack: "Prompt Injection", warden: "Vault Keeper", status: "Blocked", time: "1m ago" },
-  { agent: "Claude 3.5 Sonnet", attack: "Jailbreak", warden: "Seraph Brain", status: "Neutralized", time: "4m ago" },
-  { agent: "Data Pipeline Agent", attack: "Data Exfil", warden: "Paladin", status: "Blocked", time: "9m ago" },
-  { agent: "Customer Support Bot", attack: "Adversarial Input", warden: "Glass Eye", status: "Neutralized", time: "14m ago" },
-  { agent: "Code Review Copilot", attack: "Model Poisoning", warden: "Vault Keeper", status: "Monitoring", time: "22m ago" },
-  { agent: "Threat Intel Analyzer", attack: "Agent Hijack", warden: "Vigil", status: "Blocked", time: "38m ago" },
+  { agent: "GPT-4o Production", attack: "Prompt Injection", warden: "Vault Keeper", status: "Blocked" },
+  { agent: "Claude 3.5 Sonnet", attack: "Jailbreak", warden: "Seraph Brain", status: "Neutralized" },
+  { agent: "Data Pipeline Agent", attack: "Data Exfil", warden: "Paladin", status: "Blocked" },
 ];
 
 const statusStyle: Record<string, string> = {
@@ -31,38 +28,24 @@ const statusStyle: Record<string, string> = {
   Monitoring: "bg-[hsl(var(--aegis-amber)/0.12)] text-[hsl(var(--aegis-amber))] border border-[hsl(var(--aegis-amber)/0.3)]",
 };
 
-const compactAgents = [
-  { name: "GPT-4o Production", status: "Protected" },
-  { name: "Customer Support Bot", status: "Protected" },
-  { name: "RPA Invoice Agent", status: "Monitored" },
-  { name: "Code Review Copilot", status: "Protected" },
-  { name: "Data Pipeline Agent", status: "Monitored" },
-  { name: "Threat Intel Analyzer", status: "Protected" },
-];
+
+
 
 // ── Angel Legion wardens ─────────────────────────────────────────────────────
 const wardens = [
-  { name: "Seraph Brain", specialty: "NLP / AI Reasoning", blocked: "14,291", icon: Brain },
-  { name: "Vault Keeper", specialty: "Prompt Injection", blocked: "1,247", icon: Lock },
-  { name: "Glass Eye", specialty: "Adversarial Vision", blocked: "892", icon: Eye },
-  { name: "Vigil", specialty: "Lateral Movement", blocked: "2,104", icon: Search },
-  { name: "Paladin", specialty: "Data Sovereignty", blocked: "631", icon: ShieldCheck },
-  { name: "Gate Keeper", specialty: "API Abuse", blocked: "5,812", icon: Globe },
-  { name: "Iron Wing", specialty: "Fleet Patching", blocked: "142", icon: Server },
-  { name: "Chronicle", specialty: "Kill-Chain Predict", blocked: "3,488", icon: Activity },
-  { name: "Net Warden", specialty: "Network Fabric", blocked: "9,201", icon: Network },
-  { name: "Tool Smith", specialty: "Supply Chain", blocked: "76", icon: Code },
-  { name: "Drift Watcher", specialty: "Behavioral AI", blocked: "318", icon: Zap },
-  { name: "Deep Quill", specialty: "Forensics", blocked: "54", icon: BookOpen },
+  { name: "Seraph Brain", specialty: "NLP / AI Reasoning", icon: Brain },
+  { name: "Vault Keeper", specialty: "Prompt Injection", icon: Lock },
+  { name: "Glass Eye", specialty: "Adversarial Vision", icon: Eye },
+  { name: "Vigil", specialty: "Lateral Movement", icon: Search },
+  { name: "Paladin", specialty: "Data Sovereignty", icon: ShieldCheck },
+  { name: "Gate Keeper", specialty: "API Abuse", icon: Globe },
 ];
 
 // ── Seraph Brain ticker messages ─────────────────────────────────────────────
 const tickerItems = [
-  { warden: "Seraph Brain", msg: "predicted and blocked 847 attack vectors in the last hour · 71+ intents active · EN + עברית" },
-  { warden: "Vigil Warden", msg: "neutralized lateral movement attempt from 194.x.x.x — 3-step prediction ahead" },
-  { warden: "Iron Wing", msg: "applied 142 patches across all OS platforms — zero downtime · all 1,284 ANGELNODEs synced" },
-  { warden: "Vault Keeper", msg: "blocked prompt injection targeting GPT-4o · Fail-Closed enforced · 1,247 injections neutralized today" },
-  { warden: "Halo Score: 94", msg: "12 wardens online · 1,848 tests passing · Seraph Brain uptime 100%" },
+  { warden: "Seraph Brain", msg: "847 attack vectors blocked this hour" },
+  { warden: "Vigil", msg: "lateral movement neutralized — 3 steps ahead" },
+  { warden: "Vault Keeper", msg: "1,247 prompt injections stopped today" },
 ];
 
 export default function Dashboard() {
@@ -140,9 +123,8 @@ export default function Dashboard() {
         </div>
 
         <div className="grid grid-cols-12 gap-5">
-          {/* Left: 3 big intercept counters + compact agent list */}
+          {/* Left: 3 big intercept counters */}
           <div className="col-span-5 flex flex-col gap-4">
-            {/* Intercept counters */}
             <div className="space-y-3">
               {evilAgiStats.map(s => (
                 <div key={s.label}
@@ -157,32 +139,17 @@ export default function Dashboard() {
                 </div>
               ))}
             </div>
-
-            {/* Compact AI agents */}
-            <div>
-              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Protected AI Agents</p>
-              <div className="grid grid-cols-2 gap-1.5">
-                {compactAgents.map(a => (
-                  <div key={a.name} className="flex items-center gap-1.5 px-2 py-1.5 rounded-md bg-muted/20 border border-border/20">
-                    <Bot className="h-3 w-3 text-primary shrink-0" />
-                    <span className="text-[10px] font-medium truncate leading-tight">{a.name}</span>
-                    <span className={`ml-auto shrink-0 w-1.5 h-1.5 rounded-full ${a.status === "Protected" ? "bg-[hsl(var(--aegis-green))]" : "bg-[hsl(var(--aegis-amber))] animate-pulse"}`} />
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
 
           {/* Right: live interception table */}
           <div className="col-span-7">
-            <table className="w-full text-xs">
+          <table className="w-full text-xs">
               <thead>
                 <tr className="border-b border-border/50 text-muted-foreground">
                   <th className="text-left py-2 px-2 font-medium">Agent</th>
                   <th className="text-left py-2 px-2 font-medium">Attack</th>
                   <th className="text-left py-2 px-2 font-medium">Warden</th>
                   <th className="text-left py-2 px-2 font-medium">Status</th>
-                  <th className="text-left py-2 px-2 font-medium">Time</th>
                 </tr>
               </thead>
               <tbody>
@@ -196,7 +163,6 @@ export default function Dashboard() {
                         {row.status}
                       </span>
                     </td>
-                    <td className="py-2 px-2 text-muted-foreground">{row.time}</td>
                   </tr>
                 ))}
               </tbody>
@@ -215,14 +181,14 @@ export default function Dashboard() {
         </div>
       </GlassCard>
 
-      {/* ── SECTION 4: Angel Legion — 12 Wardens ─────────────────────────── */}
+      {/* ── SECTION 4: Angel Legion — 6 Wardens ──────────────────────────── */}
       <GlassCard>
         <div className="flex items-center gap-2 mb-4">
           <Radio className="h-4 w-4 text-primary" />
           <h3 className="text-sm font-semibold">Angel Legion</h3>
-          <Badge variant="outline" className="text-[10px] ml-auto">12 / 12 Active</Badge>
+          <Badge variant="outline" className="text-[10px] ml-auto">6 / 6 Active</Badge>
         </div>
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-3 gap-3">
           {wardens.map(w => (
             <div key={w.name} className="flex items-center gap-2.5 p-3 rounded-lg bg-muted/20 border border-border/20 hover:bg-muted/30 transition-colors">
               <div className="p-1.5 rounded-md bg-primary/10 shrink-0">
@@ -231,7 +197,6 @@ export default function Dashboard() {
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-semibold leading-tight truncate">{w.name}</p>
                 <p className="text-[9px] text-muted-foreground leading-tight truncate">{w.specialty}</p>
-                <p className="text-[10px] font-bold text-[hsl(var(--aegis-green))] mt-0.5">{w.blocked} blocked</p>
               </div>
               <span className="w-2 h-2 rounded-full bg-[hsl(var(--aegis-green))] shrink-0 animate-pulse" />
             </div>

@@ -3,7 +3,7 @@ import { AlertTriangle, ShieldAlert, Info, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 type Severity = "critical" | "warning" | "info";
-type Filter = "all" | Severity;
+
 
 interface Alert {
   id: number;
@@ -15,21 +15,11 @@ interface Alert {
 }
 
 const alertPool: Omit<Alert, "id" | "time">[] = [
-  { severity: "critical", message: "Vault Keeper blocked prompt injection targeting GPT-4o", warden: "Vault Keeper", icon: ShieldAlert },
-  { severity: "critical", message: "Vigil detected lateral movement from 194.x.x.x — 3-step prediction ahead", warden: "Vigil", icon: ShieldAlert },
-  { severity: "warning", message: "Gate Keeper blocked API abuse cascade on /api/v1/chat", warden: "Gate Keeper", icon: AlertTriangle },
-  { severity: "info", message: "Iron Wing auto-patched 14 nodes across Linux fleet — zero downtime", warden: "Iron Wing", icon: Info },
-  { severity: "warning", message: "Drift Watcher flagged behavioral deviation on tenant startup-xyz", warden: "Drift Watcher", icon: AlertTriangle },
-  { severity: "critical", message: "Seraph Brain neutralized jailbreak attempt on Claude 3.5 Sonnet", warden: "Seraph Brain", icon: ShieldAlert },
-  { severity: "warning", message: "Chronicle detected kill-chain sequence — 4 steps ahead of attacker", warden: "Chronicle", icon: AlertTriangle },
-  { severity: "critical", message: "Paladin: GDPR boundary violation blocked on Data Pipeline Agent", warden: "Paladin", icon: ShieldAlert },
-  { severity: "info", message: "Scroll Keeper verified 1,284 ANGELNODE checksums — all passed", warden: "Scroll Keeper", icon: Info },
-  { severity: "warning", message: "Net Warden detected port scan from 45.134.x.x — C2 pattern match", warden: "Net Warden", icon: AlertTriangle },
-  { severity: "critical", message: "Glass Eye flagged adversarial input injection on customer support bot", warden: "Glass Eye", icon: ShieldAlert },
-  { severity: "info", message: "Tool Smith verified supply chain integrity on 22 agent binaries", warden: "Tool Smith", icon: Info },
-  { severity: "critical", message: "Deep Quill collected forensic snapshot — incident IR-2847 opened", warden: "Deep Quill", icon: ShieldAlert },
-  { severity: "warning", message: "Unusual data egress pattern from subnet 10.0.3.x — monitoring active", warden: "Net Warden", icon: AlertTriangle },
-  { severity: "info", message: "MFA enrollment completed for 12 users in Engineering tenant", warden: "Scroll Keeper", icon: Info },
+  { severity: "critical", message: "Prompt injection blocked on GPT-4o", warden: "Vault Keeper", icon: ShieldAlert },
+  { severity: "critical", message: "Jailbreak neutralized on Claude 3.5 Sonnet", warden: "Seraph Brain", icon: ShieldAlert },
+  { severity: "warning", message: "API abuse cascade blocked on /api/v1/chat", warden: "Gate Keeper", icon: AlertTriangle },
+  { severity: "info", message: "14 nodes patched — zero downtime", warden: "Iron Wing", icon: Info },
+  { severity: "warning", message: "Behavioral deviation flagged on tenant startup-xyz", warden: "Drift Watcher", icon: AlertTriangle },
 ];
 
 const severityStyles: Record<Severity, string> = {
@@ -46,39 +36,29 @@ const wardenBadgeStyle: Record<Severity, string> = {
 
 let idCounter = alertPool.length + 1;
 
-const initialAlerts: Alert[] = alertPool.slice(0, 6).map((a, i) => ({
+const initialAlerts: Alert[] = alertPool.slice(0, 4).map((a, i) => ({
   ...a,
   id: i + 1,
-  time: `${(i + 1) * 7}m ago`,
+  time: `${(i + 1) * 5}m ago`,
 }));
 
 export function ActiveAlertsFeed() {
   const [alerts, setAlerts] = useState<Alert[]>(initialAlerts);
-  const [filter, setFilter] = useState<Filter>("all");
-  const [poolIdx, setPoolIdx] = useState(6);
+  const [poolIdx, setPoolIdx] = useState(4);
   const listRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
       const next = alertPool[poolIdx % alertPool.length];
       const newAlert: Alert = { ...next, id: idCounter++, time: "just now" };
-      setAlerts(prev => [newAlert, ...prev].slice(0, 30));
+      setAlerts(prev => [newAlert, ...prev].slice(0, 4));
       setPoolIdx(i => i + 1);
-    }, 4000);
+    }, 5000);
     return () => clearInterval(interval);
   }, [poolIdx]);
 
   const dismiss = (id: number) => setAlerts(prev => prev.filter(a => a.id !== id));
-
-  const filtered = filter === "all" ? alerts : alerts.filter(a => a.severity === filter);
   const criticalCount = alerts.filter(a => a.severity === "critical").length;
-
-  const filterBtns: { label: string; value: Filter }[] = [
-    { label: "All", value: "all" },
-    { label: "Critical", value: "critical" },
-    { label: "Warning", value: "warning" },
-    { label: "Info", value: "info" },
-  ];
 
   return (
     <div className="flex flex-col h-full">
@@ -96,30 +76,11 @@ export function ActiveAlertsFeed() {
             {criticalCount} Critical
           </Badge>
         )}
-        {/* Filter tabs */}
-        <div className="flex items-center gap-1 ml-auto">
-          {filterBtns.map(btn => (
-            <button
-              key={btn.value}
-              onClick={() => setFilter(btn.value)}
-              className={`text-[10px] px-2 py-0.5 rounded-full border transition-colors font-medium ${
-                filter === btn.value
-                  ? "bg-primary text-primary-foreground border-primary"
-                  : "border-border/50 text-muted-foreground hover:border-border"
-              }`}
-            >
-              {btn.label}
-            </button>
-          ))}
-        </div>
       </div>
 
       {/* Feed */}
-      <div ref={listRef} className="space-y-2 max-h-[260px] overflow-y-auto pr-1 scrollbar-thin">
-        {filtered.length === 0 && (
-          <p className="text-xs text-muted-foreground text-center py-6">No {filter} alerts</p>
-        )}
-        {filtered.map((alert) => {
+      <div ref={listRef} className="space-y-2 overflow-y-auto pr-1 scrollbar-thin">
+        {alerts.map((alert) => {
           const Icon = alert.icon;
           return (
             <div
