@@ -2,14 +2,14 @@ import { useState } from "react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { Building2, HardDrive, ShieldCheck, Brain, Wrench, Eye, Activity, Bell, Globe, Smartphone, Monitor, Apple, Terminal, Cloud, Server, Clock, Palette, Languages, Timer, Database, Bot, Cpu, CheckCircle2, Feather, Key, Lock } from "lucide-react";
+import { Building2, HardDrive, ShieldCheck, Brain, Wrench, Eye, Activity, Bell, Globe, Smartphone, Monitor, Apple, Terminal, Cloud, Server, Clock, Palette, Languages, Timer, Database, Bot, Cpu, CheckCircle2, Feather, Key, Lock, ShieldAlert, Heart, FileCheck, AlertTriangle, RotateCcw } from "lucide-react";
 
 const systemToggles = [
   { name: "Autonomous Protection", desc: "AngelClaw intervenes only when genuinely dangerous — everything else flows freely", icon: ShieldCheck, default: true },
   { name: "Seraph Brain NLP", desc: "Natural language security ops in English and Hebrew · 71+ intents", icon: Brain, default: true },
   { name: "Self-Hardening Engine", desc: "Autonomous security weakness detection and correction with revert", icon: Wrench, default: true },
   { name: "Zero-Trust Enforcement", desc: "Default-deny · 540 rules · Fail-Closed when engine unreachable", icon: Eye, default: true },
-  { name: "Anti-Tamper ENFORCE", desc: "Binary checksum verification · heartbeat monitoring · Iron Wing auto-restore", icon: Lock, default: true },
+  
   { name: "Self-Learning Feedback", desc: "Track operator feedback to improve suggestions over time", icon: Activity, default: true },
 ];
 
@@ -140,6 +140,142 @@ export default function SettingsPage() {
           </tbody>
         </table>
       </GlassCard>
+
+      {/* Anti-Tamper Protection */}
+      {(() => {
+        type TamperMode = "OFF" | "MONITOR" | "ENFORCE";
+        const [antiTamperMode, setAntiTamperMode] = useState<TamperMode>("ENFORCE");
+
+        const modeConfig: Record<TamperMode, { label: string; desc: string; activeClass: string; inactiveClass: string }> = {
+          OFF: {
+            label: "OFF",
+            desc: "Anti-Tamper disabled. ANGELNODE agents are unprotected from modification.",
+            activeClass: "bg-muted text-foreground border-border",
+            inactiveClass: "text-muted-foreground border-border/50 hover:border-border",
+          },
+          MONITOR: {
+            label: "MONITOR",
+            desc: "Tamper events logged and alerted. Agents continue operating. Heartbeat + checksum tracking active.",
+            activeClass: "bg-[hsl(var(--aegis-amber)/0.15)] text-[hsl(var(--aegis-amber))] border-[hsl(var(--aegis-amber)/0.5)]",
+            inactiveClass: "text-muted-foreground border-border/50 hover:border-[hsl(var(--aegis-amber)/0.3)]",
+          },
+          ENFORCE: {
+            label: "ENFORCE",
+            desc: "Tamper attempts blocked. Iron Wing auto-restores agent binary. Fail-Closed on heartbeat loss.",
+            activeClass: "bg-[hsl(var(--aegis-cyan)/0.15)] text-[hsl(var(--aegis-cyan))] border-[hsl(var(--aegis-cyan)/0.5)]",
+            inactiveClass: "text-muted-foreground border-border/50 hover:border-[hsl(var(--aegis-cyan)/0.3)]",
+          },
+        };
+
+        const tamperStats = [
+          { label: "Heartbeat Checks Today", value: "48,291", icon: Heart, color: "var(--aegis-green)" },
+          { label: "Checksum Verifications", value: "1,284", icon: FileCheck, color: "var(--aegis-cyan)" },
+          { label: "Tamper Attempts Detected", value: "3", icon: AlertTriangle, color: "var(--aegis-amber)" },
+          { label: "Auto-Restores by Iron Wing", value: "3", icon: RotateCcw, color: "var(--aegis-red)" },
+        ];
+
+        const tamperEvents = [
+          { event: "Binary checksum mismatch", agent: "node-win-0442", tenant: "acme-corp", severity: "Critical", warden: "Iron Wing", resolution: "Auto-restored", time: "2h ago" },
+          { event: "Unauthorized process injection", agent: "node-linux-0091", tenant: "dev-team", severity: "High", warden: "Vigil", resolution: "Quarantined", time: "6h ago" },
+          { event: "Heartbeat timeout (>60s)", agent: "node-mac-0217", tenant: "startup-xyz", severity: "Warning", warden: "Iron Wing", resolution: "Restarted", time: "11h ago" },
+          { event: "Config file modification", agent: "node-win-0104", tenant: "acme-corp", severity: "High", warden: "Scroll Keeper", resolution: "Reverted", time: "1d ago" },
+          { event: "Agent shutdown attempt", agent: "node-linux-0033", tenant: "dev-team", severity: "Critical", warden: "Iron Wing", resolution: "Blocked + restored", time: "2d ago" },
+        ];
+
+        const severityStyle: Record<string, string> = {
+          Critical: "text-[hsl(var(--aegis-red))]",
+          High: "text-[hsl(var(--aegis-amber))]",
+          Warning: "text-[hsl(var(--aegis-amber)/0.7)]",
+        };
+
+        const resolutionStyle: Record<string, string> = {
+          "Auto-restored": "bg-[hsl(var(--aegis-green)/0.15)] text-[hsl(var(--aegis-green))] border border-[hsl(var(--aegis-green)/0.3)]",
+          "Blocked + restored": "bg-[hsl(var(--aegis-green)/0.15)] text-[hsl(var(--aegis-green))] border border-[hsl(var(--aegis-green)/0.3)]",
+          "Quarantined": "bg-[hsl(var(--aegis-red)/0.15)] text-[hsl(var(--aegis-red))] border border-[hsl(var(--aegis-red)/0.3)]",
+          "Reverted": "bg-[hsl(var(--aegis-cyan)/0.15)] text-[hsl(var(--aegis-cyan))] border border-[hsl(var(--aegis-cyan)/0.3)]",
+          "Restarted": "bg-[hsl(var(--aegis-amber)/0.15)] text-[hsl(var(--aegis-amber))] border border-[hsl(var(--aegis-amber)/0.3)]",
+        };
+
+        return (
+          <GlassCard glow="cyan">
+            {/* Header */}
+            <div className="flex items-center gap-3 mb-5">
+              <div className="p-2.5 rounded-lg bg-primary/10"><ShieldAlert className="h-5 w-5 text-primary" /></div>
+              <div>
+                <h3 className="text-sm font-bold">Anti-Tamper Protection — Angel Legion Guard</h3>
+                <p className="text-[10px] text-muted-foreground">Iron Wing · Vigil · Scroll Keeper — heartbeat + binary checksum enforcement</p>
+              </div>
+              <div className="ml-auto flex gap-1.5">
+                <Badge variant="outline" className="text-[10px]">All Tenants</Badge>
+                <Badge variant="outline" className="text-[10px]">All ANGELNODEs</Badge>
+              </div>
+            </div>
+
+            {/* Mode Selector */}
+            <div className="mb-4">
+              <p className="text-xs font-semibold text-muted-foreground mb-2">Protection Mode</p>
+              <div className="flex gap-2">
+                {(["OFF", "MONITOR", "ENFORCE"] as TamperMode[]).map(mode => (
+                  <button
+                    key={mode}
+                    onClick={() => setAntiTamperMode(mode)}
+                    className={`flex-1 py-2.5 px-4 rounded-lg border font-bold text-sm tracking-wide transition-all duration-200 ${antiTamperMode === mode ? modeConfig[mode].activeClass : modeConfig[mode].inactiveClass}`}
+                  >
+                    {mode}
+                  </button>
+                ))}
+              </div>
+              <div className="mt-3 p-3 rounded-lg bg-muted/30 border border-border/30">
+                <p className="text-xs text-muted-foreground">{modeConfig[antiTamperMode].desc}</p>
+              </div>
+            </div>
+
+            {/* Stats row */}
+            <div className="grid grid-cols-4 gap-3 mb-5">
+              {tamperStats.map(s => (
+                <div key={s.label} className="p-3 rounded-lg bg-muted/30 border border-border/30 text-center">
+                  <s.icon className="h-4 w-4 mx-auto mb-1" style={{ color: `hsl(${s.color})` }} />
+                  <p className="text-xl font-bold">{s.value}</p>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">{s.label}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Audit Trail */}
+            <div>
+              <p className="text-xs font-semibold text-muted-foreground mb-2">Tamper Event Audit Trail</p>
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="border-b border-border/50 text-muted-foreground">
+                    <th className="text-left py-2 px-2 font-medium">Event</th>
+                    <th className="text-left py-2 px-2 font-medium">Agent</th>
+                    <th className="text-left py-2 px-2 font-medium">Tenant</th>
+                    <th className="text-left py-2 px-2 font-medium">Severity</th>
+                    <th className="text-left py-2 px-2 font-medium">Warden</th>
+                    <th className="text-left py-2 px-2 font-medium">Resolution</th>
+                    <th className="text-left py-2 px-2 font-medium">Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tamperEvents.map((row, i) => (
+                    <tr key={i} className="border-b border-border/20 hover:bg-muted/20">
+                      <td className="py-2 px-2">{row.event}</td>
+                      <td className="py-2 px-2 font-mono text-primary">{row.agent}</td>
+                      <td className="py-2 px-2 text-muted-foreground">{row.tenant}</td>
+                      <td className={`py-2 px-2 font-semibold ${severityStyle[row.severity] || "text-muted-foreground"}`}>{row.severity}</td>
+                      <td className="py-2 px-2 text-primary font-semibold">{row.warden}</td>
+                      <td className="py-2 px-2">
+                        <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${resolutionStyle[row.resolution] || "bg-muted text-muted-foreground"}`}>{row.resolution}</span>
+                      </td>
+                      <td className="py-2 px-2 text-muted-foreground">{row.time}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </GlassCard>
+        );
+      })()}
 
       {/* AI Model Governance */}
       <GlassCard aurora>
