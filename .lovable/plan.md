@@ -1,88 +1,131 @@
 
+# Three-Feature Enhancement Plan: AngelClaw v3.0.0
 
-# ANGELGRID Suite Enhancement — Maximum Depth & Differentiation
+## Overview of Changes
 
-Comprehensive upgrade across all 8 modules to deepen the ANGELGRID narrative, add new unique sections, enrich mock data, and strengthen the visual identity of an autonomous AI defense fabric built for the AI-Agent/AGI era.
-
----
-
-## Philosophy: What Makes ANGELGRID Unique
-
-Every enhancement will reinforce these differentiators:
-- **AI-Agent Protection**: Not just endpoints — ANGELGRID protects AI agents, LLMs, and autonomous systems
-- **Predictive Defense**: ANGELGRID AI forecasts attacks 3-5 steps ahead, not just reacts
-- **Autonomous Remediation**: Zero human intervention, 24/7 self-healing
-- **Universal Coverage**: Every OS, every environment (SaaS/Hybrid/On-Prem), every device type
-- **ANGELNODE Mesh**: A living network of local agents that learn and coordinate in real-time
+Three focused, high-impact additions:
+1. **Real-Time Alerts Feed Panel** — Dashboard upgrade with live-simulated event stream
+2. **Evil AGI Shield Panel** — Dedicated AI agent protection dashboard panel
+3. **Anti-Tamper Settings Section** — Full OFF/MONITOR/ENFORCE toggle with audit trail
 
 ---
 
-## Changes by File
+## Feature 1: Real-Time Alerts Feed Panel (Dashboard)
 
-### 1. Dashboard (`src/pages/Dashboard.tsx`)
-**Add new sections below existing content:**
-- **ANGELNODE Fleet Status** — New GlassCard showing deployed agents across OS types (Windows/macOS/Linux/iOS/Android) with live counts, version, and health status
-- **AI Agent Protection Panel** — New GlassCard highlighting protected AI agents/LLMs (GPT instances, autonomous bots, RPA agents) with risk scores
-- **Predictive Defense Ticker** — Horizontal scrolling-style card showing "ANGELGRID AI predicted and blocked X attack vectors in the last hour"
-- Enhance subtitle to emphasize AI-Agent and AGI protection
+### What changes
+**File:** `src/components/dashboard/ActiveAlertsFeed.tsx` — full rewrite
 
-### 2. Identity & Access (`src/pages/IdentityAccess.tsx`)
-**New sections:**
-- **AI Agent Identity Registry** — New table/card section showing managed AI agents (not just human users): chatbots, RPA bots, autonomous agents with their trust level, permissions scope, and behavioral baseline
-- **Behavioral Biometrics Panel** — GlassCard showing keystroke dynamics, mouse behavior, session patterns analyzed by ANGELGRID AI
-- **Zero-Trust Session Inspector** — Real-time session detail card showing continuous verification status
-- Enhance subtitle to mention AI-Agent identity governance
+**Current state:** Static list of 6 hardcoded alerts, no interactivity, references old "ANGELGRID" branding.
 
-### 3. Network Fabric (`src/pages/NetworkFabric.tsx`)
-**New sections:**
-- **AI Traffic Inspection** — New section showing AI-to-AI communication monitoring (LLM API calls, agent-to-agent traffic, model inference requests) with trust scores
-- **Autonomous Threat Containment** — Visual card showing how ANGELGRID auto-isolates compromised nodes with a mini flow diagram
-- **Global Mesh Stats** — Live counters for ANGELNODE heartbeats, mesh latency, cross-region sync status
-- Add more nodes to the topology map (AI agents, LLM endpoints)
+**New behavior:**
+- Simulated "live" feed using `useState` + `useEffect` with `setInterval` — every ~4 seconds a new alert is injected at the top of the list (cycling through a larger pool of 12+ realistic AngelClaw security events)
+- A pulsing **"LIVE"** badge in the header using the existing `animate-pulse` utility
+- Severity filter tabs: **All / Critical / Warning / Info** — clicking filters the visible list
+- Each alert row shows: severity icon, warden name responsible (e.g. "Vigil", "Vault Keeper"), message, timestamp, and a dismiss `×` button
+- Dismissed alerts are removed from state
+- Color coding preserved with existing `aegis-red/amber/cyan` tokens
+- Max height with smooth scroll — new alerts animate in from the top using CSS `transition`
+- Alert count badge updates live (e.g. "3 Critical")
 
-### 4. Analytics & Intel (`src/pages/Analytics.tsx`)
-**New sections:**
-- **AI Model Threat Matrix** — New section showing threats specifically targeting AI systems: prompt injection, model poisoning, data exfiltration from LLMs, adversarial inputs
-- **Predictive Timeline** — "Next 24h Forecast" card showing ANGELGRID AI's predictions for likely attack vectors
-- **Cross-Platform Correlation** — Card showing how ANGELGRID correlates events across Windows/macOS/Linux/Cloud simultaneously
-- Enhance AI narrative with more specific autonomous remediation details
+**New alerts pool includes AngelClaw-specific events:**
+- Vault Keeper blocked prompt injection on GPT-4o
+- Vigil detected lateral movement from 194.x.x.x (3-step prediction)
+- Iron Wing auto-patched 14 nodes — zero downtime
+- Gate Keeper blocked API abuse cascade on `/api/v1/chat`
+- Drift Watcher flagged behavioral deviation on tenant `startup-xyz`
+- Seraph Brain neutralized jailbreak attempt on Claude 3.5
+- Chronicle detected kill-chain sequence — 4 steps ahead
+- Paladin: GDPR boundary violation blocked on Data Pipeline Agent
 
-### 5. Policy Center (`src/pages/PolicyCenter.tsx`)
-**New sections:**
-- **AI Agent Policies** — New policy category specifically for governing AI agent behavior: model access control, prompt filtering, output sanitization, data boundary enforcement
-- **Policy Propagation Map** — Visual showing how a new policy propagates from ANGELGRID Cloud to all ANGELNODEs worldwide with timing
-- **Autonomous Policy Evolution** — Card showing policies that ANGELGRID AI has auto-generated or refined based on learning
-- Add AI-specific policies to the policy canvas
+**Dashboard layout change:** The existing `col-span-7` alerts card gets the new component — no layout change needed.
 
-### 6. Automation (`src/pages/Automation.tsx`)
-**New sections:**
-- **AI-Powered Playbook Suggestions** — GlassCard showing ANGELGRID AI recommending new playbooks based on threat patterns
-- **Cross-Environment Orchestration** — Visual showing simultaneous remediation across SaaS/Hybrid/On-Prem
-- **Self-Healing Metrics** — Stats on autonomous fixes without human intervention (patches applied, configs corrected, threats neutralized)
-- Add AI-agent-specific playbooks to the gallery
+---
 
-### 7. Data Protection (`src/pages/DataProtection.tsx`)
-**New sections:**
-- **AI Data Boundary Enforcement** — Card showing how ANGELGRID prevents LLMs from leaking sensitive data, monitors prompt/response pairs for PII
-- **Privacy-by-Design Score** — Overall privacy posture gauge similar to security posture
-- **Cross-Environment Data Flow Map** — Visual showing data movement between SaaS/On-Prem/Cloud with encryption status at each hop
-- Enhance DLP alerts with AI-specific data protection scenarios
+## Feature 2: Evil AGI Shield Panel (Dashboard)
 
-### 8. Settings (`src/pages/SettingsPage.tsx`)
-**New sections:**
-- **ANGELNODE Fleet Management** — Agent deployment status across all OS platforms with version management
-- **AI Model Governance** — Settings for controlling which AI models are allowed, inference rate limits, data boundaries
-- **Compliance Automation** — Toggle cards for auto-compliance with SOC2/ISO27001/GDPR/HIPAA with continuous audit status
-- Enhance tenant card with richer organizational context
+### What changes
+**File:** `src/pages/Dashboard.tsx` — new section inserted between the existing "AI Agent Protection Panel" and the "Seraph Brain Ticker"
+
+**New GlassCard: "Evil AGI Shield — OpenClaw Defense Layer"**
+
+This panel is distinct from the existing "AI Agent Protection Panel" (which shows monitored agents). The Evil AGI Shield focuses specifically on **active threat interceptions** targeting AI systems — the offensive side.
+
+**Contents:**
+- Header: `ShieldAlert` icon + title "Evil AGI Shield" + aurora badge "Fail-Closed Active"
+- **3-column stat row** at the top:
+  - Prompt Injections Blocked Today: `1,247`
+  - Jailbreak Attempts Neutralized: `89`
+  - Model Poisoning Events Stopped: `12`
+- **Threat interception table** (6 rows, scrollable) with columns:
+  - Target Agent (e.g. "GPT-4o Production")
+  - Attack Type (Prompt Injection / Jailbreak / Data Exfil / Adversarial Input / Model Poisoning / Agent Hijack)
+  - Warden Responsible (Vault Keeper / Vigil / Glass Eye / Drift Watcher)
+  - Status: "Blocked" (red badge) / "Neutralized" (green badge) / "Monitoring" (amber badge)
+  - Time
+- **Protection mode indicator** at bottom: `Fail-Closed` chip + "If AngelClaw unreachable, all AI actions blocked" note
+- Uses `aurora` prop on GlassCard for visual distinction
+- Consistent with existing `aiAgents` data format — same color tokens
+
+---
+
+## Feature 3: Anti-Tamper Toggle in Settings (Settings Page)
+
+### What changes
+**File:** `src/pages/SettingsPage.tsx` — new dedicated section inserted after the "ANGELNODE Fleet Management" card
+
+**Current state:** Anti-Tamper exists only as a single toggle in the "System Configuration" list (`Anti-Tamper ENFORCE`). It has no dedicated panel, no mode selector, and no audit trail.
+
+**New dedicated GlassCard: "Anti-Tamper Protection — Angel Legion Guard"**
+
+**Structure:**
+
+**(A) Mode Selector — 3-state toggle group:**
+```
+[ OFF ]  [ MONITOR ]  [ ENFORCE ]
+```
+- Implemented with 3 styled buttons (radio-style), using `useState` for `antiTamperMode`
+- Each mode has a clear color: OFF = muted, MONITOR = amber, ENFORCE = cyan/green
+- Mode description updates below the selector:
+  - OFF: "Anti-Tamper disabled. ANGELNODE agents are unprotected from modification."
+  - MONITOR: "Tamper events logged and alerted. Agents continue operating. Heartbeat + checksum tracking active."
+  - ENFORCE: "Tamper attempts blocked. Iron Wing auto-restores agent binary. Fail-Closed on heartbeat loss."
+- Per-scope badges: "Applied to: All Tenants · All ANGELNODEs"
+
+**(B) Status Row — 4 live stats:**
+- Heartbeat Checks Today: `48,291`
+- Checksum Verifications: `1,284`
+- Tamper Attempts Detected: `3`
+- Auto-Restores by Iron Wing: `3`
+
+**(C) Tamper Event Audit Trail — table:**
+| Event | Agent | Tenant | Severity | Warden | Resolution | Time |
+|---|---|---|---|---|---|---|
+| Binary checksum mismatch | `node-win-0442` | `acme-corp` | Critical | Iron Wing | Auto-restored | 2h ago |
+| Unauthorized process injection | `node-linux-0091` | `dev-team` | High | Vigil | Quarantined | 6h ago |
+| Heartbeat timeout (>60s) | `node-mac-0217` | `startup-xyz` | Warning | Iron Wing | Restarted | 11h ago |
+| Config file modification | `node-win-0104` | `acme-corp` | High | Scroll Keeper | Reverted | 1d ago |
+| Agent shutdown attempt | `node-linux-0033` | `dev-team` | Critical | Iron Wing | Blocked + restored | 2d ago |
+
+- Severity uses existing `aegis-red/amber` tokens
+- Resolution badges: "Auto-restored" (green), "Quarantined" (red), "Reverted" (cyan)
+
+**Remove the old Anti-Tamper toggle** from the `systemToggles` array (line 12 in SettingsPage) since it is now superseded by the dedicated panel with richer controls.
 
 ---
 
 ## Technical Approach
 
-- All additions are new sections appended to existing pages (no existing content removed)
-- Mock data arrays added at the top of each file
-- Consistent use of GlassCard, Badge, Lucide icons, and aegis color tokens
-- No new component files needed — all inline within page files
-- No new dependencies required
-- Every new section emphasizes autonomous operation, AI-Agent world, and predictive capabilities
+- **No new dependencies** — all using existing React state (`useState`, `useEffect`), Lucide icons, GlassCard, Badge, Switch already in the project
+- **No new files** — all changes in 2 existing files + 1 existing component
+- **Simulated live feed** — `useEffect` with `setInterval` returning cleanup; alerts cycle from a static pool so no external API needed
+- **State management** — all local component state, no global store needed
+- **Animation** — new alerts use existing CSS transition classes; new `@keyframes` added only if needed for alert-in animation
+- **Consistency** — all new UI uses existing `GlassCard`, `Badge`, `aegis-*` color tokens, and Lucide icons already imported
 
+## Files Modified
+
+| File | Change Type |
+|---|---|
+| `src/components/dashboard/ActiveAlertsFeed.tsx` | Full rewrite — live feed, filters, dismiss |
+| `src/pages/Dashboard.tsx` | Insert Evil AGI Shield panel section |
+| `src/pages/SettingsPage.tsx` | Insert Anti-Tamper dedicated section, remove old toggle |
