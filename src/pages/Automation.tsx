@@ -1,24 +1,26 @@
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { BarChart, Bar, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { Shield, Brain, BookOpen, Zap, Eye, Target, Activity, Monitor, Apple, Terminal, Cloud, BarChart3 } from "lucide-react";
+import { Brain, ThumbsUp, Target, Activity, Monitor, Apple, Terminal, Cloud, BarChart3, Zap, Shield, TrendingUp, MessageSquare, Globe } from "lucide-react";
 
 const stats = [
   { label: "Events Analyzed (30d)", value: "14,892K", icon: Shield, glow: "cyan" as const },
   { label: "Seraph Brain Queries", value: "48,291", icon: Brain, glow: "cyan" as const },
-  { label: "Incident Reports", value: "23", icon: BookOpen, glow: "amber" as const },
   { label: "Avg Detection Time", value: "0.3s", icon: Zap, glow: "cyan" as const },
+  { label: "Autonomous Actions", value: "4,218", icon: TrendingUp, glow: "amber" as const },
 ];
 
 const seraphIntents = [
-  { intent: "Scan the system", calls: 4821, success: 4821, lang: "EN/HE" },
-  { intent: "Show me threats", calls: 3402, success: 3400, lang: "EN/HE" },
-  { intent: "Anti-tamper status", calls: 2847, success: 2847, lang: "EN/HE" },
-  { intent: "Legion status", calls: 2104, success: 2104, lang: "EN" },
-  { intent: "Quarantine agent", calls: 891, success: 888, lang: "EN/HE" },
-  { intent: "Self-hardening status", calls: 756, success: 756, lang: "EN" },
-  { intent: "Feedback loop status", calls: 634, success: 634, lang: "EN" },
-  { intent: "Org overview", calls: 1247, success: 1247, lang: "EN/HE" },
+  { intent: "Scan the system", calls: 4821, success: 4821, lang: "EN/HE", category: "Defense" },
+  { intent: "Show me threats", calls: 3402, success: 3400, lang: "EN/HE", category: "Intel" },
+  { intent: "Anti-tamper status", calls: 2847, success: 2847, lang: "EN/HE", category: "Hardening" },
+  { intent: "Legion status", calls: 2104, success: 2104, lang: "EN", category: "Ops" },
+  { intent: "Quarantine agent", calls: 891, success: 888, lang: "EN/HE", category: "Response" },
+  { intent: "Self-hardening status", calls: 756, success: 756, lang: "EN", category: "Hardening" },
+  { intent: "Feedback loop status", calls: 634, success: 634, lang: "EN", category: "Learning" },
+  { intent: "Org overview", calls: 1247, success: 1247, lang: "EN/HE", category: "Ops" },
+  { intent: "סרוק את המערכת", calls: 892, success: 892, lang: "HE", category: "Defense" },
+  { intent: "הצג איומים", calls: 634, success: 634, lang: "HE", category: "Intel" },
 ];
 
 const orgMetrics = [
@@ -40,9 +42,9 @@ const platformData = [
 ];
 
 const seraphStats = [
-  { label: "NLP Intents", value: "71+", icon: Brain },
-  { label: "API Endpoints", value: "50+", icon: Target },
-  { label: "DB Tables", value: "15+", icon: BookOpen },
+  { label: "NLP Intents Active", value: "71+", icon: Brain },
+  { label: "API Endpoints Secured", value: "50+", icon: Target },
+  { label: "Languages Supported", value: "EN + HE", icon: Globe },
   { label: "Tests Passing", value: "1,848", icon: Shield },
 ];
 
@@ -53,6 +55,14 @@ const crossPlatform = [
   { platform: "Cloud", icon: Cloud, events: 6120, correlated: 451, autoFixed: 449 },
 ];
 
+const topQueries = [
+  { query: '"Scan the system"', count: 4821, lang: "EN/HE", time: "2s ago" },
+  { query: '"Show me critical alerts"', count: 3402, lang: "EN", time: "8s ago" },
+  { query: '"Legion status"', count: 2847, lang: "EN", time: "12s ago" },
+  { query: '"סרוק איומים"', count: 892, lang: "HE", time: "1m ago" },
+  { query: '"Quarantine RPA agent"', count: 634, lang: "EN", time: "3m ago" },
+];
+
 export default function Automation() {
   return (
     <div className="space-y-6">
@@ -61,8 +71,9 @@ export default function Automation() {
           <BarChart3 className="h-5 w-5 text-primary" />
           <h1 className="text-2xl font-bold tracking-tight">Analytics & Intelligence</h1>
           <Badge variant="outline" className="text-[10px]">Seraph Brain · 71+ Intents</Badge>
+          <Badge variant="outline" className="text-[10px]">EN + עברית</Badge>
         </div>
-        <p className="text-sm text-muted-foreground">Seraph Brain natural language security operations in English and Hebrew · event replay · threat hunting DSL · 48,291 daily queries processed</p>
+        <p className="text-sm text-muted-foreground">Seraph Brain natural language security operations in English and Hebrew · event replay · threat hunting DSL · 48,291 daily queries · org-wide intelligence</p>
       </div>
 
       <div className="grid grid-cols-4 gap-4">
@@ -84,49 +95,80 @@ export default function Automation() {
         ))}
       </div>
 
-      {/* Seraph Brain Intent Dashboard */}
-      <GlassCard aurora>
-        <div className="flex items-center gap-2 mb-4">
-          <Brain className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-muted-foreground">Seraph Brain — Top NLP Intents (English + Hebrew)</h3>
+      {/* Seraph Brain Intents + Recent Queries */}
+      <div className="grid grid-cols-12 gap-5">
+        <div className="col-span-8">
+          <GlassCard aurora>
+            <div className="flex items-center gap-2 mb-4">
+              <Brain className="h-4 w-4 text-primary" />
+              <h3 className="text-sm font-semibold text-muted-foreground">Seraph Brain — Top NLP Intents (English + Hebrew)</h3>
+            </div>
+            <div className="overflow-auto">
+              <table className="w-full text-sm">
+                <thead><tr className="border-b border-border/50 text-muted-foreground text-xs">
+                  <th className="text-left py-2 px-2 font-medium">Intent</th>
+                  <th className="text-left py-2 px-2 font-medium">Lang</th>
+                  <th className="text-left py-2 px-2 font-medium">Category</th>
+                  <th className="text-left py-2 px-2 font-medium">Calls (30d)</th>
+                  <th className="text-left py-2 px-2 font-medium">Success</th>
+                  <th className="text-left py-2 px-2 font-medium">Rate</th>
+                </tr></thead>
+                <tbody>
+                  {seraphIntents.map(i => (
+                    <tr key={i.intent} className="border-b border-border/20 hover:bg-muted/20">
+                      <td className="py-2 px-2 font-mono text-xs text-primary">{i.intent}</td>
+                      <td className="py-2 px-2"><Badge variant="outline" className="text-[10px]">{i.lang}</Badge></td>
+                      <td className="py-2 px-2"><Badge variant="secondary" className="text-[10px]">{i.category}</Badge></td>
+                      <td className="py-2 px-2 text-xs font-semibold">{i.calls.toLocaleString()}</td>
+                      <td className="py-2 px-2 text-xs text-[hsl(var(--aegis-green))] font-semibold">{i.success.toLocaleString()}</td>
+                      <td className="py-2 px-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-14 h-1.5 rounded-full bg-muted overflow-hidden">
+                            <div className="h-full rounded-full bg-[hsl(var(--aegis-green))]" style={{ width: `${(i.success / i.calls) * 100}%` }} />
+                          </div>
+                          <span className="text-xs text-muted-foreground">{((i.success / i.calls) * 100).toFixed(1)}%</span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </GlassCard>
         </div>
-        <div className="overflow-auto">
-          <table className="w-full text-sm">
-            <thead><tr className="border-b border-border/50 text-muted-foreground text-xs">
-              <th className="text-left py-2 px-2 font-medium">Intent</th>
-              <th className="text-left py-2 px-2 font-medium">Languages</th>
-              <th className="text-left py-2 px-2 font-medium">Calls (30d)</th>
-              <th className="text-left py-2 px-2 font-medium">Success</th>
-              <th className="text-left py-2 px-2 font-medium">Rate</th>
-            </tr></thead>
-            <tbody>
-              {seraphIntents.map(i => (
-                <tr key={i.intent} className="border-b border-border/20 hover:bg-muted/20">
-                  <td className="py-2 px-2 font-mono text-sm text-primary">{i.intent}</td>
-                  <td className="py-2 px-2"><Badge variant="outline" className="text-[10px]">{i.lang}</Badge></td>
-                  <td className="py-2 px-2 text-xs font-semibold">{i.calls.toLocaleString()}</td>
-                  <td className="py-2 px-2 text-xs text-[hsl(var(--aegis-green))] font-semibold">{i.success.toLocaleString()}</td>
-                  <td className="py-2 px-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-16 h-1.5 rounded-full bg-muted overflow-hidden">
-                        <div className="h-full rounded-full bg-[hsl(var(--aegis-green))]" style={{ width: `${(i.success / i.calls) * 100}%` }} />
-                      </div>
-                      <span className="text-xs text-muted-foreground">{((i.success / i.calls) * 100).toFixed(1)}%</span>
-                    </div>
-                  </td>
-                </tr>
+        <div className="col-span-4">
+          <GlassCard glow="cyan" className="h-full">
+            <div className="flex items-center gap-2 mb-4">
+              <MessageSquare className="h-4 w-4 text-primary" />
+              <h3 className="text-sm font-semibold text-muted-foreground">Recent Queries — Live Feed</h3>
+              <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[hsl(var(--aegis-green))] animate-pulse" />
+            </div>
+            <div className="space-y-2">
+              {topQueries.map((q, i) => (
+                <div key={i} className="p-2.5 rounded-lg bg-muted/30 border border-border/30">
+                  <p className="font-mono text-xs text-primary">{q.query}</p>
+                  <div className="flex items-center justify-between mt-1 text-[10px] text-muted-foreground">
+                    <span><Badge variant="outline" className="text-[9px] mr-1">{q.lang}</Badge>{q.count.toLocaleString()} calls</span>
+                    <span>{q.time}</span>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          </GlassCard>
         </div>
-      </GlassCard>
+      </div>
 
       {/* Charts */}
       <div className="grid grid-cols-12 gap-5">
         <div className="col-span-8">
           <GlassCard>
             <h3 className="text-sm font-semibold text-muted-foreground mb-3">Weekly Event Trend — Detected vs Blocked vs Auto-Fixed</h3>
-            <ResponsiveContainer width="100%" height={240}>
+            <div className="flex items-center gap-4 mb-3 text-[10px]">
+              <span className="flex items-center gap-1"><span className="w-3 h-0.5 bg-[hsl(var(--aegis-amber))] inline-block rounded" />Detected</span>
+              <span className="flex items-center gap-1"><span className="w-3 h-0.5 bg-primary inline-block rounded" />Blocked</span>
+              <span className="flex items-center gap-1"><span className="w-3 h-0.5 bg-[hsl(var(--aegis-green))] inline-block rounded" />Auto-Fixed</span>
+            </div>
+            <ResponsiveContainer width="100%" height={220}>
               <AreaChart data={orgMetrics}>
                 <defs>
                   <linearGradient id="gEvents" x1="0" y1="0" x2="0" y2="1">
@@ -156,13 +198,13 @@ export default function Automation() {
         <div className="col-span-4">
           <GlassCard className="h-full">
             <h3 className="text-sm font-semibold text-muted-foreground mb-3">Events by Platform</h3>
-            <ResponsiveContainer width="100%" height={240}>
+            <ResponsiveContainer width="100%" height={220}>
               <BarChart data={platformData} layout="vertical">
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                 <XAxis type="number" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 9 }} />
                 <YAxis dataKey="name" type="category" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }} width={55} />
                 <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }} />
-                <Bar dataKey="events" fill="hsl(var(--aegis-amber) / 0.6)" radius={[0, 4, 4, 0]} />
+                <Bar dataKey="events" fill="hsl(var(--aegis-amber) / 0.5)" radius={[0, 4, 4, 0]} />
                 <Bar dataKey="blocked" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -170,11 +212,11 @@ export default function Automation() {
         </div>
       </div>
 
-      {/* Cross-Platform */}
+      {/* Cross-Platform Correlation */}
       <GlassCard>
         <div className="flex items-center gap-2 mb-4">
           <Activity className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-muted-foreground">Cross-Platform Event Correlation — Simultaneous Analysis</h3>
+          <h3 className="text-sm font-semibold text-muted-foreground">Cross-Platform Event Correlation — Simultaneous Multi-Warden Analysis</h3>
         </div>
         <div className="grid grid-cols-4 gap-3">
           {crossPlatform.map(c => (
@@ -184,11 +226,26 @@ export default function Automation() {
               <p className="text-xl font-bold mt-1">{c.events.toLocaleString()}</p>
               <p className="text-[10px] text-muted-foreground">events analyzed</p>
               <div className="mt-2 pt-2 border-t border-border/30 grid grid-cols-2 gap-1 text-[10px]">
-                <div><p className="font-semibold text-primary">{c.correlated}</p><p className="text-muted-foreground">Correlated</p></div>
-                <div><p className="font-semibold text-[hsl(var(--aegis-green))]">{c.autoFixed}</p><p className="text-muted-foreground">Auto-Fixed</p></div>
+                <div><p className="font-bold text-primary">{c.correlated}</p><p className="text-muted-foreground">Correlated</p></div>
+                <div><p className="font-bold text-[hsl(var(--aegis-green))]">{c.autoFixed}</p><p className="text-muted-foreground">Auto-Fixed</p></div>
               </div>
             </div>
           ))}
+        </div>
+      </GlassCard>
+
+      {/* Acceptance + Learning insight */}
+      <GlassCard glow="cyan">
+        <div className="flex items-center gap-3">
+          <ThumbsUp className="h-5 w-5 text-primary shrink-0" />
+          <div>
+            <p className="text-sm font-semibold">Seraph Brain Learning Summary</p>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              <span className="text-[hsl(var(--aegis-green))] font-semibold">91.2% acceptance rate</span> across 4,218 suggestions · acme-corp upgraded to <span className="text-primary font-semibold">auto_apply</span> mode after crossing 94% threshold ·
+              Detection threshold adjusted from 0.75 → <span className="text-primary font-semibold">0.82</span> reducing false positives by 31% ·
+              <span className="text-[hsl(var(--aegis-green))] font-semibold"> 1,848 tests passing</span>
+            </p>
+          </div>
         </div>
       </GlassCard>
     </div>
