@@ -1,196 +1,106 @@
 import { GlassCard } from "@/components/ui/glass-card";
-import { Badge } from "@/components/ui/badge";
-import { ScrollText, ShieldCheck, Clock, Ban, ArrowRight, Bot, Brain, Globe, Zap, CheckCircle2, Camera, RotateCcw } from "lucide-react";
-
-const stats = [
-  { label: "Active Policies", value: "156", icon: ScrollText, glow: "cyan" as const },
-  { label: "Auto-Enforced", value: "142", icon: ShieldCheck, glow: "cyan" as const },
-  { label: "Pending Review", value: "8", icon: Clock, glow: "amber" as const },
-  { label: "Violations Blocked", value: "2,341", icon: Ban, glow: "red" as const },
-];
+import { ScrollText, ArrowRight } from "lucide-react";
 
 const policies = [
-  { name: "Endpoint Isolation on Anomaly", status: "Active", severity: "Critical", scope: "Endpoint", assets: 1284 },
-  { name: "MFA Enforcement — All Privileged", status: "Active", severity: "High", scope: "Identity", assets: 28 },
-  { name: "Cloud Egress Throttle", status: "Active", severity: "Medium", scope: "Network", assets: 256 },
-  { name: "USB Device Block — Contractors", status: "Active", severity: "High", scope: "Endpoint", assets: 48 },
-  { name: "Guest Network Quarantine", status: "Draft", severity: "Medium", scope: "Network", assets: 44 },
-  { name: "Lateral Movement Kill Chain", status: "Active", severity: "Critical", scope: "Network", assets: 842 },
-  { name: "Legacy TLS Deprecation", status: "Disabled", severity: "Low", scope: "Network", assets: 32 },
-  { name: "AI Model Access Control", status: "Active", severity: "Critical", scope: "AI Agent", assets: 156 },
+  { name: "Endpoint Isolation on Anomaly",  severity: "Critical", scope: "Endpoint",  assets: 1284, status: "Active"   },
+  { name: "MFA Enforcement — Privileged",   severity: "High",     scope: "Identity",  assets: 28,   status: "Active"   },
+  { name: "Lateral Movement Kill Chain",    severity: "Critical", scope: "Network",   assets: 842,  status: "Active"   },
+  { name: "AI Model Access Control",        severity: "Critical", scope: "AI Agent",  assets: 156,  status: "Active"   },
+  { name: "Cloud Egress Throttle",          severity: "Medium",   scope: "Network",   assets: 256,  status: "Active"   },
+  { name: "USB Device Block — Contractors", severity: "High",     scope: "Endpoint",  assets: 48,   status: "Active"   },
+  { name: "LLM Prompt Filtering",           severity: "Critical", scope: "AI Agent",  assets: 14,   status: "Active"   },
+  { name: "Guest Network Quarantine",       severity: "Medium",   scope: "Network",   assets: 44,   status: "Draft"    },
 ];
 
-const aiAgentPolicies = [
-  { name: "LLM Prompt Filtering", desc: "Block injection patterns, jailbreak attempts, and adversarial prompts across all LLM endpoints", status: "Active", enforced: 14 },
-  { name: "Model Access Control", desc: "Restrict which AI models can be accessed per user role and environment", status: "Active", enforced: 8 },
-  { name: "Output Sanitization", desc: "Strip PII, credentials, and classified data from all AI-generated responses", status: "Active", enforced: 6 },
-  { name: "Data Boundary Enforcement", desc: "Prevent AI agents from accessing data outside their authorized scope", status: "Active", enforced: 12 },
-  { name: "Agent Rate Limiting", desc: "Throttle inference requests to prevent abuse and resource exhaustion", status: "Active", enforced: 5 },
-  { name: "Autonomous Action Approval", desc: "Require Seraph Brain verification for high-risk autonomous agent actions — Fail-Closed", status: "Active", enforced: 3 },
+const propagation = [
+  { region: "Cloud Origin",    time: "0s"   },
+  { region: "US-East",        time: "1.2s" },
+  { region: "EU-West",        time: "2.8s" },
+  { region: "APAC",           time: "3.6s" },
+  { region: "All ANGELNODEs", time: "4.2s" },
 ];
 
-const propagationSteps = [
-  { region: "AngelClaw Cloud", time: "0s", status: "Origin", nodes: 1 },
-  { region: "US-East", time: "1.2s", status: "Synced", nodes: 312 },
-  { region: "EU-West", time: "2.8s", status: "Synced", nodes: 284 },
-  { region: "APAC", time: "3.6s", status: "Synced", nodes: 198 },
-  { region: "All ANGELNODEs", time: "4.2s", status: "Complete", nodes: 1284 },
+const evolved = [
+  { name: "Adaptive Phishing Detection v4.7", confidence: 96, trigger: "Vigil — new patterns in 3 sectors" },
+  { name: "Agent Behavioral Baseline Drift",  confidence: 92, trigger: "Drift Watcher — anomalous RPA calls" },
+  { name: "Zero-Day Endpoint Hardening",      confidence: 89, trigger: "Seraph Brain — pre-emptive correlation" },
 ];
 
-const autoEvolvedPolicies = [
-  { name: "Adaptive Phishing Detection v4.7", origin: "AI-Generated", trigger: "New phishing patterns detected across 3 sectors · Vigil Warden", confidence: 96, applied: "2h ago" },
-  { name: "Agent Behavioral Baseline Drift", origin: "AI-Refined", trigger: "RPA agent showed anomalous API call patterns · Drift Watcher", confidence: 92, applied: "4h ago" },
-  { name: "Zero-Day Endpoint Hardening", origin: "AI-Generated", trigger: "Pre-emptive rule based on Seraph Brain threat intel correlation", confidence: 89, applied: "8h ago" },
-];
-
-const snapshots = [
-  { version: "v1.7.4", created: "2h ago", policies: 156, status: "Current", auto: false },
-  { version: "v1.7.3", created: "1d ago", policies: 154, status: "Archived", auto: true },
-  { version: "v1.7.2", created: "3d ago", policies: 151, status: "Archived", auto: true },
-  { version: "v1.7.1", created: "7d ago", policies: 148, status: "Archived", auto: false },
-];
-
-const statusColor = (s: string) => s === "Active" ? "default" as const : s === "Draft" ? "secondary" as const : "outline" as const;
-const sevColor = (s: string) => s === "Critical" ? "text-[hsl(var(--aegis-red))]" : s === "High" ? "text-[hsl(var(--aegis-amber))]" : s === "Medium" ? "text-primary" : "text-muted-foreground";
+const sevColor = (s: string) =>
+  s === "Critical" ? "text-[hsl(var(--aegis-red))]" : s === "High" ? "text-[hsl(var(--aegis-amber))]" : "text-primary";
 
 export default function PoliciesHub() {
   return (
-    <div className="space-y-6">
-      <div>
-        <div className="flex items-center gap-2 mb-1">
-          <ScrollText className="h-5 w-5 text-primary" />
-          <h1 className="text-2xl font-bold tracking-tight">Zero-Trust Policy Center</h1>
-          <Badge variant="outline" className="text-[10px]">540 Rules · Default-Deny</Badge>
+    <div className="space-y-5">
+
+      {/* Header */}
+      <div className="flex items-center gap-2">
+        <ScrollText className="h-5 w-5 text-primary" />
+        <h1 className="text-2xl font-bold tracking-tight">Zero-Trust Policies</h1>
+        <span className="text-xs text-muted-foreground font-mono">540 rules · default-deny · 4.2s global sync</span>
+      </div>
+
+      {/* 3 inline numbers */}
+      <div className="flex items-center gap-10">
+        <div>
+          <p className="text-4xl font-bold tabular-nums" style={{ color: "hsl(var(--aegis-cyan))" }}>156</p>
+          <p className="text-[10px] text-muted-foreground mt-1 tracking-wide">Active Policies</p>
         </div>
-        <p className="text-sm text-muted-foreground">AngelClaw Cloud autonomous policy enforcement · visual rules engine for AI agents, endpoints, and networks · snapshots & rollback · policy propagation in 4.2s</p>
+        <div>
+          <p className="text-4xl font-bold tabular-nums" style={{ color: "hsl(var(--aegis-red))" }}>2,341</p>
+          <p className="text-[10px] text-muted-foreground mt-1 tracking-wide">Violations Blocked</p>
+        </div>
+        <div>
+          <p className="text-4xl font-bold tabular-nums text-primary">4.2s</p>
+          <p className="text-[10px] text-muted-foreground mt-1 tracking-wide">Global Propagation</p>
+        </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
-        {stats.map(s => (
-          <GlassCard key={s.label} glow={s.glow} className="flex items-center gap-4">
-            <div className="p-2.5 rounded-lg bg-primary/10"><s.icon className="h-5 w-5 text-primary" /></div>
-            <div><p className="text-2xl font-bold">{s.value}</p><p className="text-xs text-muted-foreground">{s.label}</p></div>
-          </GlassCard>
-        ))}
-      </div>
-
-      {/* Policy Canvas */}
+      {/* Policy list — minimal */}
       <GlassCard>
-        <h3 className="text-sm font-semibold text-muted-foreground mb-4">Policy Canvas — 540-Rule Zero-Trust Bootstrap</h3>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="space-y-1.5">
           {policies.map(p => (
-            <div key={p.name} className="p-3 rounded-lg bg-muted/30 border border-border/30 flex items-center justify-between hover:bg-muted/50 transition-colors">
-              <div className="min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-sm font-medium truncate">{p.name}</span>
-                  <Badge variant={statusColor(p.status)} className="text-[10px] shrink-0">{p.status}</Badge>
-                </div>
-                <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
-                  <span className={sevColor(p.severity)}>● {p.severity}</span>
-                  <span>{p.scope}</span>
-                  <span>{p.assets.toLocaleString()} assets</span>
-                </div>
-              </div>
+            <div key={p.name} className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-muted/30 border border-border/30 hover:bg-muted/50 transition-colors">
+              <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${p.status === "Active" ? "bg-[hsl(var(--aegis-green))]" : "bg-muted-foreground"}`} />
+              <p className="text-sm font-medium flex-1">{p.name}</p>
+              <span className={`text-[10px] font-semibold w-14 text-right ${sevColor(p.severity)}`}>{p.severity}</span>
+              <span className="text-[10px] text-muted-foreground w-16 text-right">{p.assets.toLocaleString()} assets</span>
             </div>
           ))}
         </div>
       </GlassCard>
 
-      {/* AI Agent Policies */}
+      {/* Propagation flow */}
       <GlassCard aurora>
-        <div className="flex items-center gap-2 mb-4">
-          <Bot className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-muted-foreground">AI Agent Policies — OpenClaw Governance</h3>
-        </div>
-        <div className="grid grid-cols-3 gap-3">
-          {aiAgentPolicies.map(p => (
-            <div key={p.name} className="p-3 rounded-lg bg-muted/30 border border-border/30">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium">{p.name}</span>
-                <Badge variant="default" className="text-[10px]">{p.status}</Badge>
-              </div>
-              <p className="text-[10px] text-muted-foreground mb-2 leading-relaxed">{p.desc}</p>
-              <p className="text-[10px] text-primary">{p.enforced} AI agents enforced</p>
-            </div>
-          ))}
-        </div>
-      </GlassCard>
-
-      {/* Policy Propagation */}
-      <GlassCard>
-        <div className="flex items-center gap-2 mb-4">
-          <Globe className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-muted-foreground">Policy Propagation Map — Global ANGELNODE Sync in 4.2s</h3>
-        </div>
+        <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-4">Policy Propagation — ANGELNODE Mesh</p>
         <div className="flex items-center gap-2">
-          {propagationSteps.map((p, i) => (
+          {propagation.map((p, i) => (
             <div key={p.region} className="flex items-center gap-2 flex-1">
-              <div className="p-3 rounded-lg bg-muted/30 border border-border/30 flex-1 text-center">
+              <div className="flex-1 text-center px-2 py-2.5 rounded-lg bg-muted/30 border border-border/30">
                 <p className="text-xs font-semibold">{p.region}</p>
-                <p className="text-lg font-bold text-primary mt-1">{p.time}</p>
-                <p className="text-[10px] text-muted-foreground">{p.nodes.toLocaleString()} nodes</p>
-                <Badge variant={p.status === "Complete" ? "default" : "secondary"} className="text-[10px] mt-1">{p.status}</Badge>
+                <p className="text-lg font-bold text-primary mt-0.5">{p.time}</p>
               </div>
-              {i < propagationSteps.length - 1 && <ArrowRight className="h-4 w-4 text-primary shrink-0" />}
+              {i < propagation.length - 1 && <ArrowRight className="h-3.5 w-3.5 text-primary/50 shrink-0" />}
             </div>
           ))}
         </div>
       </GlassCard>
 
-      {/* Autonomous Policy Evolution */}
+      {/* Autonomous evolution — 3 lines */}
       <GlassCard glow="cyan">
-        <div className="flex items-center gap-2 mb-4">
-          <Brain className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-muted-foreground">Autonomous Policy Evolution — Seraph Brain AI-Generated Rules</h3>
-        </div>
-        <div className="space-y-3">
-          {autoEvolvedPolicies.map(p => (
-            <div key={p.name} className="flex items-center justify-between p-3 rounded-lg bg-muted/20 border border-border/20">
-              <div className="flex items-center gap-3">
-                <Zap className="h-4 w-4 text-primary shrink-0" />
-                <div>
-                  <p className="text-sm font-medium">{p.name}</p>
-                  <p className="text-[10px] text-muted-foreground">{p.trigger}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <Badge variant="outline" className="text-[10px]">{p.origin}</Badge>
-                <span className="text-xs text-primary font-semibold">{p.confidence}%</span>
-                <span className="text-[10px] text-muted-foreground">{p.applied}</span>
-              </div>
+        <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-4">Seraph Brain — Autonomous Policy Evolution</p>
+        <div className="space-y-2">
+          {evolved.map(e => (
+            <div key={e.name} className="flex items-center gap-3">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
+              <p className="text-sm font-medium flex-1">{e.name}</p>
+              <span className="text-xs text-muted-foreground">{e.trigger}</span>
+              <span className="text-xs font-bold text-primary w-10 text-right">{e.confidence}%</span>
             </div>
           ))}
         </div>
       </GlassCard>
 
-      {/* Policy Snapshots */}
-      <GlassCard>
-        <div className="flex items-center gap-2 mb-4">
-          <Camera className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-muted-foreground">Policy Snapshots & Rollback — Every Version Saved</h3>
-        </div>
-        <div className="space-y-2">
-          {snapshots.map(s => (
-            <div key={s.version} className="flex items-center justify-between p-3 rounded-lg bg-muted/20 border border-border/20">
-              <div className="flex items-center gap-3">
-                <span className="font-mono text-sm text-primary font-bold">{s.version}</span>
-                <div>
-                  <p className="text-xs text-muted-foreground">{s.created} · {s.policies} policies</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                {s.auto && <Badge variant="outline" className="text-[10px]">Auto-Snapshot</Badge>}
-                <Badge variant={s.status === "Current" ? "default" : "secondary"} className="text-[10px]">{s.status}</Badge>
-                {s.status !== "Current" && (
-                  <button className="flex items-center gap-1 text-[10px] text-primary hover:underline">
-                    <RotateCcw className="h-3 w-3" />Rollback
-                  </button>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      </GlassCard>
     </div>
   );
 }
